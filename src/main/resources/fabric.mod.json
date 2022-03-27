@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "fabric-essentials",
+  "version": "${version}",
+
+  "name": "FabricEssentials",
+  "description": "TODO: Description",
+  "authors": [
+    "Quaint",
+    "Drex"
+  ],
+  "license": "MIT",
+  "icon": "assets/fabric-essentials/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "org.server_utilities.essentials.EssentialsMod"
+    ]
+  },
+  "mixins": [
+    "essentials.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  }
+}

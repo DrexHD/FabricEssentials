@@ -1,0 +1,17 @@
+{
+  "text.fabric-essentials.command.inventory.menu.other": "Opened %s's %s",
+
+  "text.fabric-essentials.command.heal.self": "You have healed yourself",
+  "text.fabric-essentials.command.heal.other": "You have healed %s",
+  "text.fabric-essentials.command.heal.healed": "You have been healed by %s",
+
+  "text.fabric-essentials.command.feed.self": "You have fed yourself",
+  "text.fabric-essentials.command.feed.other": "You have fed %s",
+  "text.fabric-essentials.command.feed.healed": "You have been fed by %s",
+
+  "text.fabric-essentials.command.ping.self": "Pong! Your connection latency to the server is %sms",
+  "text.fabric-essentials.command.ping.other": "Pong! %s's connection latency to the server is %sms",
+
+
+  "text.fabric-essentials.command.mods.list.title": "Mods [%s]:"
+}

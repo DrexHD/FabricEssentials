@@ -1,5 +1,6 @@
 {
-  "text.fabric-essentials.command.inventory.menu.other": "Opened %s's %s",
+  "text.fabric-essentials.command.inventory.other": "Opened %s's inventory",
+  "text.fabric-essentials.command.enderchest.other": "Opened %s's enderchest",
 
   "text.fabric-essentials.command.delhome.self": "Deleted home %s",
   "text.fabric-essentials.command.delhome.other": "Deleted home %s from %s",

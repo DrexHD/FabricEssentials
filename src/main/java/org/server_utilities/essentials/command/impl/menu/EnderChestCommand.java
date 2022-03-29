@@ -19,8 +19,9 @@ public class EnderChestCommand extends SimpleMenuCommand {
 
     @Override
     protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, ServerPlayer target) {
-        sendFeedback(ctx, "text.fabric-essentials.command.menu.other", target.getDisplayName(), ENDERCHEST_TITLE);
-        return super.onOther(ctx, sender, target);
+        sendFeedback(ctx, "text.fabric-essentials.command.enderchest.other", target.getDisplayName(), ENDERCHEST_TITLE);
+        sender.openMenu(createMenu(ctx, sender, target));
+        return 1;
     }
 
     @Override

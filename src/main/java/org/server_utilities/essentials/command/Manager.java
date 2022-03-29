@@ -36,6 +36,7 @@ public class Manager {
             new PingCommand(),
             new ModsCommand(),
             new FlyCommand(),
+            new InvulnerableCommand(),
     };
 
     public Manager(CommandDispatcher<CommandSourceStack> dispatcher, boolean dedicated) {

@@ -13,10 +13,18 @@
   "text.fabric-essentials.command.feed.other": "You have fed %s",
   "text.fabric-essentials.command.feed.victim": "You have been fed by %s",
 
-  "text.fabric-essentials.command.fly.self.enable": "Enabled fly",
-  "text.fabric-essentials.command.fly.self.disable": "Disabled fly",
-  "text.fabric-essentials.command.fly.other.enable": "Enabled fly for %s",
-  "text.fabric-essentials.command.fly.other.disable": "Disabled fly for %s",
+  "text.fabric-essentials.command.fly.self": "Set Fly to %s",
+  "text.fabric-essentials.command.fly.other": "Set Fly to %s for %s",
+  "text.fabric-essentials.command.fly.victim": "Fly has been set to %s by %s",
+
+  "text.fabric-essentials.command.invulnerable.self": "Set God mode to %s",
+  "text.fabric-essentials.command.invulnerable.other": "Set God mode to %s for %s",
+  "text.fabric-essentials.command.invulnerable.victim": "God mode has been set to %s by %s",
+
+  "text.fabric-essentials.command.invulnerable.self.enable": "Enabled God mode",
+  "text.fabric-essentials.command.invulnerable.self.disable": "Disabled God mode",
+  "text.fabric-essentials.command.invulnerable.other.enable": "Enabled God mode for %s",
+  "text.fabric-essentials.command.invulnerable.other.disable": "Disabled God mode for %s",
 
   "text.fabric-essentials.command.ping.self": "Pong! Your connection latency to the server is %sms",
   "text.fabric-essentials.command.ping.other": "Pong! %s's connection latency to the server is %sms",

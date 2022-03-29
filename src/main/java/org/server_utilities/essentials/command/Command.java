@@ -3,15 +3,18 @@ package org.server_utilities.essentials.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
 import org.server_utilities.essentials.util.data.IMinecraftServer;
 
-import java.util.Arrays;
 import java.util.function.Predicate;
 
 public abstract class Command {
@@ -46,6 +49,20 @@ public abstract class Command {
 
     public static void sendFeedback(CommandContext<CommandSourceStack> ctx, String translation, Object... args) {
         ctx.getSource().sendSuccess(new TranslatableComponent(translation, args), false);
+    }
+
+    public static void sendFeedback(ServerPlayer serverPlayer, String translation, Object... args) {
+        serverPlayer.sendMessage(new TranslatableComponent(translation, args), Util.NIL_UUID);
+    }
+
+    public static String toName(CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack source = ctx.getSource();
+        try {
+            Entity entity = source.getEntityOrException();
+            return entity.getScoreboardName();
+        } catch (CommandSyntaxException e) {
+            return "Console";
+        }
     }
 
 }

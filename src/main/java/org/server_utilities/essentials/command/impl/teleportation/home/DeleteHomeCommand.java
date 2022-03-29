@@ -10,7 +10,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
@@ -37,12 +36,12 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx, ServerPlayer sender) throws CommandSyntaxException {
-        return deleteHome(ctx, StringArgumentType.getString(ctx, NAME), sender.getGameProfile(), true);
+    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return deleteHome(ctx, StringArgumentType.getString(ctx, NAME), ctx.getSource().getPlayerOrException().getGameProfile(), true);
     }
 
     @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, GameProfile target) throws CommandSyntaxException {
+    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) throws CommandSyntaxException {
         return deleteHome(ctx, StringArgumentType.getString(ctx, NAME), target, false);
     }
 

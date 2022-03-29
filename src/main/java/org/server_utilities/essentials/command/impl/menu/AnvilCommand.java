@@ -19,7 +19,7 @@ public class AnvilCommand extends SimpleMenuCommand {
     }
 
     @Override
-    protected MenuProvider createMenu(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, ServerPlayer target) {
+    protected MenuProvider createMenu(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
         return new SimpleMenuProvider((i, inventory, player) -> new DummyAnvilMenu(i, inventory, ContainerLevelAccess.create(player.level, player.blockPosition())), ANVIL_TITLE);
     }
 }

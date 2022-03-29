@@ -28,12 +28,12 @@ public class InvulnerableCommand extends OptionalOnlineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx, ServerPlayer sender) throws CommandSyntaxException {
-        return setInvulnerable(ctx, sender, BoolArgumentType.getBool(ctx, ENABLE), true);
+    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return setInvulnerable(ctx, ctx.getSource().getPlayerOrException(), BoolArgumentType.getBool(ctx, ENABLE), true);
     }
 
     @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, ServerPlayer target) throws CommandSyntaxException {
+    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException {
         return setInvulnerable(ctx, target, BoolArgumentType.getBool(ctx, ENABLE), false);
     }
 

@@ -19,7 +19,7 @@ public class WorkBenchCommand extends SimpleMenuCommand {
     }
 
     @Override
-    protected MenuProvider createMenu(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, ServerPlayer target) {
+    protected MenuProvider createMenu(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
         return new SimpleMenuProvider((i, inventory, player) -> new DummyCraftingMenu(i, inventory, ContainerLevelAccess.create(player.level, player.blockPosition())), WORKBENCH_TITLE);
     }
 }

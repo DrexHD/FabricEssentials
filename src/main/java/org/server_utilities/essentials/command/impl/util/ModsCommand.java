@@ -25,7 +25,7 @@ public class ModsCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        ctx.getSource().sendSuccess(new TranslatableComponent("text.fabric-essentials.command.mods.list.title", mods.size()), false);
+        sendFeedback(ctx, "text.fabric-essentials.command.mods.list.title", mods.size());
         String joinedMods = String.join(", ", mods.stream().map(modContainer -> modContainer.getMetadata().getName()).toList());
         ctx.getSource().sendSuccess(new TextComponent(joinedMods), false);
         return mods.size();

@@ -2,9 +2,9 @@ package org.server_utilities.essentials.command.impl.teleportation.home;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.UserDataStorage;
@@ -20,12 +20,12 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx, ServerPlayer sender) {
-        return sendHomeList(ctx, sender.getGameProfile(), true);
+    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return sendHomeList(ctx, ctx.getSource().getPlayerOrException().getGameProfile(), true);
     }
 
     @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, GameProfile target) {
+    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) {
         return sendHomeList(ctx, target, false);
     }
 

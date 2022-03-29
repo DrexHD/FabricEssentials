@@ -43,18 +43,15 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
     protected abstract S getArgument(CommandContext<CommandSourceStack> ctx, String string) throws CommandSyntaxException;
 
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer sender = ctx.getSource().getPlayerOrException();
-        return onSelf(ctx, sender);
+        return onSelf(ctx);
     }
 
     private int executeOther(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer sender = ctx.getSource().getPlayerOrException();
-        S target = getArgument(ctx, targetArgumentId);
-        return onOther(ctx, sender, target);
+        return onOther(ctx, getArgument(ctx, targetArgumentId));
     }
 
-    protected abstract int onSelf(CommandContext<CommandSourceStack> ctx, ServerPlayer sender) throws CommandSyntaxException;
+    protected abstract int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException;
 
-    protected abstract int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, S target) throws CommandSyntaxException;
+    protected abstract int onOther(CommandContext<CommandSourceStack> ctx, S target) throws CommandSyntaxException;
 
 }

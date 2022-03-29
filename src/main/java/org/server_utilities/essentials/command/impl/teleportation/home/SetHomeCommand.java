@@ -38,12 +38,12 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx, ServerPlayer sender) throws CommandSyntaxException {
-        return setHome(ctx, StringArgumentType.getString(ctx, NAME), sender.getGameProfile(), true);
+    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return setHome(ctx, StringArgumentType.getString(ctx, NAME), ctx.getSource().getPlayerOrException().getGameProfile(), true);
     }
 
     @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer sender, GameProfile target) throws CommandSyntaxException {
+    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) throws CommandSyntaxException {
         return setHome(ctx, StringArgumentType.getString(ctx, NAME), target, false);
     }
 
@@ -56,8 +56,10 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             List<Home> homes = userData.getHomes();
             Home newHome = new Home(name, new Location(serverPlayer));
             homes.add(newHome);
-            ctx.getSource().sendSuccess(self ? new TranslatableComponent("text.fabric-essentials.command.sethome.self", name) :
-                    new TranslatableComponent("text.fabric-essentials.command.sethome.other", name, target.getName()), false);
+            sendFeedback(ctx,
+                    String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
+                    self ? new Object[]{name} : new Object[]{name, target.getName()}
+            );
             return 1;
         } else {
             throw ALREADY_EXISTS.create();

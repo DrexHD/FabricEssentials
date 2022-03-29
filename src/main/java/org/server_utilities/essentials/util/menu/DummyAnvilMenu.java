@@ -4,6 +4,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import org.jetbrains.annotations.NotNull;
 
 public class DummyAnvilMenu extends AnvilMenu {
 
@@ -12,7 +13,7 @@ public class DummyAnvilMenu extends AnvilMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 }

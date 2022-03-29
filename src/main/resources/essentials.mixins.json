@@ -7,5 +7,12 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "data.LevelResourceAccessor",
+    "data.LevelStorageAccessMixin",
+    "data.LevelStorageSourceAccessor",
+    "data.MinecraftServerMixin",
+    "data.PlayerListMixin"
+  ]
 }

@@ -2,20 +2,15 @@ package org.server_utilities.essentials.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
-import org.server_utilities.essentials.command.menu.AnvilCommand;
-import org.server_utilities.essentials.command.menu.EnderChestCommand;
-import org.server_utilities.essentials.command.menu.InventoryCommand;
-import org.server_utilities.essentials.command.menu.WorkBenchCommand;
-import org.server_utilities.essentials.command.teleportation.home.HomeCommand;
-import org.server_utilities.essentials.command.teleportation.home.HomesCommand;
-import org.server_utilities.essentials.command.teleportation.home.SetHomeCommand;
-import org.server_utilities.essentials.command.teleportation.warp.SetWarpCommand;
-import org.server_utilities.essentials.command.teleportation.warp.WarpCommand;
-import org.server_utilities.essentials.command.teleportation.warp.WarpsCommand;
-import org.server_utilities.essentials.command.util.FeedCommand;
-import org.server_utilities.essentials.command.util.HealCommand;
-import org.server_utilities.essentials.command.util.ModsCommand;
-import org.server_utilities.essentials.command.util.PingCommand;
+import org.server_utilities.essentials.command.impl.menu.AnvilCommand;
+import org.server_utilities.essentials.command.impl.menu.EnderChestCommand;
+import org.server_utilities.essentials.command.impl.menu.InventoryCommand;
+import org.server_utilities.essentials.command.impl.menu.WorkBenchCommand;
+import org.server_utilities.essentials.command.impl.teleportation.home.*;
+import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCommand;
+import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
+import org.server_utilities.essentials.command.impl.teleportation.warp.WarpsCommand;
+import org.server_utilities.essentials.command.impl.util.*;
 
 // TODO:
 public class Manager {
@@ -29,9 +24,10 @@ public class Manager {
             new InventoryCommand(),
             new WorkBenchCommand(),
             // Homes
+            new DeleteHomeCommand(),
             new HomeCommand(),
-            new SetHomeCommand(),
             new HomesCommand(),
+            new SetHomeCommand(),
             // Warps
             new WarpCommand(),
             new SetWarpCommand(),
@@ -39,6 +35,7 @@ public class Manager {
             // Util
             new PingCommand(),
             new ModsCommand(),
+            new FlyCommand(),
     };
 
     public Manager(CommandDispatcher<CommandSourceStack> dispatcher, boolean dedicated) {

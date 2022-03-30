@@ -43,5 +43,10 @@
   "text.fabric-essentials.command.sethome.other": "Set the Home %s for %s",
   "text.fabric-essentials.command.sethome.already_exists": "A home with that name already exists",
 
-  "text.fabric-essentials.command.mods.list.title": "Mods [%s]:"
+  "text.fabric-essentials.command.mods.doesnt_exist": "No mod with that id exists",
+  "text.fabric-essentials.command.mods.list.title": "Mods [%s]:",
+  "text.fabric-essentials.command.mods.info.version": "Version: %s",
+  "text.fabric-essentials.command.mods.info.author": "Authors: %s",
+  "text.fabric-essentials.command.mods.info.description": "Description: %s",
+  "text.fabric-essentials.command.mods.info.hover": "Click for more information!"
 }

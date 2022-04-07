@@ -7,8 +7,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
-import org.server_utilities.essentials.storage.UserDataStorage;
-import org.server_utilities.essentials.teleportation.Home;
+import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.util.teleportation.Home;
 import org.server_utilities.essentials.util.ComponentUtil;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
     }
 
     private int sendHomeList(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) {
-        UserDataStorage dataStorage = getEssentialsDataStorage(ctx).getUserData(target.getId());
+        UserData dataStorage = getEssentialsDataStorage(ctx).getUserData(target.getId());
         List<Home> homes = dataStorage.getHomes();
         if (homes.isEmpty()) {
             sendFeedback(ctx,
@@ -47,7 +47,7 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("text.fabric-essentials.command.homes.hover")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", HomeCommand.HOME_COMMAND, home.getName()) + (self ? "" : " " + target.getName())))
             )).toArray(Component[]::new);
-            ctx.getSource().sendSuccess(ComponentUtil.join(new TextComponent(", "), components), false);
+            ctx.getSource().sendSuccess(ComponentUtil.join(components), false);
         }
         return homes.size();
     }

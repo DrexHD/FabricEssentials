@@ -1,4 +1,4 @@
-package org.server_utilities.essentials.storage.util;
+package org.server_utilities.essentials.util.teleportation;
 
 import net.minecraft.CrashReport;
 import net.minecraft.ReportedException;

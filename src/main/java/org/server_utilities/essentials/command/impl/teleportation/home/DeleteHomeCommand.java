@@ -13,8 +13,8 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
-import org.server_utilities.essentials.storage.UserDataStorage;
-import org.server_utilities.essentials.teleportation.Home;
+import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
 
@@ -47,7 +47,7 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
 
     private int deleteHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         EssentialsDataStorage dataStorage = getEssentialsDataStorage(ctx);
-        UserDataStorage userData = dataStorage.getUserData(target.getId());
+        UserData userData = dataStorage.getUserData(target.getId());
         Optional<Home> optional = userData.getHome(name);
         if (optional.isPresent()) {
             userData.getHomes().remove(optional.get());

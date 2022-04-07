@@ -3,18 +3,18 @@ package org.server_utilities.essentials.storage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import org.server_utilities.essentials.teleportation.Home;
+import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDataStorage {
+public class UserData {
 
     private final List<Home> homes = new ArrayList<>();
 
     // TODO: Exception handling
-    public UserDataStorage(CompoundTag compoundTag) {
+    public UserData(CompoundTag compoundTag) {
         load(compoundTag);
     }
 

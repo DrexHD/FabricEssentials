@@ -42,7 +42,7 @@ public class ModsCommand extends Command {
     private int execute(CommandContext<CommandSourceStack> ctx) {
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
         sendFeedback(ctx, "text.fabric-essentials.command.mods.list.title", mods.size());
-        MutableComponent modsComponent = ComponentUtil.join(new TextComponent(", "),
+        MutableComponent modsComponent = ComponentUtil.join(
                 mods.stream().map(this::formatMod)
                         .toArray(Component[]::new));
         ctx.getSource().sendSuccess(modsComponent, false);
@@ -55,7 +55,9 @@ public class ModsCommand extends Command {
         if (optional.isPresent()) {
             ModContainer modContainer = optional.get();
             ModMetadata metadata = modContainer.getMetadata();
-            MutableComponent authors = ComponentUtil.join(new TextComponent(", "), metadata.getAuthors().stream().map(person -> new TextComponent(person.getName())).toArray(Component[]::new));
+            MutableComponent authors = ComponentUtil.join(
+                    metadata.getAuthors().stream().map(person -> new TextComponent(person.getName())).toArray(Component[]::new)
+            );
             ctx.getSource().sendSuccess(new TextComponent(metadata.getName()), false);
             sendFeedback(ctx, "text.fabric-essentials.command.mods.info.version", metadata.getVersion().getFriendlyString());
             sendFeedback(ctx, "text.fabric-essentials.command.mods.info.author", authors);

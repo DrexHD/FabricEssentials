@@ -1,26 +1,29 @@
-package org.server_utilities.essentials.teleportation;
+package org.server_utilities.essentials.util.teleportation;
 
 import net.minecraft.nbt.CompoundTag;
-import org.server_utilities.essentials.storage.util.Location;
 
-public class Home {
+public class Warp {
 
     private String name;
     private Location location;
+    private boolean hasAlias;
 
-    public Home(String name, Location location) {
+    public Warp(String name, Location location, boolean hasAlias) {
         this.name = name;
         this.location = location;
+        this.hasAlias = hasAlias;
     }
 
-    public Home(CompoundTag compoundTag) {
+    public Warp(CompoundTag compoundTag) {
         this.name = compoundTag.getString("Name");
         this.location = new Location(compoundTag.getCompound("Location"));
+        this.hasAlias = compoundTag.getBoolean("HasAlias");
     }
 
     public CompoundTag save(CompoundTag compoundTag) {
         compoundTag.putString("Name", name);
         compoundTag.put("Location", location.save(new CompoundTag()));
+        compoundTag.putBoolean("HasAlias", hasAlias);
         return compoundTag;
     }
 
@@ -31,4 +34,9 @@ public class Home {
     public Location getLocation() {
         return location;
     }
+
+    public boolean hasAlias() {
+        return hasAlias;
+    }
+
 }

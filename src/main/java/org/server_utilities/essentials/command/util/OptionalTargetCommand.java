@@ -8,20 +8,25 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 
 public abstract class OptionalTargetCommand<T, S> extends Command {
 
-    private String targetArgumentId = "target";
+    private final String targetArgumentId;
 
     public OptionalTargetCommand(Properties properties) {
-        super(properties);
+        this(properties, "target");
     }
 
     public OptionalTargetCommand(Properties properties, String targetArgumentId) {
         super(properties);
+        // Allow literal command execution if either of the sub-nodes is present
+        String permission = properties.getPermission();
+        if (permission != null) {
+            properties.orPredicate(permission(permission, SELF_PERMISSION_SUFFIX));
+            properties.orPredicate(permission(permission, OTHER_PERMISSION_SUFFIX));
+        }
         this.targetArgumentId = targetArgumentId;
     }
 
@@ -33,7 +38,10 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
         argument.executes(this::execute);
         RequiredArgumentBuilder<CommandSourceStack, T> target = Commands.argument(targetArgumentId, getArgumentType());
         String permission = this.properties.getPermission();
-        if (permission != null) target.requires(permission(permission, OTHER_PERMISSION_SUFFIX));
+        if (permission != null) {
+            argument.requires(permission(permission, SELF_PERMISSION_SUFFIX));
+            target.requires(permission(permission, OTHER_PERMISSION_SUFFIX));
+        }
         target.executes(this::executeOther);
         argument.then(target);
     }

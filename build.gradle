@@ -32,8 +32,11 @@ dependencies {
     // Placeholder api
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 
+    // Server Translations api
     modImplementation include("fr.catcore:api:${project.translations_version}")
 
+    // Hocon config
+    implementation include("org.spongepowered:configurate-hocon:${project.configurate_hocon_version}")
 
 }
 
@@ -46,8 +49,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
+    it.options.release.set(17)
 }
 
 java {

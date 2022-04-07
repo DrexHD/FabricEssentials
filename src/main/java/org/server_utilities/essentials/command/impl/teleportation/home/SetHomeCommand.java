@@ -13,6 +13,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
+import org.server_utilities.essentials.config.homes.HomesConfig;
+import org.server_utilities.essentials.config.homes.HomesLimit;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
 import org.server_utilities.essentials.storage.UserDataStorage;
 import org.server_utilities.essentials.storage.util.Location;
@@ -25,6 +27,9 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
 
     private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(new TranslatableComponent("text.fabric-essentials.command.sethome.already_exists"));
     private static final String NAME = "name";
+    private static final String PERMISSION_BASE = "homes";
+    private static final String PERMISSION_LIMIT = "limit";
+    private static final String PERMISSION_LIMIT_BYPASS = "bypass";
 
     public SetHomeCommand() {
         super(Properties.create("sethome").permission("sethome"));
@@ -54,15 +59,43 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
         Optional<Home> optional = userData.getHome(name);
         if (optional.isEmpty()) {
             List<Home> homes = userData.getHomes();
-            Home newHome = new Home(name, new Location(serverPlayer));
-            homes.add(newHome);
-            sendFeedback(ctx,
-                    String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
-                    self ? new Object[]{name} : new Object[]{name, target.getName()}
-            );
-            return 1;
+            int limit = getHomesLimit(ctx.getSource());
+            if (homes.size() >= limit) {
+                ctx.getSource().sendFailure(new TranslatableComponent("text.fabric-essentials.command.sethome.limit"));
+                return 0;
+            } else {
+                Home newHome = new Home(name, new Location(serverPlayer));
+                homes.add(newHome);
+                sendFeedback(ctx,
+                        String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
+                        self ? new Object[]{name} : new Object[]{name, target.getName()}
+                );
+                return 1;
+            }
         } else {
             throw ALREADY_EXISTS.create();
         }
     }
+
+    private int getHomesLimit(CommandSourceStack source) {
+        if (permission(PERMISSION_BASE, PERMISSION_LIMIT, PERMISSION_LIMIT_BYPASS).test(source)) {
+            return Integer.MAX_VALUE;
+        } else {
+            HomesConfig homesConfig = getConfig().homesConfig;
+            int limit = homesConfig.defaultLimit;
+            int added = 0;
+            for (HomesLimit homesLimit : homesConfig.homesLimits) {
+                if (permission(PERMISSION_BASE, PERMISSION_LIMIT, homesLimit.permission).test(source)) {
+                    if (homesLimit.stacks) {
+                        added += homesLimit.limit;
+                    } else {
+                        limit = Math.max(limit, homesLimit.limit);
+                    }
+                }
+            }
+            limit += added;
+            return limit;
+        }
+    }
+
 }

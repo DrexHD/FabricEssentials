@@ -11,7 +11,7 @@ import static org.server_utilities.essentials.command.Command.PERMISSION_PREFIX;
 
 public class Properties {
 
-    private String[] literals;
+    private final String[] literals;
     @Nullable
     private String permission;
     private Predicate<CommandSourceStack> predicate = stack -> true;
@@ -36,8 +36,13 @@ public class Properties {
         return this;
     }
 
-    public Properties predicate(Predicate<CommandSourceStack> predicate) {
+    public Properties andPredicate(Predicate<CommandSourceStack> predicate) {
         this.predicate = this.predicate.and(predicate);
+        return this;
+    }
+
+    public Properties orPredicate(Predicate<CommandSourceStack> predicate) {
+        this.predicate = this.predicate.or(predicate);
         return this;
     }
 

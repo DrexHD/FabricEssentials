@@ -1,7 +1,6 @@
 {
   "text.fabric-essentials.command.inventory.other": "Opened %s's inventory",
   "text.fabric-essentials.command.enderchest.other": "Opened %s's enderchest",
-
   "text.fabric-essentials.command.delhome.self": "Deleted home %s",
   "text.fabric-essentials.command.delhome.other": "Deleted home %s from %s",
 
@@ -21,11 +20,6 @@
   "text.fabric-essentials.command.invulnerable.other": "Set God mode to %s for %s",
   "text.fabric-essentials.command.invulnerable.victim": "God mode has been set to %s by %s",
 
-  "text.fabric-essentials.command.invulnerable.self.enable": "Enabled God mode",
-  "text.fabric-essentials.command.invulnerable.self.disable": "Disabled God mode",
-  "text.fabric-essentials.command.invulnerable.other.enable": "Enabled God mode for %s",
-  "text.fabric-essentials.command.invulnerable.other.disable": "Disabled God mode for %s",
-
   "text.fabric-essentials.command.ping.self": "Pong! Your connection latency to the server is %sms",
   "text.fabric-essentials.command.ping.other": "Pong! %s's connection latency to the server is %sms",
 
@@ -42,6 +36,7 @@
   "text.fabric-essentials.command.sethome.self": "Set the Home %s",
   "text.fabric-essentials.command.sethome.other": "Set the Home %s for %s",
   "text.fabric-essentials.command.sethome.already_exists": "A home with that name already exists",
+  "text.fabric-essentials.command.sethome.limit": "Limited reached! You can't set any more Homes!",
 
   "text.fabric-essentials.command.mods.doesnt_exist": "No mod with that id exists",
   "text.fabric-essentials.command.mods.list.title": "Mods [%s]:",

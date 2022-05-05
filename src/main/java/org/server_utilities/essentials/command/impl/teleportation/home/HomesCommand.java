@@ -9,7 +9,6 @@ import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.UserData;
 import org.server_utilities.essentials.util.teleportation.Home;
-import org.server_utilities.essentials.util.ComponentUtil;
 
 import java.util.List;
 
@@ -42,12 +41,12 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
                     String.format("text.fabric-essentials.command.homes.%s", self ? "self" : "other"),
                     self ? new Object[]{} : new Object[]{target.getName()}
             );
-            Component[] components = homes.stream().map(home -> new TextComponent(home.getName()).withStyle(
+            Component homesComponent = ComponentUtils.formatList(homes.stream().map(Home::getName).toList(), name -> new TextComponent(name).withStyle(
                     Style.EMPTY
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("text.fabric-essentials.command.homes.hover")))
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", HomeCommand.HOME_COMMAND, home.getName()) + (self ? "" : " " + target.getName())))
-            )).toArray(Component[]::new);
-            ctx.getSource().sendSuccess(ComponentUtil.join(components), false);
+                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", HomeCommand.HOME_COMMAND, name) + (self ? "" : " " + target.getName())))
+            ));
+            ctx.getSource().sendSuccess(homesComponent, false);
         }
         return homes.size();
     }

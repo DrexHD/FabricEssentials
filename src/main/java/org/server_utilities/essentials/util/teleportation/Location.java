@@ -51,7 +51,6 @@ public class Location {
         compoundTag.put("Pos", this.newDoubleList(location.x, location.y, location.z));
         compoundTag.put("Rotation", this.newFloatList(yaw, pitch));
         ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("Dimension", tag));
-        ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("Dimension", tag));
         return compoundTag;
     }
 

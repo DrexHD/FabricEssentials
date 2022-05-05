@@ -26,6 +26,7 @@ public class EssentialsConfig {
         }
     }
 
+    // TODO: Config reloading
     private void load() throws ConfigurateException {
         LOGGER.info("Loading configuration...");
         HoconConfigurationLoader configurationLoader = HoconConfigurationLoader.builder().path(CONFIG_FILE).build();

@@ -53,13 +53,10 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         EssentialsDataStorage dataStorage = getEssentialsDataStorage(ctx);
         UserData userData = dataStorage.getUserData(target.getId());
         Optional<Home> optional = userData.getHome(name);
-        if (optional.isPresent()) {
-            sendFeedback(ctx, String.format("text.fabric-essentials.command.home.teleport.%s", self ? "self" : "other"), name);
-            optional.get().getLocation().teleport(serverPlayer);
-            return 1;
-        } else {
-            throw DOESNT_EXIST.create();
-        }
+        Home home = optional.orElseThrow(DOESNT_EXIST::create);
+        sendFeedback(ctx, String.format("text.fabric-essentials.command.home.teleport.%s", self ? "self" : "other"), name);
+        home.getLocation().teleport(serverPlayer);
+        return 1;
     }
 
     public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(getEssentialsDataStorage(ctx).getUserData(ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::getName).toList(), builder);

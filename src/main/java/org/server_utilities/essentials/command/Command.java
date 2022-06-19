@@ -15,6 +15,7 @@ import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.MainConfig;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
 import org.server_utilities.essentials.util.data.IMinecraftServer;
+import org.slf4j.Logger;
 
 import java.util.function.Predicate;
 
@@ -25,6 +26,7 @@ public abstract class Command {
     protected static final String PERMISSION_DELIMITER = ".";
     protected static final String SELF_PERMISSION_SUFFIX = "self";
     protected static final String OTHER_PERMISSION_SUFFIX = "other";
+    protected static final Logger LOGGER = EssentialsMod.getLogger();
 
     public Command(@NotNull Properties properties) {
         this.properties = properties;
@@ -51,6 +53,10 @@ public abstract class Command {
 
     public static MainConfig getConfig() {
         return EssentialsMod.getConfig().main();
+    }
+
+    public static void sendFeedback(CommandSourceStack source, String translation, Object... args) {
+        source.sendSuccess(Component.translatable(translation, args), false);
     }
 
     public static void sendFeedback(CommandContext<CommandSourceStack> ctx, String translation, Object... args) {

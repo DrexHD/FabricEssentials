@@ -38,6 +38,7 @@ public class CommandManager {
             new SetWarpCommand(),
             new WarpsCommand(),
             // Util
+            new EssentialsCommand(),
             new PingCommand(),
             new ModsCommand(),
             new FlyCommand(),

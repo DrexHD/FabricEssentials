@@ -8,12 +8,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.EssentialsData;
-import org.server_utilities.essentials.storage.EssentialsDataStorage;
 import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
@@ -22,7 +21,7 @@ import java.util.Optional;
 
 public class SetWarpCommand extends Command {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(new TranslatableComponent("text.fabric-essentials.command.setwarp.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.setwarp.already_exists"));
     private static final String NAME = "name";
 
     public SetWarpCommand() {

@@ -29,9 +29,9 @@ public class WarpsCommand extends Command {
             sendFeedback(ctx, "text.fabric-essentials.command.warps.no_warp");
         } else {
             sendFeedback(ctx, "text.fabric-essentials.command.warps");
-            Component warpsComponent = ComponentUtils.formatList(warps.stream().map(Warp::getName).toList(), name -> new TextComponent(name).withStyle(
+            Component warpsComponent = ComponentUtils.formatList(warps.stream().map(Warp::getName).toList(), name -> Component.literal(name).withStyle(
                     Style.EMPTY
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("text.fabric-essentials.command.warps.hover")))
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.warps.hover")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", WarpCommand.WARP_COMMAND, name)))
             ));
             ctx.getSource().sendSuccess(warpsComponent, false);

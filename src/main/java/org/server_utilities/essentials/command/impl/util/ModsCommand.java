@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class ModsCommand extends Command {
 
-    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(new TranslatableComponent("text.fabric-essentials.command.mods.doesnt_exist"));
+    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.mods.doesnt_exist"));
     private static final String MOD_ID = "modid";
     public static final String MODS_COMMAND = "mods";
 
@@ -52,8 +52,8 @@ public class ModsCommand extends Command {
         if (optional.isPresent()) {
             ModContainer modContainer = optional.get();
             ModMetadata metadata = modContainer.getMetadata();
-            Component authors = ComponentUtils.formatList(metadata.getAuthors(), person -> new TextComponent(person.getName()));
-            ctx.getSource().sendSuccess(new TextComponent(metadata.getName()), false);
+            Component authors = ComponentUtils.formatList(metadata.getAuthors(), person -> Component.literal(person.getName()));
+            ctx.getSource().sendSuccess(Component.literal(metadata.getName()), false);
             sendFeedback(ctx, "text.fabric-essentials.command.mods.info.version", metadata.getVersion().getFriendlyString());
             sendFeedback(ctx, "text.fabric-essentials.command.mods.info.author", authors);
             sendFeedback(ctx, "text.fabric-essentials.command.mods.info.description", metadata.getDescription());
@@ -64,10 +64,10 @@ public class ModsCommand extends Command {
     }
 
     private Component formatMod(ModContainer modContainer) {
-        return new TextComponent(modContainer.getMetadata().getId())
+        return Component.literal(modContainer.getMetadata().getId())
                 .withStyle(
                         Style.EMPTY
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("text.fabric-essentials.command.mods.info.hover")))
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.mods.info.hover")))
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", MODS_COMMAND, modContainer.getMetadata().getId())))
                 );
     }

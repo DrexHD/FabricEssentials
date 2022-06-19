@@ -41,9 +41,9 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
                     String.format("text.fabric-essentials.command.homes.%s", self ? "self" : "other"),
                     self ? new Object[]{} : new Object[]{target.getName()}
             );
-            Component homesComponent = ComponentUtils.formatList(homes.stream().map(Home::getName).toList(), name -> new TextComponent(name).withStyle(
+            Component homesComponent = ComponentUtils.formatList(homes.stream().map(Home::getName).toList(), name -> Component.literal(name).withStyle(
                     Style.EMPTY
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("text.fabric-essentials.command.homes.hover")))
+                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.homes.hover")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", HomeCommand.HOME_COMMAND, name) + (self ? "" : " " + target.getName())))
             ));
             ctx.getSource().sendSuccess(homesComponent, false);

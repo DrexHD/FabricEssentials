@@ -1,7 +1,6 @@
 package org.server_utilities.essentials.storage;
 
 import com.mojang.datafixers.DataFixer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;

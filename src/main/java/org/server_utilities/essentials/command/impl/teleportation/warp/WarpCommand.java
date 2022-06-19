@@ -10,7 +10,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class WarpCommand extends Command {
 
-    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(new TranslatableComponent("text.fabric-essentials.command.warp.doesnt_exist"));
+    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.warp.doesnt_exist"));
     private static final String NAME = "name";
     public static final String WARP_COMMAND = "warp";
 

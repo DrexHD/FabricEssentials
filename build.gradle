@@ -33,7 +33,7 @@ dependencies {
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 
     // Server Translations api
-    modImplementation include("fr.catcore:api:${project.translations_version}")
+    modImplementation include("fr.catcore:server-translations-api:${project.translations_version}")
 
     // Hocon config
     implementation include("org.spongepowered:configurate-hocon:${project.configurate_hocon_version}")

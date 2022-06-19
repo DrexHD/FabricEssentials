@@ -9,7 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
@@ -17,15 +17,15 @@ import org.server_utilities.essentials.config.homes.HomesConfig;
 import org.server_utilities.essentials.config.homes.HomesLimit;
 import org.server_utilities.essentials.storage.EssentialsDataStorage;
 import org.server_utilities.essentials.storage.UserData;
-import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Home;
+import org.server_utilities.essentials.util.teleportation.Location;
 
 import java.util.List;
 import java.util.Optional;
 
 public class SetHomeCommand extends OptionalOfflineTargetCommand {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(new TranslatableComponent("text.fabric-essentials.command.sethome.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.sethome.already_exists"));
     private static final String NAME = "name";
     private static final String PERMISSION_BASE = "homes";
     private static final String PERMISSION_LIMIT = "limit";
@@ -61,7 +61,7 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             List<Home> homes = userData.getHomes();
             int limit = getHomesLimit(ctx.getSource());
             if (homes.size() >= limit) {
-                ctx.getSource().sendFailure(new TranslatableComponent("text.fabric-essentials.command.sethome.limit"));
+                ctx.getSource().sendFailure(Component.translatable("text.fabric-essentials.command.sethome.limit"));
                 return 0;
             } else {
                 Home newHome = new Home(name, new Location(serverPlayer));

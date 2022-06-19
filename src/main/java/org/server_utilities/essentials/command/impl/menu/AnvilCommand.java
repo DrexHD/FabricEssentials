@@ -2,7 +2,8 @@ package org.server_utilities.essentials.command.impl.menu;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -12,7 +13,7 @@ import org.server_utilities.essentials.util.menu.DummyAnvilMenu;
 
 public class AnvilCommand extends SimpleMenuCommand {
 
-    private static final TranslatableComponent ANVIL_TITLE = new TranslatableComponent("container.repair");
+    private static final MutableComponent ANVIL_TITLE = Component.translatable("container.repair");
 
     public AnvilCommand() {
         super(Properties.create("anvil").permission("anvil"));

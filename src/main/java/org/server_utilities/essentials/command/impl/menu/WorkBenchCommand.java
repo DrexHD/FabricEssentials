@@ -2,7 +2,8 @@ package org.server_utilities.essentials.command.impl.menu;
 
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -12,7 +13,7 @@ import org.server_utilities.essentials.util.menu.DummyCraftingMenu;
 
 public class WorkBenchCommand extends SimpleMenuCommand {
 
-    private static final TranslatableComponent WORKBENCH_TITLE = new TranslatableComponent("container.crafting");
+    private static final MutableComponent WORKBENCH_TITLE = Component.translatable("container.crafting");
 
     public WorkBenchCommand() {
         super(Properties.create("wb", "workbench").permission("workbench"));

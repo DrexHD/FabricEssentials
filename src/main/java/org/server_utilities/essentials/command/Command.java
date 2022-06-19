@@ -5,10 +5,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -55,11 +54,11 @@ public abstract class Command {
     }
 
     public static void sendFeedback(CommandContext<CommandSourceStack> ctx, String translation, Object... args) {
-        ctx.getSource().sendSuccess(new TranslatableComponent(translation, args), false);
+        ctx.getSource().sendSuccess(Component.translatable(translation, args), false);
     }
 
     public static void sendFeedback(ServerPlayer serverPlayer, String translation, Object... args) {
-        serverPlayer.sendMessage(new TranslatableComponent(translation, args), Util.NIL_UUID);
+        serverPlayer.sendSystemMessage(Component.translatable(translation, args));
     }
 
     public static String toName(CommandContext<CommandSourceStack> ctx) {

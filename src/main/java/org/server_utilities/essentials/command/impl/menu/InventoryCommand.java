@@ -3,7 +3,8 @@ package org.server_utilities.essentials.command.impl.menu;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -14,7 +15,7 @@ import org.server_utilities.essentials.util.menu.LinkedInventory;
 
 public class InventoryCommand extends SimpleMenuCommand {
 
-    private static final TranslatableComponent INVENTORY_TITLE = new TranslatableComponent("container.inventory");
+    private static final MutableComponent INVENTORY_TITLE = Component.translatable("container.inventory");
 
     public InventoryCommand() {
         super(Properties.create("inv", "inventory").permission("inventory"));

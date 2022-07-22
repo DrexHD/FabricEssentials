@@ -2,9 +2,11 @@ package org.server_utilities.essentials.config;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.server_utilities.essentials.EssentialsMod;
+import org.server_utilities.essentials.config.serializer.ResourceLocationSerializer;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 import java.nio.file.Path;
@@ -27,13 +29,15 @@ public class EssentialsConfig {
 
     public void load() throws ConfigurateException {
         LOGGER.info("Loading configuration...");
-        HoconConfigurationLoader configurationLoader = HoconConfigurationLoader.builder().path(CONFIG_FILE).build();
-        CommentedConfigurationNode configurationNode = configurationLoader.load();
+        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().path(CONFIG_FILE).build();
+        CommentedConfigurationNode rootNode = loader.load(ConfigurationOptions.defaults().serializers(builder -> builder.register(new ResourceLocationSerializer())));
         if (!CONFIG_FILE.toFile().exists()) {
             CONFIG_DIR.toFile().mkdirs();
-            configurationLoader.save(configurationNode);
+            LOGGER.info("Creating configuration file!");
+            rootNode.set(MainConfig.class, new MainConfig());
+            loader.save(rootNode);
         }
-        mainConfig = configurationNode.get(MainConfig.class, new MainConfig());
+        mainConfig = rootNode.get(MainConfig.class, new MainConfig());
     }
 
     public MainConfig main() {

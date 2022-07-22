@@ -55,6 +55,14 @@ public abstract class Command {
         return EssentialsMod.getConfig().main();
     }
 
+    public static void sendError(CommandSourceStack source, String translation, Object... args) {
+        source.sendFailure(Component.translatable(translation, args));
+    }
+
+    public static void sendError(CommandContext<CommandSourceStack> ctx, String translation, Object... args) {
+        ctx.getSource().sendFailure(Component.translatable(translation, args));
+    }
+
     public static void sendFeedback(CommandSourceStack source, String translation, Object... args) {
         source.sendSuccess(Component.translatable(translation, args), false);
     }

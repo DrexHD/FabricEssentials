@@ -24,8 +24,6 @@ public class CommandManager {
             // Menu
             new AnvilCommand(),
             new EnderChestCommand(),
-            new FeedCommand(),
-            new HealCommand(),
             new InventoryCommand(),
             new WorkBenchCommand(),
             // Homes
@@ -37,15 +35,20 @@ public class CommandManager {
             new WarpCommand(),
             new SetWarpCommand(),
             new WarpsCommand(),
+
             // Util
             new EssentialsCommand(),
+            new FeedCommand(),
+            new HatCommand(),
+            new HealCommand(),
+            new GlowCommand(),
             new PingCommand(),
             new ModsCommand(),
             new FlyCommand(),
             new InvulnerableCommand(),
     };
 
-    public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
+    public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {
         for (Command command : COMMANDS) {
             command.registerCommand(dispatcher);
         }

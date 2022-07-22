@@ -9,6 +9,7 @@ import org.server_utilities.essentials.mixin.data.LevelResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Color on signs / anvil
 public class EssentialsMod implements DedicatedServerModInitializer {
 
 	public static final String MOD_ID = "fabric-essentials";

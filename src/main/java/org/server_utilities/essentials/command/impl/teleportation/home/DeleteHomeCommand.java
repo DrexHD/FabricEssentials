@@ -12,7 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
-import org.server_utilities.essentials.storage.EssentialsDataStorage;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.UserData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
@@ -46,11 +46,12 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     private int deleteHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
-        EssentialsDataStorage dataStorage = getEssentialsDataStorage(ctx);
-        UserData userData = dataStorage.getUserData(target.getId());
+        DataStorage dataStorage = DataStorage.STORAGE;
+        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = userData.getHome(name);
         if (optional.isPresent()) {
             userData.getHomes().remove(optional.get());
+            dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), userData);
             sendFeedback(ctx, String.format("text.fabric-essentials.command.delhome.%s", self ? "self" : "other"), name);
             return 1;
         } else {
@@ -58,6 +59,6 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(getEssentialsDataStorage(ctx).getUserData(ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::getName).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);
 
 }

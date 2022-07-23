@@ -1,9 +1,7 @@
 package org.server_utilities.essentials.util.teleportation;
 
-import net.minecraft.CrashReport;
-import net.minecraft.ReportedException;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.*;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -22,63 +20,13 @@ public class Location {
     private static final Logger LOGGER = EssentialsMod.getLogger();
     private Vec3 location;
     private float yaw, pitch;
-    private ResourceKey<Level> dimension = Level.OVERWORLD;
-
-    public Location(Vec3 location, float yaw, float pitch, ResourceKey<Level> dimension) {
-        this.location = location;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.dimension = dimension;
-    }
+    private ResourceLocation dim;
 
     public Location(Entity entity) {
         this.location = entity.position();
         this.yaw = entity.getYRot();
         this.pitch = entity.getXRot();
-        this.dimension = entity.getLevel().dimension();
-    }
-
-    public Location(CompoundTag compoundTag) {
-        try {
-            load(compoundTag);
-        } catch (Throwable throwable) {
-            CrashReport crashReport = CrashReport.forThrowable(throwable, "Loading location NBT");
-            throw new ReportedException(crashReport);
-        }
-    }
-
-    public CompoundTag save(CompoundTag compoundTag) {
-        compoundTag.put("Pos", this.newDoubleList(location.x, location.y, location.z));
-        compoundTag.put("Rotation", this.newFloatList(yaw, pitch));
-        ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error).ifPresent(tag -> compoundTag.put("Dimension", tag));
-        return compoundTag;
-    }
-
-    public void load(CompoundTag compoundTag) {
-        ListTag pos = compoundTag.getList("Pos", Tag.TAG_DOUBLE);
-        ListTag rotation = compoundTag.getList("Rotation", Tag.TAG_FLOAT);
-        location = new Vec3(pos.getDouble(0), pos.getDouble(1), pos.getDouble(2));
-        yaw = rotation.getFloat(0);
-        pitch = rotation.getFloat(1);
-        if (compoundTag.contains("Dimension")) {
-            this.dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, compoundTag.get("Dimension")).resultOrPartial(LOGGER::error).orElse(Level.OVERWORLD);
-        }
-    }
-
-    protected ListTag newDoubleList(double... doubles) {
-        ListTag listTag = new ListTag();
-        for (double d : doubles) {
-            listTag.add(DoubleTag.valueOf(d));
-        }
-        return listTag;
-    }
-
-    protected ListTag newFloatList(float... floats) {
-        ListTag listTag = new ListTag();
-        for (float f : floats) {
-            listTag.add(FloatTag.valueOf(f));
-        }
-        return listTag;
+        this.dim = entity.getLevel().dimension().location();
     }
 
     public boolean teleport(@NotNull Entity entity) {
@@ -90,7 +38,7 @@ public class Location {
             return false;
         }
 
-        ServerLevel serverLevel = entity.getServer().getLevel(this.dimension);
+        ServerLevel serverLevel = entity.getServer().getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dim));
         if (serverLevel == null) {
             LOGGER.warn("Can't teleport {} to {}, because dimension doesn't exist!", entity.getScoreboardName(), this);
             return false;
@@ -146,19 +94,5 @@ public class Location {
 
     public float getPitch() {
         return pitch;
-    }
-
-    public ResourceKey<Level> getDimension() {
-        return dimension;
-    }
-
-    @Override
-    public String toString() {
-        return "Location{" +
-                "location=" + location +
-                ", yaw=" + yaw +
-                ", pitch=" + pitch +
-                ", dimension=" + dimension +
-                '}';
     }
 }

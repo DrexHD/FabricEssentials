@@ -15,7 +15,7 @@ import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.config.homes.HomesConfig;
 import org.server_utilities.essentials.config.homes.HomesLimit;
-import org.server_utilities.essentials.storage.EssentialsDataStorage;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.UserData;
 import org.server_utilities.essentials.util.teleportation.Home;
 import org.server_utilities.essentials.util.teleportation.Location;
@@ -54,8 +54,8 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
 
     private int setHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        EssentialsDataStorage dataStorage = getEssentialsDataStorage(ctx);
-        UserData userData = dataStorage.getUserData(target.getId());
+        DataStorage dataStorage = DataStorage.STORAGE;
+        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = userData.getHome(name);
         if (optional.isEmpty()) {
             List<Home> homes = userData.getHomes();
@@ -66,6 +66,7 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             } else {
                 Home newHome = new Home(name, new Location(serverPlayer));
                 homes.add(newHome);
+                dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), userData);
                 sendFeedback(ctx,
                         String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
                         self ? new Object[]{name} : new Object[]{name, target.getName()}

@@ -15,7 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
-import org.server_utilities.essentials.storage.EssentialsDataStorage;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.UserData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
@@ -50,15 +50,15 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
 
     private int teleportHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        EssentialsDataStorage dataStorage = getEssentialsDataStorage(ctx);
-        UserData userData = dataStorage.getUserData(target.getId());
+        DataStorage dataStorage = DataStorage.STORAGE;
+        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = userData.getHome(name);
         Home home = optional.orElseThrow(DOESNT_EXIST::create);
         sendFeedback(ctx, String.format("text.fabric-essentials.command.home.teleport.%s", self ? "self" : "other"), name);
-        home.getLocation().teleport(serverPlayer);
+        home.location().teleport(serverPlayer);
         return 1;
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(getEssentialsDataStorage(ctx).getUserData(ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::getName).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);
 
 }

@@ -13,8 +13,6 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.MainConfig;
-import org.server_utilities.essentials.storage.EssentialsDataStorage;
-import org.server_utilities.essentials.util.data.IMinecraftServer;
 import org.slf4j.Logger;
 
 import java.util.function.Predicate;
@@ -45,10 +43,6 @@ public abstract class Command {
 
     protected static Predicate<CommandSourceStack> permission(String... permission) {
         return commandSourceStack -> Permissions.check(commandSourceStack, PERMISSION_PREFIX + PERMISSION_DELIMITER + String.join(PERMISSION_DELIMITER, permission));
-    }
-
-    public static EssentialsDataStorage getEssentialsDataStorage(CommandContext<CommandSourceStack> ctx) {
-        return ((IMinecraftServer)ctx.getSource().getServer()).getEssentialsStorage();
     }
 
     public static MainConfig getConfig() {

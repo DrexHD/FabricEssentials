@@ -7,6 +7,7 @@ import net.minecraft.network.chat.*;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class WarpsCommand extends Command {
     }
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
-        EssentialsData essentialsData = getEssentialsDataStorage(ctx).getEssentialsData();
+        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
         List<Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
             sendFeedback(ctx, "text.fabric-essentials.command.warps.no_warp");

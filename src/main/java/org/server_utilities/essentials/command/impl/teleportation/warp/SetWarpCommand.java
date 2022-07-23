@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
@@ -37,12 +38,13 @@ public class SetWarpCommand extends Command {
 
     private int setWarp(CommandContext<CommandSourceStack> ctx, String name, boolean hasAlias) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        EssentialsData essentialsData = getEssentialsDataStorage(ctx).getEssentialsData();
+        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
         Optional<Warp> optional = essentialsData.getWarp(name);
         if (optional.isEmpty()) {
             List<Warp> warps = essentialsData.getWarps();
             Warp newWarp = new Warp(name, new Location(serverPlayer), hasAlias);
             warps.add(newWarp);
+            DataStorage.STORAGE.saveEssentialsData(ctx.getSource().getServer(), essentialsData);
             sendFeedback(ctx, "text.fabric-essentials.command.setwarp", name);
             return 1;
         } else {

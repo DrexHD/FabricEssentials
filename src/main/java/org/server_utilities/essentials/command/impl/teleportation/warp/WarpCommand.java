@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.Optional;
@@ -39,7 +40,7 @@ public class WarpCommand extends Command {
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String name = StringArgumentType.getString(ctx, NAME);
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        EssentialsData essentialsData = getEssentialsDataStorage(ctx).getEssentialsData();
+        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
         Optional<Warp> optional = essentialsData.getWarp(name);
         if (optional.isPresent()) {
             sendFeedback(ctx, "text.fabric-essentials.command.warp.teleport", name);
@@ -50,6 +51,6 @@ public class WarpCommand extends Command {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(getEssentialsDataStorage(ctx).getEssentialsData().getWarps().stream().map(Warp::getName).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer()).getWarps().stream().map(Warp::getName).toList(), builder);
 
 }

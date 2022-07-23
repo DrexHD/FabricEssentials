@@ -13,7 +13,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.DataStorage;
-import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
@@ -47,11 +47,11 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
 
     private int deleteHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         DataStorage dataStorage = DataStorage.STORAGE;
-        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
-        Optional<Home> optional = userData.getHome(name);
+        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        Optional<Home> optional = playerData.getHome(name);
         if (optional.isPresent()) {
-            userData.getHomes().remove(optional.get());
-            dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), userData);
+            playerData.getHomes().remove(optional.get());
+            dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
             sendFeedback(ctx, String.format("text.fabric-essentials.command.delhome.%s", self ? "self" : "other"), name);
             return 1;
         } else {

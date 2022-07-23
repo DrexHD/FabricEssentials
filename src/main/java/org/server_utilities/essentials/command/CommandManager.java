@@ -8,6 +8,7 @@ import org.server_utilities.essentials.command.impl.menu.AnvilCommand;
 import org.server_utilities.essentials.command.impl.menu.EnderChestCommand;
 import org.server_utilities.essentials.command.impl.menu.InventoryCommand;
 import org.server_utilities.essentials.command.impl.menu.WorkBenchCommand;
+import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.DeleteHomeCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.HomesCommand;
@@ -36,6 +37,7 @@ public class CommandManager {
             new SetWarpCommand(),
             new WarpsCommand(),
 
+            new RTPCommand(),
             // Util
             new EssentialsCommand(),
             new FeedCommand(),

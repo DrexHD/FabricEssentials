@@ -8,7 +8,7 @@ import net.minecraft.network.chat.*;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.DataStorage;
-import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
     }
 
     private int sendHomeList(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) {
-        UserData dataStorage = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId());
+        PlayerData dataStorage = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId());
         List<Home> homes = dataStorage.getHomes();
         if (homes.isEmpty()) {
             sendFeedback(ctx,

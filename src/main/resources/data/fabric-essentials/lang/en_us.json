@@ -1,60 +1,63 @@
 {
+  "text.fabric-essentials.command.async.loading_chunks": "Loading chunks...",
   "text.fabric-essentials.command.inventory.other": "Opened %s's Inventory",
   "text.fabric-essentials.command.enderchest.other": "Opened %s's Enderchest",
   "text.fabric-essentials.command.delhome.self": "Deleted Home %s",
   "text.fabric-essentials.command.delhome.other": "Deleted Home %s from %s",
-
   "text.fabric-essentials.command.heal.self": "You have healed yourself",
   "text.fabric-essentials.command.heal.other": "You have healed %s",
   "text.fabric-essentials.command.heal.victim": "You have been healed by %s",
-
   "text.fabric-essentials.command.feed.self": "You have fed yourself",
   "text.fabric-essentials.command.feed.other": "You have fed %s",
   "text.fabric-essentials.command.feed.victim": "You have been fed by %s",
-
   "text.fabric-essentials.command.fly.self": "Set Fly to %s",
   "text.fabric-essentials.command.fly.other": "Set Fly to %s for %s",
   "text.fabric-essentials.command.fly.victim": "Fly has been set to %s by %s",
-
   "text.fabric-essentials.command.invulnerable.self": "Set God mode to %s",
   "text.fabric-essentials.command.invulnerable.other": "Set God mode to %s for %s",
   "text.fabric-essentials.command.invulnerable.victim": "God mode has been set to %s by %s",
-
   "text.fabric-essentials.command.ping.self": "Pong! Your connection latency to the server is %sms",
   "text.fabric-essentials.command.ping.other": "Pong! %s's connection latency to the server is %sms",
-
+  "text.fabric-essentials.command.hat.no_permission": "You are not allowed to wear this item",
+  "text.fabric-essentials.command.hat.binding_curse": "You can't remove your head item",
+  "text.fabric-essentials.command.hat.self": "Set your hat item to %s",
+  "text.fabric-essentials.command.hat.other": "Set %s hat item to %s",
+  "text.fabric-essentials.command.hat.victim": "%s set your hat item to %s",
   "text.fabric-essentials.command.home.doesnt_exist": "No Home with that name exists",
   "text.fabric-essentials.command.home.teleport.self": "Teleporting to Home %s",
   "text.fabric-essentials.command.home.teleport.other": "Teleporting to Home %s from %s",
-
   "text.fabric-essentials.command.homes.self": "Homes:",
   "text.fabric-essentials.command.homes.other": "%s's Homes:",
   "text.fabric-essentials.command.homes.self.no_home": "You don't have any Homes!",
   "text.fabric-essentials.command.homes.other.no_home": "%s doesn't have any Homes!",
   "text.fabric-essentials.command.homes.hover": "Click to teleport!",
-
   "text.fabric-essentials.command.sethome.self": "Set the Home %s",
   "text.fabric-essentials.command.sethome.other": "Set the Home %s for %s",
   "text.fabric-essentials.command.sethome.already_exists": "A Home with that name already exists",
   "text.fabric-essentials.command.sethome.limit": "Limited reached! You can't set any more Homes!",
-
   "text.fabric-essentials.command.setwarp": "Set the Warp %s",
   "text.fabric-essentials.command.setwarp.already_exists": "A Warp with that name already exists",
-
   "text.fabric-essentials.command.warps": "Warps:",
   "text.fabric-essentials.command.warps.no_warp": "There aren't any Warps!",
   "text.fabric-essentials.command.warps.hover": "Click to teleport!",
-
   "text.fabric-essentials.command.warp.doesnt_exist": "No Warp with that name exists",
   "text.fabric-essentials.command.warp.teleport": "Teleporting to Warp %s",
-
   "text.fabric-essentials.command.mods.doesnt_exist": "No Mod with that id exists",
   "text.fabric-essentials.command.mods.list.title": "Mods [%s]:",
   "text.fabric-essentials.command.mods.info.version": "Version: %s",
   "text.fabric-essentials.command.mods.info.author": "Authors: %s",
   "text.fabric-essentials.command.mods.info.description": "Description: %s",
   "text.fabric-essentials.command.mods.info.hover": "Click for more information!",
-
   "text.fabric-essentials.command.reload": "Config successfully reloaded in %sms",
-  "text.fabric-essentials.command.reload.error": "An error occurred while reloading the config, keeping old values: %s"
+  "text.fabric-essentials.command.reload.error": "An error occurred while reloading the config, keeping old values: %s",
+  "text.fabric-essentials.command.rtp.add.self": "Added %s RTPs",
+  "text.fabric-essentials.command.rtp.add.other": "Added %s RTPs to %s",
+  "text.fabric-essentials.command.rtp.add.victim": "Received %s RTPs",
+  "text.fabric-essentials.command.rtp.still_active": "RTP process already running!",
+  "text.fabric-essentials.command.rtp.no_left": "You don't have any RTPs left.",
+  "text.fabric-essentials.command.rtp.dimension": "You don't have permission to RTP in this dimension.",
+  "text.fabric-essentials.command.rtp.success": "RTP successfully completed after %sms.",
+  "text.fabric-essentials.command.rtp.error": "An error occurred, while loading the chunks: %s.",
+  "text.fabric-essentials.command.rtp.no_location": "Unable to find correct location, within reasonable attempts.",
+  "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again."
 }

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:fire",
+    "minecraft:lava",
+    "minecraft:water",
+    "minecraft:air",
+    "minecraft:bubble_column",
+    "minecraft:cactus"
+  ]
+}

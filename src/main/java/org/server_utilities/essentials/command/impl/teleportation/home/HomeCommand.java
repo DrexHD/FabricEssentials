@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.DataStorage;
-import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
@@ -51,8 +51,8 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
     private int teleportHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
-        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
-        Optional<Home> optional = userData.getHome(name);
+        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        Optional<Home> optional = playerData.getHome(name);
         Home home = optional.orElseThrow(DOESNT_EXIST::create);
         sendFeedback(ctx, String.format("text.fabric-essentials.command.home.teleport.%s", self ? "self" : "other"), name);
         home.location().teleport(serverPlayer);

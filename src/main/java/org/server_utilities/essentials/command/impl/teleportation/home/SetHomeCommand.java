@@ -16,7 +16,7 @@ import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand
 import org.server_utilities.essentials.config.homes.HomesConfig;
 import org.server_utilities.essentials.config.homes.HomesLimit;
 import org.server_utilities.essentials.storage.DataStorage;
-import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 import org.server_utilities.essentials.util.teleportation.Location;
 
@@ -55,10 +55,10 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     private int setHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
-        UserData userData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
-        Optional<Home> optional = userData.getHome(name);
+        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        Optional<Home> optional = playerData.getHome(name);
         if (optional.isEmpty()) {
-            List<Home> homes = userData.getHomes();
+            List<Home> homes = playerData.getHomes();
             int limit = getHomesLimit(ctx.getSource());
             if (homes.size() >= limit) {
                 ctx.getSource().sendFailure(Component.translatable("text.fabric-essentials.command.sethome.limit"));
@@ -66,7 +66,7 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             } else {
                 Home newHome = new Home(name, new Location(serverPlayer));
                 homes.add(newHome);
-                dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), userData);
+                dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
                 sendFeedback(ctx,
                         String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
                         self ? new Object[]{name} : new Object[]{name, target.getName()}

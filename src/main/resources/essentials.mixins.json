@@ -9,5 +9,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "async.IChunkMap",
+    "async.IServerChunkCache"
   ]
 }

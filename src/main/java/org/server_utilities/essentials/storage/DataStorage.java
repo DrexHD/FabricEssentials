@@ -27,13 +27,13 @@ public class DataStorage {
     }
 
     @NotNull
-    public UserData getPlayerData(MinecraftServer server, UUID uuid) {
-        UserData data = PlayerDataApi.getCustomDataFor(server, uuid, EssentialsMod.USER_DATA_STORAGE);
-        if (data == null) data = new UserData();
+    public PlayerData getPlayerData(MinecraftServer server, UUID uuid) {
+        PlayerData data = PlayerDataApi.getCustomDataFor(server, uuid, EssentialsMod.USER_DATA_STORAGE);
+        if (data == null) data = new PlayerData();
         return data;
     }
 
-    public void savePlayerData(MinecraftServer server, UUID uuid, UserData data) {
+    public void savePlayerData(MinecraftServer server, UUID uuid, PlayerData data) {
         PlayerDataApi.setCustomDataFor(server, uuid, EssentialsMod.USER_DATA_STORAGE, data);
     }
 

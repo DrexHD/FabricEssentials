@@ -4,12 +4,10 @@ import eu.pb4.playerdata.api.PlayerDataApi;
 import eu.pb4.playerdata.api.storage.JsonDataStorage;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.server.MinecraftServer;
 import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.config.EssentialsConfig;
 import org.server_utilities.essentials.storage.EssentialsData;
-import org.server_utilities.essentials.storage.UserData;
+import org.server_utilities.essentials.storage.PlayerData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +17,7 @@ public class EssentialsMod implements DedicatedServerModInitializer {
 	public static final String MOD_ID = "fabric-essentials";
 	private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static EssentialsConfig essentialsConfig;
-	public static final JsonDataStorage<UserData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", UserData.class);
+	public static final JsonDataStorage<PlayerData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", PlayerData.class);
 	public static final JsonDataStorage<EssentialsData> ESSENTIALS_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", EssentialsData.class);
 
 	/**

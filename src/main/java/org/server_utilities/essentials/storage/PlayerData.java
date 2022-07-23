@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserData {
+public class PlayerData {
 
     private final List<Home> homes = new LinkedList<>();
     private int rtpsLeft = EssentialsMod.getConfig().main().rtpConfig.defaultRtps;

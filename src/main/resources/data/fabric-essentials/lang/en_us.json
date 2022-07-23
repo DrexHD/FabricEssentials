@@ -48,6 +48,7 @@
   "text.fabric-essentials.command.mods.info.author": "Authors: %s",
   "text.fabric-essentials.command.mods.info.description": "Description: %s",
   "text.fabric-essentials.command.mods.info.hover": "Click for more information!",
+  "text.fabric-essentials.command.import.doesnt_exist": "No importer with that name exists",
   "text.fabric-essentials.command.reload": "Config successfully reloaded in %sms",
   "text.fabric-essentials.command.reload.error": "An error occurred while reloading the config, keeping old values: %s",
   "text.fabric-essentials.command.rtp.add.self": "Added %s RTPs",

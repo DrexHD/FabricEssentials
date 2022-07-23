@@ -13,7 +13,7 @@ import java.nio.file.Path;
 
 public class EssentialsConfig {
 
-    private static final Logger LOGGER = EssentialsMod.getLogger();
+    private static final Logger LOGGER = EssentialsMod.LOGGER;
     private static final String SUBDIRECTORY = "fabric-essentials";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve(SUBDIRECTORY);
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class EssentialsMod implements DedicatedServerModInitializer {
 
 	public static final String MOD_ID = "fabric-essentials";
-	private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static EssentialsConfig essentialsConfig;
 	public static final JsonDataStorage<PlayerData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", PlayerData.class);
 	public static final JsonDataStorage<EssentialsData> ESSENTIALS_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", EssentialsData.class);
@@ -29,10 +29,6 @@ public class EssentialsMod implements DedicatedServerModInitializer {
 		PlayerDataApi.register(USER_DATA_STORAGE);
 		PlayerDataApi.register(ESSENTIALS_DATA_STORAGE);
 		CommandRegistrationCallback.EVENT.register(CommandManager::new);
-	}
-
-	public static Logger getLogger() {
-		return LOGGER;
 	}
 
 	public static EssentialsConfig getConfig() {

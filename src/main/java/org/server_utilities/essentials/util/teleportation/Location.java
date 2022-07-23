@@ -17,10 +17,17 @@ import org.slf4j.Logger;
 
 public class Location {
 
-    private static final Logger LOGGER = EssentialsMod.getLogger();
+    private static final Logger LOGGER = EssentialsMod.LOGGER;
     private Vec3 location;
     private float yaw, pitch;
     private ResourceLocation dim;
+
+    public Location(Vec3 location, float yaw, float pitch, ResourceLocation dim) {
+        this.location = location;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.dim = dim;
+    }
 
     public Location(Entity entity) {
         this.location = entity.position();

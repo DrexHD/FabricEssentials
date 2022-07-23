@@ -24,7 +24,7 @@ public abstract class Command {
     protected static final String PERMISSION_DELIMITER = ".";
     protected static final String SELF_PERMISSION_SUFFIX = "self";
     protected static final String OTHER_PERMISSION_SUFFIX = "other";
-    protected static final Logger LOGGER = EssentialsMod.getLogger();
+    protected static final Logger LOGGER = EssentialsMod.LOGGER;
 
     public Command(@NotNull Properties properties) {
         this.properties = properties;

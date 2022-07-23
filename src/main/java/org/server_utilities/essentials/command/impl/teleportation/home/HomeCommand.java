@@ -54,7 +54,11 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = playerData.getHome(name);
         Home home = optional.orElseThrow(DOESNT_EXIST::create);
-        sendFeedback(ctx, String.format("text.fabric-essentials.command.home.teleport.%s", self ? "self" : "other"), name);
+        if (self) {
+            sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.self", name);
+        } else {
+            sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.other", name, target.getName());
+        }
         home.location().teleport(serverPlayer);
         return 1;
     }

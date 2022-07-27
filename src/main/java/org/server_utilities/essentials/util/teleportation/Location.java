@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.EssentialsMod;
 import org.slf4j.Logger;
 
@@ -45,7 +47,7 @@ public class Location {
             return false;
         }
 
-        ServerLevel serverLevel = entity.getServer().getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dim));
+        ServerLevel serverLevel = getLevel(entity.getServer());
         if (serverLevel == null) {
             LOGGER.warn("Can't teleport {} to {}, because dimension doesn't exist!", entity.getScoreboardName(), this);
             return false;
@@ -54,6 +56,7 @@ public class Location {
         double y = getY();
         double z = getZ();
         if (entity instanceof ServerPlayer serverPlayer) {
+            if (serverPlayer.connection == null) return false;
             ChunkPos chunkPos = new ChunkPos(blockPos);
             serverLevel.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkPos, 1, entity.getId());
             entity.stopRiding();
@@ -77,6 +80,15 @@ public class Location {
             }
         }
         return true;
+    }
+
+    @Nullable
+    public ServerLevel getLevel(MinecraftServer server) {
+        return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dim));
+    }
+
+    public ChunkPos getChunkPos() {
+        return new ChunkPos((int) location.x >> 4, (int) location.z >> 4);
     }
 
     public double getX() {

@@ -11,11 +11,13 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.EssentialsData;
 import org.server_utilities.essentials.storage.DataStorage;
+import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.Optional;
@@ -42,15 +44,17 @@ public class WarpCommand extends Command {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
         EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
         Optional<Warp> optional = essentialsData.getWarp(name);
-        if (optional.isPresent()) {
-            sendFeedback(ctx, "text.fabric-essentials.command.warp.teleport", name);
-            optional.get().getLocation().teleport(serverPlayer);
-            return 1;
-        } else {
-            throw DOESNT_EXIST.create();
+        Warp warp = optional.orElseThrow(DOESNT_EXIST::create);
+        ServerLevel targetLevel = warp.location().getLevel(ctx.getSource().getServer());
+        if (targetLevel != null) {
+            AsyncChunkLoadUtil.scheduleChunkLoadForCommand(ctx.getSource(), targetLevel, warp.location().getChunkPos()).whenCompleteAsync((chunkAccess, throwable) -> {
+                sendFeedback(ctx, "text.fabric-essentials.command.warp.teleport", name);
+                warp.location().teleport(serverPlayer);
+            }, ctx.getSource().getServer());
         }
+        return 1;
     }
 
-    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer()).getWarps().stream().map(Warp::getName).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer()).getWarps().stream().map(Warp::name).toList(), builder);
 
 }

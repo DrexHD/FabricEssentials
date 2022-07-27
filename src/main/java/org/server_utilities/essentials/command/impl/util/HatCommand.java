@@ -34,14 +34,14 @@ public class HatCommand extends OptionalOnlineTargetCommand {
         Inventory inventory = target.getInventory();
         ItemStack selected = inventory.getSelected();
         ResourceLocation resourceLocation = Registry.ITEM.getKey(selected.getItem());
-        if (!permission(properties.getPermission(), "item", resourceLocation.getPath()).test(ctx.getSource())) {
+        if (!permission(properties.permission(), "item", resourceLocation.getPath()).test(ctx.getSource())) {
             sendError(ctx,
                     "text.fabric-essentials.command.hat.no_permission");
             return -1;
         }
         ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
 
-        if (EnchantmentHelper.hasBindingCurse(head) && !permission(properties.getPermission(), "bypassBindingCurse").test(ctx.getSource())) {
+        if (EnchantmentHelper.hasBindingCurse(head) && !permission(properties.permission(), "bypassBindingCurse").test(ctx.getSource())) {
             sendError(ctx,
                     "text.fabric-essentials.command.hat.binding_curse");
             return -2;

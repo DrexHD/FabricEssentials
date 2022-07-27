@@ -4,16 +4,21 @@ package org.server_utilities.essentials.util;
  * https://github.com/RelativityMC/VMP-fabric/blob/ver/1.19/src/main/java/com/ishland/vmp/common/chunkloading/async_chunks_on_player_login/AsyncChunkLoadUtil.java
  * */
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.mixin.async.IChunkMap;
 import org.server_utilities.essentials.mixin.async.IServerChunkCache;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class AsyncChunkLoadUtil {
@@ -59,6 +64,30 @@ public class AsyncChunkLoadUtil {
             ticketManager.removeRegionTicket(ASYNC_CHUNK_LOAD, pos, level, Unit.INSTANCE);
             ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
         }, world.getServer());
+        return future;
+    }
+
+    public static CompletableFuture<ChunkAccess> scheduleChunkLoadForCommand(CommandSourceStack src, ServerLevel world, ChunkPos pos) throws CommandSyntaxException {
+        return scheduleChunkLoadForCommand(src, world, pos, ignored -> {});
+    }
+
+    public static CompletableFuture<ChunkAccess> scheduleChunkLoadForCommand(CommandSourceStack src, ServerLevel world, ChunkPos pos, Consumer<Throwable> onFailure) throws CommandSyntaxException {
+        CompletableFuture<ChunkAccess> future = new CompletableFuture<>();
+        src.getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.command.async.loading_chunks"), true);
+        scheduleChunkLoadWithRadius(world, pos, 2).whenCompleteAsync((either, throwable) -> {
+            if (throwable != null) {
+                Command.sendError(src, "text.fabric-essentials.command.async.error", throwable.getMessage());
+                onFailure.accept(throwable);
+                return;
+            }
+            try {
+                ChunkAccess chunkAccess = either.orThrow();
+                future.complete(chunkAccess);
+            } catch (Throwable throwable1) {
+                Command.sendError(src, "text.fabric-essentials.command.async.error", throwable1.getMessage());
+                onFailure.accept(throwable1);
+            }
+        }, src.getServer());
         return future;
     }
 

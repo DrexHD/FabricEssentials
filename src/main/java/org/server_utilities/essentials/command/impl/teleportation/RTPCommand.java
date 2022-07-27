@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.datafixers.util.Either;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -15,7 +14,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -108,15 +106,11 @@ public class RTPCommand extends Command {
         long start = System.currentTimeMillis();
         activeRtps.add(target.getUUID());
         ChunkPos chunkPos = new ChunkPos(location.x >> 4, location.z >> 4);
-        AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(targetLevel, chunkPos, 2)
-                .whenCompleteAsync((either, throwable) -> {
-                    try {
-                        execute(ctx.getSource(), target, targetLevel, start, chunkPos, either, throwable);
-                    } catch (Exception e) {
-                        activeRtps.remove(target.getUUID());
-                        LOGGER.error("An error occurred, while attempting to rtp {}", target.getScoreboardName(), e);
-                    }
-                }, ctx.getSource().getServer());
+        AsyncChunkLoadUtil.scheduleChunkLoadForCommand(ctx.getSource(), targetLevel, chunkPos, throwable -> {
+            activeRtps.remove(target.getUUID());
+        }).whenCompleteAsync((chunkAccess, throwable) -> {
+            execute(ctx.getSource(), target, targetLevel, start, chunkPos, chunkAccess);
+        }, ctx.getSource().getServer());
         return 1;
     }
 
@@ -144,14 +138,7 @@ public class RTPCommand extends Command {
     public record RTPLocation(int x, int z) {
     }
 
-    private void execute(CommandSourceStack src, ServerPlayer target, ServerLevel targetLevel, long start, ChunkPos chunkPos, Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure> either, Throwable throwable) {
-        if (throwable != null) {
-            sendError(src, "text.fabric-essentials.command.rtp.error", throwable.getMessage());
-            throwable.printStackTrace();
-            activeRtps.remove(target.getUUID());
-            return;
-        }
-        ChunkAccess chunkAccess = either.orThrow();
+    private void execute(CommandSourceStack src, ServerPlayer target, ServerLevel targetLevel, long start, ChunkPos chunkPos, ChunkAccess chunkAccess) {
         if (target.connection == null) {
             activeRtps.remove(target.getUUID());
             return;

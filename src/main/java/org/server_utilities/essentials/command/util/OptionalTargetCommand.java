@@ -22,7 +22,7 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
     public OptionalTargetCommand(Properties properties, String targetArgumentId) {
         super(properties);
         // Allow literal command execution if either of the sub-nodes is present
-        String permission = properties.getPermission();
+        String permission = properties.permission();
         if (permission != null) {
             properties.orPredicate(permission(permission, SELF_PERMISSION_SUFFIX));
             properties.orPredicate(permission(permission, OTHER_PERMISSION_SUFFIX));
@@ -37,7 +37,7 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
     protected void registerOptionalArgument(ArgumentBuilder<CommandSourceStack, ?> argument) {
         argument.executes(this::execute);
         RequiredArgumentBuilder<CommandSourceStack, T> target = Commands.argument(targetArgumentId, getArgumentType());
-        String permission = this.properties.getPermission();
+        String permission = this.properties.permission();
         if (permission != null) {
             argument.requires(permission(permission, SELF_PERMISSION_SUFFIX));
             target.requires(permission(permission, OTHER_PERMISSION_SUFFIX));

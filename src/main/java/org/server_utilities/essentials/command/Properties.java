@@ -1,13 +1,13 @@
 package org.server_utilities.essentials.command;
 
+import com.mojang.brigadier.context.CommandContext;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-import static org.server_utilities.essentials.command.Command.PERMISSION_DELIMITER;
-import static org.server_utilities.essentials.command.Command.PERMISSION_PREFIX;
+import static org.server_utilities.essentials.command.Command.*;
 
 public class Properties {
 
@@ -25,13 +25,7 @@ public class Properties {
     }
 
     public Properties permission(String permission) {
-        this.predicate = this.predicate.and(commandSourceStack -> Permissions.check(commandSourceStack, String.join(PERMISSION_DELIMITER, PERMISSION_PREFIX, permission), false));
-        this.permission = permission;
-        return this;
-    }
-
-    public Properties permission(String permission, int minOpLevel) {
-        this.predicate = this.predicate.and(commandSourceStack -> Permissions.check(commandSourceStack, String.join(PERMISSION_DELIMITER, PERMISSION_PREFIX, permission), minOpLevel));
+        this.predicate = this.predicate.and(Command.permission(permission));
         this.permission = permission;
         return this;
     }
@@ -46,16 +40,16 @@ public class Properties {
         return this;
     }
 
-    public String[] getLiterals() {
+    public String[] literals() {
         return literals;
     }
 
-    public Predicate<CommandSourceStack> getPredicate() {
+    public Predicate<CommandSourceStack> predicate() {
         return predicate;
     }
 
     @Nullable
-    public String getPermission() {
+    public String permission() {
         return permission;
     }
 

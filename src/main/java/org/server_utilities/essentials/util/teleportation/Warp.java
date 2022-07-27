@@ -12,15 +12,15 @@ public class Warp {
         this.hasAlias = hasAlias;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public Location getLocation() {
+    public Location location() {
         return location;
     }
 
-    public boolean hasAlias() {
+    public boolean alias() {
         return hasAlias;
     }
 

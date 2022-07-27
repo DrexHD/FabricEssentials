@@ -12,11 +12,13 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
+import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
     public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.doesnt_exist"));
+    public static final SimpleCommandExceptionType WORLD_DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.world_doesnt_exist"));
     private static final String NAME = "name";
     public static final String HOME_COMMAND = "home";
 
@@ -54,13 +57,20 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = playerData.getHome(name);
         Home home = optional.orElseThrow(DOESNT_EXIST::create);
-        if (self) {
-            sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.self", name);
+        ServerLevel targetLevel = home.location().getLevel(ctx.getSource().getServer());
+        if (targetLevel != null) {
+            AsyncChunkLoadUtil.scheduleChunkLoadForCommand(ctx.getSource(), targetLevel, home.location().getChunkPos()).whenCompleteAsync((chunkAccess, throwable) -> {
+                if (self) {
+                    sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.self", name);
+                } else {
+                    sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.other", name, target.getName());
+                }
+                home.location().teleport(serverPlayer);
+            }, ctx.getSource().getServer());
+            return 1;
         } else {
-            sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.other", name, target.getName());
+            throw WORLD_DOESNT_EXIST.create();
         }
-        home.location().teleport(serverPlayer);
-        return 1;
     }
 
     public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);

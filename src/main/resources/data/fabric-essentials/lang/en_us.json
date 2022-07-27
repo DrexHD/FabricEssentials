@@ -1,5 +1,6 @@
 {
   "text.fabric-essentials.command.async.loading_chunks": "Loading chunks...",
+  "text.fabric-essentials.command.async.error": "An error occurred, while loading the chunks: %s",
   "text.fabric-essentials.command.inventory.other": "Opened %s's Inventory",
   "text.fabric-essentials.command.enderchest.other": "Opened %s's Enderchest",
   "text.fabric-essentials.command.delhome.self": "Deleted Home %s",
@@ -24,6 +25,7 @@
   "text.fabric-essentials.command.hat.other": "Set %s hat item to %s",
   "text.fabric-essentials.command.hat.victim": "%s set your hat item to %s",
   "text.fabric-essentials.command.home.doesnt_exist": "No Home with that name exists",
+  "text.fabric-essentials.command.home.world_doesnt_exist": "The world of this home no longer exists",
   "text.fabric-essentials.command.home.teleport.self": "Teleporting to Home %s",
   "text.fabric-essentials.command.home.teleport.other": "Teleporting to Home %s from %s",
   "text.fabric-essentials.command.homes.self": "Homes:",
@@ -51,6 +53,7 @@
   "text.fabric-essentials.command.import.doesnt_exist": "No importer with that name exists",
   "text.fabric-essentials.command.reload": "Config successfully reloaded in %sms",
   "text.fabric-essentials.command.reload.error": "An error occurred while reloading the config, keeping old values: %s",
+  "text.fabric-essentials.command.rtp.check": "You have %s RTPs left",
   "text.fabric-essentials.command.rtp.add.self": "Added %s RTPs",
   "text.fabric-essentials.command.rtp.add.other": "Added %s RTPs to %s",
   "text.fabric-essentials.command.rtp.add.victim": "Received %s RTPs",
@@ -58,7 +61,6 @@
   "text.fabric-essentials.command.rtp.no_left": "You don't have any RTPs left.",
   "text.fabric-essentials.command.rtp.dimension": "You don't have permission to RTP in this dimension.",
   "text.fabric-essentials.command.rtp.success": "RTP successfully completed after %sms.",
-  "text.fabric-essentials.command.rtp.error": "An error occurred, while loading the chunks: %s.",
   "text.fabric-essentials.command.rtp.no_location": "Unable to find correct location, within reasonable attempts.",
   "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again."
 }

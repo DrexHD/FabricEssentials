@@ -19,7 +19,7 @@ public class EssentialsData {
     }
 
     public Optional<Warp> getWarp(String name) {
-        return warps.stream().filter(warp -> warp.getName().equals(name)).findFirst();
+        return warps.stream().filter(warp -> warp.name().equals(name)).findFirst();
     }
 
 }

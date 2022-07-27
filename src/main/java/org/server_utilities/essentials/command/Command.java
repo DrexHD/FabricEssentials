@@ -31,9 +31,9 @@ public abstract class Command {
     }
 
     public void registerCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        for (String literal : this.properties.getLiterals()) {
+        for (String literal : this.properties.literals()) {
             LiteralArgumentBuilder<CommandSourceStack> literalArgument = Commands.literal(literal);
-            literalArgument.requires(this.properties.getPredicate());
+            literalArgument.requires(this.properties.predicate());
             register(literalArgument);
             dispatcher.register(literalArgument);
         }

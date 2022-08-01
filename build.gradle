@@ -35,7 +35,6 @@ dependencies {
     // Player data api
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
 
-
     // Server Translations api
     modImplementation include("fr.catcore:server-translations-api:${project.translations_version}")
 

@@ -60,6 +60,7 @@ public class EssentialsCommand extends Command {
         }
     }
 
+    // TODO: Only console allowed
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String importerId = StringArgumentType.getString(ctx, "importer");
         Optional<DataImporter> optional = Arrays.stream(DATA_IMPORTERS).filter(importer -> importer.getImporterId().equals(importerId)).findFirst();

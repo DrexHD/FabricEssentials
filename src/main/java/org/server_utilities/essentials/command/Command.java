@@ -41,11 +41,11 @@ public abstract class Command {
 
     protected abstract void register(LiteralArgumentBuilder<CommandSourceStack> literalArgumentBuilder);
 
-    protected static Predicate<CommandSourceStack> permission(String... permission) {
+    public static Predicate<CommandSourceStack> permission(String... permission) {
         return commandSourceStack -> Permissions.check(commandSourceStack, createPermission(permission));
     }
 
-    protected static String createPermission(String... permission) {
+    public static String createPermission(String... permission) {
         return PERMISSION_PREFIX + PERMISSION_DELIMITER + String.join(PERMISSION_DELIMITER, permission);
     }
 

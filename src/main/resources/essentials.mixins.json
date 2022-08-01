@@ -10,6 +10,8 @@
   },
   "mixins": [
     "async.IChunkMap",
-    "async.IServerChunkCache"
+    "async.IServerChunkCache",
+    "gameplay.AnvilMenuMixin",
+    "gameplay.ServerGamePacketListenerImplMixin"
   ]
 }

@@ -48,6 +48,7 @@ public class CommandManager {
             new ModsCommand(),
             new FlyCommand(),
             new InvulnerableCommand(),
+            new StaffMessageCommand(),
     };
 
     public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {

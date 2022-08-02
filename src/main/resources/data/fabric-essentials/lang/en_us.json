@@ -1,6 +1,8 @@
 {
   "text.fabric-essentials.command.async.loading_chunks": "Loading chunks...",
   "text.fabric-essentials.command.async.error": "An error occurred, while loading the chunks: %s",
+  "text.fabric-essentials.command.chat.channel": "[%s] <%s> %s",
+  "text.fabric-essentials.command.chat.channel.staff": "Staff",
   "text.fabric-essentials.command.inventory.other": "Opened %s's Inventory",
   "text.fabric-essentials.command.enderchest.other": "Opened %s's Enderchest",
   "text.fabric-essentials.command.delhome.self": "Deleted Home %s",

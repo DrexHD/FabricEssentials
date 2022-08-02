@@ -22,7 +22,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     @Redirect(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
     public MutableComponent itemNameFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> Command.permission("style", "anvil", "format", textTag.name()).test(this.player.createCommandSourceStack()));
+        return (MutableComponent) StyledInputUtil.parse(input, textTag -> Command.permission("style", "anvil", textTag.name()).test(this.player.createCommandSourceStack()));
     }
 
 }

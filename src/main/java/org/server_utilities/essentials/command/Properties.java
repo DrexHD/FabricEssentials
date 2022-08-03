@@ -1,13 +1,9 @@
 package org.server_utilities.essentials.command;
 
-import com.mojang.brigadier.context.CommandContext;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
-
-import static org.server_utilities.essentials.command.Command.*;
 
 public class Properties {
 

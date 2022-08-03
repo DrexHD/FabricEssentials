@@ -9,19 +9,11 @@ import java.util.Optional;
 
 public class PlayerData {
 
-    private final List<Home> homes = new LinkedList<>();
-    private int rtpsLeft = EssentialsMod.getConfig().main().rtpConfig.defaultRtps;
+    public final List<Home> homes = new LinkedList<>();
+    public int rtpsLeft = EssentialsMod.getConfig().main().rtpConfig.defaultRtps;
 
     public List<Home> getHomes() {
         return homes;
-    }
-
-    public void setRtpsLeft(int rtpsLeft) {
-        this.rtpsLeft = rtpsLeft;
-    }
-
-    public int getRtpsLeft() {
-        return rtpsLeft;
     }
 
     public Optional<Home> getHome(String name) {

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -31,11 +32,13 @@ public abstract class Command {
     }
 
     public void registerCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        for (String literal : this.properties.literals()) {
-            LiteralArgumentBuilder<CommandSourceStack> literalArgument = Commands.literal(literal);
-            literalArgument.requires(this.properties.predicate());
-            register(literalArgument);
-            dispatcher.register(literalArgument);
+        String[] literals = this.properties.literals();
+        if (literals.length == 0) return;
+        LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(literals[0]);
+        register(builder);
+        LiteralCommandNode<CommandSourceStack> root = dispatcher.register(builder);
+        for (int i = 1; i < literals.length; i++) {
+            dispatcher.register(Commands.literal(literals[i]).redirect(root));
         }
     }
 

@@ -65,8 +65,8 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getUUID());
-        sendFeedback(ctx, "text.fabric-essentials.command.rtp.check", playerData.getRtpsLeft());
-        return playerData.getRtpsLeft();
+        sendFeedback(ctx, "text.fabric-essentials.command.rtp.check", playerData.rtpsLeft);
+        return playerData.rtpsLeft;
     }
 
     // TODO: add messages, rework optional targets
@@ -75,7 +75,7 @@ public class RTPCommand extends Command {
         Collection<GameProfile> targets = GameProfileArgument.getGameProfiles(ctx, "targets");
         for (GameProfile target : targets) {
             PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId());
-            playerData.setRtpsLeft(playerData.getRtpsLeft() + amount);
+            playerData.rtpsLeft += amount;
             DataStorage.STORAGE.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
         }
         return targets.size();
@@ -89,7 +89,7 @@ public class RTPCommand extends Command {
             sendError(ctx, "text.fabric-essentials.command.rtp.dimension");
             return -1;
         }
-        if (playerData.getRtpsLeft() <= 0 && !Permissions.check(ctx.getSource(), createPermission("rtp", "bypassLimit"))) {
+        if (playerData.rtpsLeft <= 0 && !Permissions.check(ctx.getSource(), createPermission("rtp", "bypassLimit"))) {
             sendError(ctx, "text.fabric-essentials.command.rtp.no_left");
             return -2;
         }
@@ -160,7 +160,7 @@ public class RTPCommand extends Command {
                 sendFeedback(src, "text.fabric-essentials.command.rtp.success", (System.currentTimeMillis() - start));
                 if (!Permissions.check(src, createPermission("rtp", "bypassLimit"))) {
                     PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
-                    playerData.setRtpsLeft(playerData.getRtpsLeft() - 1);
+                    playerData.rtpsLeft--;
                     DataStorage.STORAGE.savePlayerData(src.getServer(), target.getUUID(), playerData);
                 }
                 activeRtps.remove(target.getUUID());

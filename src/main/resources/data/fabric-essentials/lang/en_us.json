@@ -64,5 +64,15 @@
   "text.fabric-essentials.command.rtp.dimension": "You don't have permission to RTP in this dimension.",
   "text.fabric-essentials.command.rtp.success": "RTP successfully completed after %sms.",
   "text.fabric-essentials.command.rtp.no_location": "Unable to find correct location, within reasonable attempts.",
-  "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again."
+  "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again.",
+  "text.fabric-essentials.command.tpaccept.noPending": "You don't have any pending requests from %s",
+  "text.fabric-essentials.command.tpaccept.self": "Teleport requested accepted.",
+  "text.fabric-essentials.command.tpaccept.victim": "%s accepted your teleport request.",
+  "text.fabric-essentials.command.tpa.pending": "You already have a pending teleport request for that player.",
+  "text.fabric-essentials.command.tpa.here.self": "Request to teleport %s to you has been sent.",
+  "text.fabric-essentials.command.tpa.there.self": "Request to teleport you to %s has been sent.",
+  "text.fabric-essentials.command.tpa.here.victim": "%s requested to teleport you to them. %s",
+  "text.fabric-essentials.command.tpa.there.victim": "%s requested to teleport to you. %s",
+  "text.fabric-essentials.command.tpa.accept": "[Accept]",
+  "text.fabric-essentials.command.tpa.accept.hover": "Click to accept!"
 }

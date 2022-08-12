@@ -13,10 +13,13 @@ import org.server_utilities.essentials.command.impl.teleportation.home.DeleteHom
 import org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.HomesCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.SetHomeCommand;
+import org.server_utilities.essentials.command.impl.teleportation.tpr.TpAcceptCommand;
+import org.server_utilities.essentials.command.impl.teleportation.tpr.TpaCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpsCommand;
 import org.server_utilities.essentials.command.impl.util.*;
+import org.server_utilities.essentials.util.TprManager;
 
 // TODO:
 public class CommandManager {
@@ -36,8 +39,11 @@ public class CommandManager {
             new WarpCommand(),
             new SetWarpCommand(),
             new WarpsCommand(),
-
+            // Teleportation
             new RTPCommand(),
+            new TpaCommand(TprManager.Direction.HERE),
+            new TpaCommand(TprManager.Direction.THERE),
+            new TpAcceptCommand(),
             // Util
             new EssentialsCommand(),
             new FeedCommand(),

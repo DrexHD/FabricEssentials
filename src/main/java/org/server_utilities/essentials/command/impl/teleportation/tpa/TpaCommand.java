@@ -1,4 +1,4 @@
-package org.server_utilities.essentials.command.impl.teleportation.tpr;
+package org.server_utilities.essentials.command.impl.teleportation.tpa;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;

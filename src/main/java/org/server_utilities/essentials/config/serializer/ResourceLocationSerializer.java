@@ -18,7 +18,7 @@ public class ResourceLocationSerializer extends ScalarSerializer<ResourceLocatio
     }
 
     @Override
-    protected Object serialize(ResourceLocation item, Predicate<Class<?>> typeSupported) {
-        return item.toString();
+    protected Object serialize(ResourceLocation location, Predicate<Class<?>> typeSupported) {
+        return location.toString();
     }
 }

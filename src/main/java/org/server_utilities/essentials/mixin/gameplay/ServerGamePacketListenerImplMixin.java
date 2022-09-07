@@ -20,12 +20,25 @@ public abstract class ServerGamePacketListenerImplMixin {
     @Shadow
     public ServerPlayer player;
 
-    @Redirect(method = "updateSignText", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"))
+    @Redirect(
+            method = "updateSignText",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"
+            )
+    )
     public MutableComponent signFormatting(String input) {
         return (MutableComponent) StyledInputUtil.parse(input, textTag -> Command.permission("style", "sign", textTag.name()).test(player.createCommandSourceStack()));
     }
 
-    @ModifyArg(method = "signBook", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;updateBookPages(Ljava/util/List;Ljava/util/function/UnaryOperator;Lnet/minecraft/world/item/ItemStack;)V"), index = 1)
+    @ModifyArg(
+            method = "signBook",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;updateBookPages(Ljava/util/List;Ljava/util/function/UnaryOperator;Lnet/minecraft/world/item/ItemStack;)V"
+            ),
+            index = 1
+    )
     public UnaryOperator<String> bookPageFormatting(UnaryOperator<String> original) {
         return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> Command.permission("style", "book", textTag.name()).test(player.createCommandSourceStack())));
     }

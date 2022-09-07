@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.EssentialsMod;
+import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.config.MainConfig;
 import org.slf4j.Logger;
 
@@ -53,7 +54,7 @@ public abstract class Command {
     }
 
     public static MainConfig getConfig() {
-        return EssentialsMod.getConfig().main();
+        return ConfigManager.INSTANCE.config();
     }
 
     public static void sendError(CommandSourceStack source, String translation, Object... args) {

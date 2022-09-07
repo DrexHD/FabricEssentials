@@ -16,6 +16,7 @@ import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.impl.util.importer.DataImporter;
 import org.server_utilities.essentials.command.impl.util.importer.KiloEssentialsImporter;
+import org.server_utilities.essentials.config.ConfigManager;
 import org.spongepowered.configurate.ConfigurateException;
 
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class EssentialsCommand extends Command {
         try {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
-            EssentialsMod.getConfig().load();
+            ConfigManager.INSTANCE.load();
             stopWatch.stop();
             sendFeedback(ctx, "text.fabric-essentials.command.reload", stopWatch.getTime());
             return 1;

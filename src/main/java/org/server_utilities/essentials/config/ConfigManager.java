@@ -11,7 +11,7 @@ import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
 import java.nio.file.Path;
 
-public class EssentialsConfig {
+public class ConfigManager {
 
     private static final Logger LOGGER = EssentialsMod.LOGGER;
     private static final String SUBDIRECTORY = "fabric-essentials";
@@ -19,7 +19,9 @@ public class EssentialsConfig {
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");
     private MainConfig mainConfig = new MainConfig();
 
-    public EssentialsConfig() {
+    public static final ConfigManager INSTANCE = new ConfigManager();
+
+    public ConfigManager() {
         try {
             load();
         } catch (ConfigurateException e) {
@@ -40,7 +42,7 @@ public class EssentialsConfig {
         mainConfig = rootNode.get(MainConfig.class, new MainConfig());
     }
 
-    public MainConfig main() {
+    public MainConfig config() {
         return mainConfig;
     }
 

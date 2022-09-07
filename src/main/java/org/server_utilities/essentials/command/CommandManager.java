@@ -13,8 +13,8 @@ import org.server_utilities.essentials.command.impl.teleportation.home.DeleteHom
 import org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.HomesCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.SetHomeCommand;
-import org.server_utilities.essentials.command.impl.teleportation.tpr.TpAcceptCommand;
-import org.server_utilities.essentials.command.impl.teleportation.tpr.TpaCommand;
+import org.server_utilities.essentials.command.impl.teleportation.tpa.TpAcceptCommand;
+import org.server_utilities.essentials.command.impl.teleportation.tpa.TpaCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpsCommand;

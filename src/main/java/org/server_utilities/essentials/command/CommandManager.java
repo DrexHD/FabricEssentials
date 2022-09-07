@@ -19,7 +19,7 @@ import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCo
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpsCommand;
 import org.server_utilities.essentials.command.impl.util.*;
-import org.server_utilities.essentials.util.TprManager;
+import org.server_utilities.essentials.util.TpaManager;
 
 // TODO:
 public class CommandManager {
@@ -41,8 +41,8 @@ public class CommandManager {
             new WarpsCommand(),
             // Teleportation
             new RTPCommand(),
-            new TpaCommand(TprManager.Direction.HERE),
-            new TpaCommand(TprManager.Direction.THERE),
+            new TpaCommand(TpaManager.Direction.HERE),
+            new TpaCommand(TpaManager.Direction.THERE),
             new TpAcceptCommand(),
             // Util
             new EssentialsCommand(),

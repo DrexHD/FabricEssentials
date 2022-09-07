@@ -10,7 +10,7 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.util.TprManager;
+import org.server_utilities.essentials.util.TpaManager;
 
 import java.util.List;
 
@@ -28,14 +28,11 @@ public class TpAllCommand extends Command {
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         List<ServerPlayer> players = ctx.getSource().getServer().getPlayerList().getPlayers();
         for (ServerPlayer target : players) {
-            TprManager.Participants participants = new TprManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
-            TprManager.Direction direction = TprManager.INSTANCE.getRequest(participants);
-            if (direction == TprManager.Direction.HERE) {
-                sendError(ctx, "text.fabric-essentials.command.tpa.pending");
-                return 0;
-            }
-            TprManager.INSTANCE.addRequest(participants, TprManager.Direction.HERE);
-            sendFeedback(target, "text.fabric-essentials.command.tpa.%s.victim".formatted(TprManager.Direction.HERE.getTranslationKey()),
+            TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
+            TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
+            if (direction == TpaManager.Direction.HERE) continue;
+            TpaManager.INSTANCE.addRequest(participants, TpaManager.Direction.HERE);
+            sendFeedback(target, "text.fabric-essentials.command.tpa.%s.victim".formatted(TpaManager.Direction.HERE.getTranslationKey()),
                     ctx.getSource().getDisplayName(),
                     Component.translatable("text.fabric-essentials.command.tpa.accept")
                             .withStyle(style ->

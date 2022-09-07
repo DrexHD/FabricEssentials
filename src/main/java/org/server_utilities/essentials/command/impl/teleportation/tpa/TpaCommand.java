@@ -13,15 +13,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
-import org.server_utilities.essentials.util.TprManager;
+import org.server_utilities.essentials.util.TpaManager;
 
-// TODO:
 public class TpaCommand extends Command {
 
     private static final String TARGET_ARGUMENT_ID = "target";
-    private final TprManager.Direction direction;
+    private final TpaManager.Direction direction;
 
-    public TpaCommand(TprManager.Direction direction) {
+    public TpaCommand(TpaManager.Direction direction) {
         super(direction.getProperties());
         this.direction = direction;
     }
@@ -35,13 +34,13 @@ public class TpaCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = EntityArgument.getPlayer(ctx, TARGET_ARGUMENT_ID);
-        TprManager.Participants participants = new TprManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
-        TprManager.Direction direction = TprManager.INSTANCE.getRequest(participants);
+        TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
+        TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == this.direction) {
             sendError(ctx, "text.fabric-essentials.command.tpa.pending");
             return 0;
         }
-        TprManager.INSTANCE.addRequest(participants, this.direction);
+        TpaManager.INSTANCE.addRequest(participants, this.direction);
         sendFeedback(ctx, "text.fabric-essentials.command.tpa.%s.self".formatted(this.direction.getTranslationKey()), target.getDisplayName());
         sendFeedback(target, "text.fabric-essentials.command.tpa.%s.victim".formatted(this.direction.getTranslationKey()),
                 ctx.getSource().getDisplayName(),

@@ -51,7 +51,7 @@ public class WarpCommand extends Command {
         Warp warp = optional.orElseThrow(DOESNT_EXIST::create);
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().homes.waitingPeriod);
+            CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().warps.waitingPeriod);
             CompletableFuture.allOf(waitingPeriod,
                     AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, warp.location().getChunkPos())
             ).whenCompleteAsync((chunkAccess, throwable) -> {

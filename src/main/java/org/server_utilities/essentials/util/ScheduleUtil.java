@@ -54,6 +54,10 @@ public class ScheduleUtil {
             successFuture.complete(WaitingPeriodConfig.WaitingResult.DAMAGE);
             return;
         }
+        if (src.getServer().getPlayerList().getPlayer(src.getPlayer().getUUID()) == null) {
+            successFuture.complete(WaitingPeriodConfig.WaitingResult.OFFLINE);
+            return;
+        }
         if (seconds >= 1) {
             if (ConfigManager.INSTANCE.config().misc.announcedTimeDuration.contains(seconds)) {
                 announcer.accept(seconds);

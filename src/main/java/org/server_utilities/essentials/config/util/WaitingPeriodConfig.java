@@ -26,6 +26,7 @@ public class WaitingPeriodConfig {
     public enum WaitingResult {
         DAMAGE("text.fabric-essentials.teleport.cancel.damage", "text.fabric-essentials.teleport.cancel.damage.other"),
         MOVE("text.fabric-essentials.teleport.cancel.move", "text.fabric-essentials.teleport.cancel.move.other"),
+        OFFLINE("", "text.fabric-essentials.teleport.cancel.offline.other"),
         SUCCESS();
 
         private final String translationKeySelf;

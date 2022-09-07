@@ -83,5 +83,7 @@
   "text.fabric-essentials.teleport.cancel.move.other": "Teleportation cancelled. %s moved too far!",
   "text.fabric-essentials.teleport.cancel.damage": "Teleportation cancelled. You received damage!",
   "text.fabric-essentials.teleport.cancel.damage.other": "Teleportation cancelled. %s received damage!",
-  "text.fabric-essentials.teleport.wait": "Teleporting in %d seconds!"
+  "text.fabric-essentials.teleport.cancel.offline.other": "Teleportation cancelled. %s went offline!",
+  "text.fabric-essentials.teleport.wait": "Teleporting in %d seconds!",
+  "text.fabric-essentials.teleport.wait.other": "Teleporting %s in %d seconds!"
 }

@@ -66,6 +66,10 @@ public abstract class Command {
         ctx.getSource().sendFailure(Component.translatable(translation, args));
     }
 
+    public static void sendError(ServerPlayer serverPlayer, String translation, Object... args) {
+        serverPlayer.createCommandSourceStack().sendFailure(Component.translatable(translation, args));
+    }
+
     public static void sendFeedback(CommandSourceStack source, String translation, Object... args) {
         source.sendSuccess(Component.translatable(translation, args), false);
     }

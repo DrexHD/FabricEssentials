@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.ConfigManager;
-import org.server_utilities.essentials.config.MainConfig;
+import org.server_utilities.essentials.config.EssentialsConfig;
 import org.slf4j.Logger;
 
 import java.util.function.Predicate;
@@ -53,7 +54,7 @@ public abstract class Command {
         return PERMISSION_PREFIX + PERMISSION_DELIMITER + String.join(PERMISSION_DELIMITER, permission);
     }
 
-    public static MainConfig getConfig() {
+    public static EssentialsConfig config() {
         return ConfigManager.INSTANCE.config();
     }
 
@@ -86,5 +87,7 @@ public abstract class Command {
             return "Console";
         }
     }
+
+    public static final SimpleCommandExceptionType WORLD_DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.location.world_doesnt_exist"));
 
 }

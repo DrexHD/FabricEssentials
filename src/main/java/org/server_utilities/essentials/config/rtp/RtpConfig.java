@@ -3,6 +3,7 @@ package org.server_utilities.essentials.config.rtp;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biomes;
 import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
+import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -17,6 +18,9 @@ public class RtpConfig {
     public int centerZ = 0;
     public int minRadius = 5000;
     public int maxRadius = 10000;
+
+    @Comment("Define a waiting period to prevent players from using rtps to escape dangerous situations")
+    public WaitingPeriodConfig waitingPeriod = new WaitingPeriodConfig();
 
     @Comment("The shape used for determining the rtp area (CIRCLE, RECTANGLE)")
     public Shape shape = Shape.RECTANGLE;

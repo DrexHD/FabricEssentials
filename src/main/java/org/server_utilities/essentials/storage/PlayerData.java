@@ -10,7 +10,7 @@ import java.util.Optional;
 public class PlayerData {
 
     public final List<Home> homes = new LinkedList<>();
-    public int rtpsLeft = ConfigManager.INSTANCE.config().rtpConfig.defaultRtps;
+    public int rtpsLeft = ConfigManager.INSTANCE.config().rtp.defaultRtps;
 
     public List<Home> getHomes() {
         return homes;

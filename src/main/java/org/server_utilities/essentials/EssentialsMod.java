@@ -8,6 +8,7 @@ import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.storage.EssentialsData;
 import org.server_utilities.essentials.storage.PlayerData;
+import org.server_utilities.essentials.util.ScheduleUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.ConfigurateException;
@@ -18,7 +19,7 @@ public class EssentialsMod implements DedicatedServerModInitializer {
     public static final String MOD_ID = "fabric-essentials";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final JsonDataStorage<PlayerData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", PlayerData.class);
-    public static final JsonDataStorage<EssentialsData> ESSENTIALS_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", EssentialsData.class);
+    public static final JsonDataStorage<EssentialsData> ESSENTIALS_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials-global", EssentialsData.class);
 
     /**
      * Runs the mod initializer on the server environment.
@@ -33,6 +34,7 @@ public class EssentialsMod implements DedicatedServerModInitializer {
         PlayerDataApi.register(USER_DATA_STORAGE);
         PlayerDataApi.register(ESSENTIALS_DATA_STORAGE);
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
+        ScheduleUtil.INSTANCE.init();
     }
 
 }

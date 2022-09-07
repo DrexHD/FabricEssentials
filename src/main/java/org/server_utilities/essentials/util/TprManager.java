@@ -20,6 +20,7 @@ public class TprManager {
     }
 
     private void onTick(MinecraftServer server) {
+        // TODO: config
         long cooldown = 30;
         // TODO: remove if player is offline
         requestMap.entrySet().removeIf(entry -> (entry.getValue().timeStamp + TimeUnit.SECONDS.toMillis(cooldown)) <= System.currentTimeMillis());

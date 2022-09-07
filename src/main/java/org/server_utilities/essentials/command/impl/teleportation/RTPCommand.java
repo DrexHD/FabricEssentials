@@ -26,15 +26,18 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
+import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
+import org.server_utilities.essentials.util.ScheduleUtil;
 import org.server_utilities.essentials.util.TeleportationUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
@@ -82,14 +85,15 @@ public class RTPCommand extends Command {
     }
 
     private int rtp(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer target = ctx.getSource().getPlayerOrException();
-        ServerLevel targetLevel = ctx.getSource().getLevel();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getUUID());
-        if (!Permissions.check(ctx.getSource(), createPermission("rtp", "dimension", targetLevel.dimension().location().toString()))) {
+        CommandSourceStack src = ctx.getSource();
+        ServerPlayer target = src.getPlayerOrException();
+        ServerLevel targetLevel = src.getLevel();
+        PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
+        if (!Permissions.check(src, createPermission("rtp", "dimension", targetLevel.dimension().location().toString()))) {
             sendError(ctx, "text.fabric-essentials.command.rtp.dimension");
             return -1;
         }
-        if (playerData.rtpsLeft <= 0 && !Permissions.check(ctx.getSource(), createPermission("rtp", "bypassLimit"))) {
+        if (playerData.rtpsLeft <= 0 && !Permissions.check(src, createPermission("rtp", "bypassLimit"))) {
             sendError(ctx, "text.fabric-essentials.command.rtp.no_left");
             return -2;
         }
@@ -102,26 +106,34 @@ public class RTPCommand extends Command {
             sendError(ctx, "text.fabric-essentials.command.rtp.no_location");
             return -4;
         }
-        ctx.getSource().getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.command.async.loading_chunks"), true);
+        src.getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.command.async.loading_chunks"), true);
         long start = System.currentTimeMillis();
         activeRtps.add(target.getUUID());
         ChunkPos chunkPos = new ChunkPos(location.x >> 4, location.z >> 4);
-        AsyncChunkLoadUtil.scheduleChunkLoadForCommand(ctx.getSource(), targetLevel, chunkPos, throwable -> {
+        CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriodFuture = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().rtp.waitingPeriod);
+        CompletableFuture<ChunkAccess> chunkLoadFuture = AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, chunkPos, throwable -> {
             activeRtps.remove(target.getUUID());
-        }).whenCompleteAsync((chunkAccess, throwable) -> {
-            execute(ctx.getSource(), target, targetLevel, start, chunkPos, chunkAccess);
-        }, ctx.getSource().getServer());
+        });
+        CompletableFuture.allOf(waitingPeriodFuture,
+                chunkLoadFuture
+        ).whenCompleteAsync((chunkAccess, throwable) -> {
+            if (waitingPeriodFuture.join().isCancelled()) {
+                activeRtps.remove(target.getUUID());
+                return;
+            }
+            execute(src, target, targetLevel, start, chunkPos, chunkLoadFuture.join());
+        }, src.getServer());
         return 1;
     }
 
     @Nullable
     private static RTPLocation generateLocation(ServerLevel level) {
         for (int i = 0; i < 50; i++) {
-            RTPLocation rtpLocation = getConfig().rtpConfig.shape.generateLocation(getConfig().rtpConfig.centerX, getConfig().rtpConfig.centerZ, getConfig().rtpConfig.minRadius, getConfig().rtpConfig.maxRadius);
+            RTPLocation rtpLocation = config().rtp.shape.generateLocation(config().rtp.centerX, config().rtp.centerZ, config().rtp.minRadius, config().rtp.maxRadius);
             Holder<Biome> holder = level.getBiome(new BlockPos(rtpLocation.x, 70, rtpLocation.z));
             ResourceLocation location = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(holder.value());
             boolean invalid = false;
-            for (ResourceLocation blacklisted : getConfig().rtpConfig.blacklistedBiomes) {
+            for (ResourceLocation blacklisted : config().rtp.blacklistedBiomes) {
                 if (blacklisted.equals(location)) {
                     invalid = true;
                     break;

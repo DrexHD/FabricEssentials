@@ -82,7 +82,7 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
         if (permission(PERMISSION_BASE, PERMISSION_LIMIT, PERMISSION_LIMIT_BYPASS).test(source)) {
             return Integer.MAX_VALUE;
         } else {
-            HomesConfig homesConfig = getConfig().homesConfig;
+            HomesConfig homesConfig = config().homes;
             int limit = homesConfig.defaultLimit;
             int added = 0;
             for (HomesLimit homesLimit : homesConfig.homesLimits) {

@@ -16,17 +16,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
+import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
+import org.server_utilities.essentials.util.ScheduleUtil;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
     public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.doesnt_exist"));
-    public static final SimpleCommandExceptionType WORLD_DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.world_doesnt_exist"));
     private static final String NAME = "name";
     public static final String HOME_COMMAND = "home";
 
@@ -52,21 +54,26 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
     }
 
     private int teleportHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
-        ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
+        CommandSourceStack src = ctx.getSource();
+        ServerPlayer serverPlayer = src.getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
-        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        PlayerData playerData = dataStorage.getPlayerData(src.getServer(), target.getId());
         Optional<Home> optional = playerData.getHome(name);
         Home home = optional.orElseThrow(DOESNT_EXIST::create);
-        ServerLevel targetLevel = home.location().getLevel(ctx.getSource().getServer());
+        ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            AsyncChunkLoadUtil.scheduleChunkLoadForCommand(ctx.getSource(), targetLevel, home.location().getChunkPos()).whenCompleteAsync((chunkAccess, throwable) -> {
+            CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().homes.waitingPeriod);
+            CompletableFuture.allOf(waitingPeriod,
+                    AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, home.location().getChunkPos())
+            ).whenCompleteAsync((unused, throwable) -> {
+                if (waitingPeriod.join().isCancelled()) return;
                 if (self) {
                     sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.self", name);
                 } else {
                     sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.other", name, target.getName());
                 }
                 home.location().teleport(serverPlayer);
-            }, ctx.getSource().getServer());
+            }, src.getServer());
             return 1;
         } else {
             throw WORLD_DOESNT_EXIST.create();

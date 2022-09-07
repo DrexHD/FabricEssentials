@@ -17,7 +17,7 @@ public class ConfigManager {
     private static final String SUBDIRECTORY = "fabric-essentials";
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve(SUBDIRECTORY);
     private static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");
-    private MainConfig mainConfig = new MainConfig();
+    private EssentialsConfig essentialsConfig = new EssentialsConfig();
 
     public static final ConfigManager INSTANCE = new ConfigManager();
 
@@ -36,14 +36,14 @@ public class ConfigManager {
         if (!CONFIG_FILE.toFile().exists()) {
             CONFIG_DIR.toFile().mkdirs();
             LOGGER.info("Creating configuration file!");
-            rootNode.set(MainConfig.class, new MainConfig());
+            rootNode.set(EssentialsConfig.class, new EssentialsConfig());
             loader.save(rootNode);
         }
-        mainConfig = rootNode.get(MainConfig.class, new MainConfig());
+        essentialsConfig = rootNode.get(EssentialsConfig.class, new EssentialsConfig());
     }
 
-    public MainConfig config() {
-        return mainConfig;
+    public EssentialsConfig config() {
+        return essentialsConfig;
     }
 
 }

@@ -27,7 +27,7 @@
   "text.fabric-essentials.command.hat.other": "Set %s hat item to %s",
   "text.fabric-essentials.command.hat.victim": "%s set your hat item to %s",
   "text.fabric-essentials.command.home.doesnt_exist": "No Home with that name exists",
-  "text.fabric-essentials.command.home.world_doesnt_exist": "The world of this home no longer exists",
+  "text.fabric-essentials.command.home.predicate": "Can't teleport home: Predicate failed!",
   "text.fabric-essentials.command.home.teleport.self": "Teleporting to Home %s",
   "text.fabric-essentials.command.home.teleport.other": "Teleporting to Home %s from %s",
   "text.fabric-essentials.command.homes.self": "Homes:",
@@ -74,5 +74,14 @@
   "text.fabric-essentials.command.tpa.here.victim": "%s requested to teleport you to them. %s",
   "text.fabric-essentials.command.tpa.there.victim": "%s requested to teleport to you. %s",
   "text.fabric-essentials.command.tpa.accept": "[Accept]",
-  "text.fabric-essentials.command.tpa.accept.hover": "Click to accept!"
+  "text.fabric-essentials.command.tpa.accept.hover": "Click to accept!",
+
+
+  "text.fabric-essentials.location.world_doesnt_exist": "The target world no longer exists",
+
+  "text.fabric-essentials.teleport.cancel.move": "Teleportation cancelled. You moved too far!",
+  "text.fabric-essentials.teleport.cancel.move.other": "Teleportation cancelled. %s moved too far!",
+  "text.fabric-essentials.teleport.cancel.damage": "Teleportation cancelled. You received damage!",
+  "text.fabric-essentials.teleport.cancel.damage.other": "Teleportation cancelled. %s received damage!",
+  "text.fabric-essentials.teleport.wait": "Teleporting in %d seconds!"
 }

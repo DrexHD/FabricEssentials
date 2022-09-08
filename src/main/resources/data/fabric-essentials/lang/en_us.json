@@ -70,15 +70,13 @@
   "text.fabric-essentials.command.tpaccept.victim": "%s accepted your teleport request.",
   "text.fabric-essentials.command.tpa.pending": "You already have a pending teleport request for that player.",
   "text.fabric-essentials.command.tpa.here.self": "Request to teleport %s to you has been sent.",
+  "text.fabric-essentials.command.tpaall": "Request to teleport to you has been sent to %d players.",
   "text.fabric-essentials.command.tpa.there.self": "Request to teleport you to %s has been sent.",
   "text.fabric-essentials.command.tpa.here.victim": "%s requested to teleport you to them. %s",
   "text.fabric-essentials.command.tpa.there.victim": "%s requested to teleport to you. %s",
   "text.fabric-essentials.command.tpa.accept": "[Accept]",
   "text.fabric-essentials.command.tpa.accept.hover": "Click to accept!",
-
-
   "text.fabric-essentials.location.world_doesnt_exist": "The target world no longer exists",
-
   "text.fabric-essentials.teleport.cancel.move": "Teleportation cancelled. You moved too far!",
   "text.fabric-essentials.teleport.cancel.move.other": "Teleportation cancelled. %s moved too far!",
   "text.fabric-essentials.teleport.cancel.damage": "Teleportation cancelled. You received damage!",

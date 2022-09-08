@@ -27,7 +27,9 @@ public class TpAllCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         List<ServerPlayer> players = ctx.getSource().getServer().getPlayerList().getPlayers();
+        int success = 0;
         for (ServerPlayer target : players) {
+            if (ctx.getSource().getPlayerOrException().equals(target)) continue;
             TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
             TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
             if (direction == TpaManager.Direction.HERE) continue;
@@ -40,9 +42,9 @@ public class TpAllCommand extends Command {
                                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.tpa.accept.hover")))
                             )
             );
+            success++;
         }
-        // TODO: sent feedback to source
-        //sendFeedback(ctx, "text.fabric-essentials.command.tpa.%s.self".formatted(TprManager.Direction.HERE.getTranslationKey()), target.getDisplayName());
-        return players.size();
+        sendFeedback(ctx, "text.fabric-essentials.command.tpaall", success);
+        return success;
     }
 }

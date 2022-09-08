@@ -14,6 +14,7 @@ import org.server_utilities.essentials.command.impl.teleportation.home.HomeComma
 import org.server_utilities.essentials.command.impl.teleportation.home.HomesCommand;
 import org.server_utilities.essentials.command.impl.teleportation.home.SetHomeCommand;
 import org.server_utilities.essentials.command.impl.teleportation.tpa.TpAcceptCommand;
+import org.server_utilities.essentials.command.impl.teleportation.tpa.TpAllCommand;
 import org.server_utilities.essentials.command.impl.teleportation.tpa.TpaCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCommand;
 import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
@@ -43,6 +44,7 @@ public class CommandManager {
             new RTPCommand(),
             new TpaCommand(TpaManager.Direction.HERE),
             new TpaCommand(TpaManager.Direction.THERE),
+            new TpAllCommand(),
             new TpAcceptCommand(),
             // Util
             new EssentialsCommand(),

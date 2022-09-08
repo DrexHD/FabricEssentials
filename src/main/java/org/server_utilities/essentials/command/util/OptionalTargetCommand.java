@@ -24,8 +24,9 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
         // Allow literal command execution if either of the sub-nodes is present
         String permission = properties.permission();
         if (permission != null) {
-            properties.orPredicate(permission(permission, SELF_PERMISSION_SUFFIX));
-            properties.orPredicate(permission(permission, OTHER_PERMISSION_SUFFIX));
+            properties
+                    .orPredicate(permission(permission, SELF_PERMISSION_SUFFIX))
+                    .orPredicate(permission(permission, OTHER_PERMISSION_SUFFIX));
         }
         this.targetArgumentId = targetArgumentId;
     }

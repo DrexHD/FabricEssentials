@@ -21,20 +21,15 @@ public class FlyCommand extends OptionalOnlineTargetCommand {
 
     @Override
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
-        RequiredArgumentBuilder<CommandSourceStack, Boolean> enable = Commands.argument("enable", BoolArgumentType.bool());
+        RequiredArgumentBuilder<CommandSourceStack, Boolean> enable = Commands.argument(ENABLE, BoolArgumentType.bool());
         registerOptionalArgument(enable);
         literal.then(enable);
         literal.executes(this::toggle);
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return setFly(ctx, ctx.getSource().getPlayerOrException(), BoolArgumentType.getBool(ctx, ENABLE), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException {
-        return setFly(ctx, target, BoolArgumentType.getBool(ctx, ENABLE), false);
+    protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
+        return setFly(ctx, target, BoolArgumentType.getBool(ctx, ENABLE), self);
     }
 
     private int toggle(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
@@ -43,17 +38,10 @@ public class FlyCommand extends OptionalOnlineTargetCommand {
     }
 
     private int setFly(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean value, boolean self) {
-        sendFeedback(ctx,
-                String.format("text.fabric-essentials.command.fly.%s", self ? "self" : "other"),
-                self ? new Object[]{value} : new Object[]{value, target.getDisplayName()}
-        );
-        if (!self) sendFeedback(target,
-                String.format("text.fabric-essentials.command.fly.%s", "victim"),
-                value, toName(ctx)
-        );
+        sendFeedbackWithOptionalTarget(ctx, target, self, new Object[]{value}, new Object[]{value, target.getDisplayName()}, new Object[]{value, ctx.getSource().getDisplayName()});
         target.getAbilities().mayfly = value;
         if (!value) target.getAbilities().flying = false;
         target.onUpdateAbilities();
-        return value ? 1 : 0;
+        return value ? SUCCESS : FAILURE;
     }
 }

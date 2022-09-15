@@ -34,17 +34,15 @@ public class TpAllCommand extends Command {
             TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
             if (direction == TpaManager.Direction.HERE) continue;
             TpaManager.INSTANCE.addRequest(participants, TpaManager.Direction.HERE);
-            sendFeedback(target, "text.fabric-essentials.command.tpa.%s.victim".formatted(TpaManager.Direction.HERE.getTranslationKey()),
-                    ctx.getSource().getDisplayName(),
-                    Component.translatable("text.fabric-essentials.command.tpa.accept")
+            target.sendSystemMessage(Component.translatable(translation(TpaManager.Direction.HERE.getTranslationKey(), "victim"), ctx.getSource().getDisplayName(),
+                    Component.translatable(translation("accept"))
                             .withStyle(style ->
                                     style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(ctx.getSource().getPlayer().getScoreboardName())))
-                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.tpa.accept.hover")))
-                            )
-            );
+                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("accept", "hover"))))
+                            )));
             success++;
         }
-        sendFeedback(ctx, "text.fabric-essentials.command.tpaall", success);
+        sendSuccess(ctx.getSource(), join(), success);
         return success;
     }
 }

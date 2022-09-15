@@ -1,4 +1,4 @@
-package org.server_utilities.essentials.mixin.gameplay;
+package org.server_utilities.essentials.mixin.style;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.command.Command;
+import org.server_utilities.essentials.util.KeyUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,7 +28,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> Command.permission("style", "anvil", textTag.name()).test(this.player.createCommandSourceStack()));
+        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "anvil", textTag.name()).test(this.player.createCommandSourceStack()));
     }
 
 }

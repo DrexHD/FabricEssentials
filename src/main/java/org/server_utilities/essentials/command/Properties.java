@@ -7,37 +7,45 @@ import java.util.function.Predicate;
 
 public class Properties {
 
-    private final String[] literals;
+    private final String literal;
+    private final String[] alias;
     @Nullable
     private String permission;
+    @Deprecated
     private Predicate<CommandSourceStack> predicate = stack -> true;
 
-    private Properties(String... literals) {
-        this.literals = literals;
+    private Properties(String literal, String... alias) {
+        this.literal = literal;
+        this.alias = alias;
     }
 
-    public static Properties create(String... literals) {
-        return new Properties(literals);
+    public static Properties create(String literal, String... alias) {
+        return new Properties(literal, alias);
     }
 
     public Properties permission(String permission) {
-        this.predicate = this.predicate.and(Command.permission(permission));
         this.permission = permission;
         return this;
     }
 
+    @Deprecated
     public Properties andPredicate(Predicate<CommandSourceStack> predicate) {
         this.predicate = this.predicate.and(predicate);
         return this;
     }
 
+    @Deprecated
     public Properties orPredicate(Predicate<CommandSourceStack> predicate) {
         this.predicate = this.predicate.or(predicate);
         return this;
     }
 
-    public String[] literals() {
-        return literals;
+    public String[] alias() {
+        return alias;
+    }
+
+    public String literal() {
+        return literal;
     }
 
     public Predicate<CommandSourceStack> predicate() {

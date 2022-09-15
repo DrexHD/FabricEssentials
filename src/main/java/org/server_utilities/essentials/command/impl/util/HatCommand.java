@@ -21,42 +21,27 @@ public class HatCommand extends OptionalOnlineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return setHat(ctx, ctx.getSource().getPlayerOrException(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
-        return setHat(ctx, target, false);
-    }
-
-    private int setHat(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) {
+    protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
         Inventory inventory = target.getInventory();
         ItemStack selected = inventory.getSelected();
         ResourceLocation resourceLocation = Registry.ITEM.getKey(selected.getItem());
-        if (!permission(properties.permission(), "item", resourceLocation.getPath()).test(ctx.getSource())) {
-            sendError(ctx,
-                    "text.fabric-essentials.command.hat.no_permission");
-            return -1;
+        if (!predicate("item", resourceLocation.getPath()).test(ctx.getSource())) {
+            sendFailure(ctx.getSource(),
+                    "no_permission");
+            return FAILURE;
         }
         ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
 
-        if (EnchantmentHelper.hasBindingCurse(head) && !permission(properties.permission(), "bypassBindingCurse").test(ctx.getSource())) {
-            sendError(ctx,
-                    "text.fabric-essentials.command.hat.binding_curse");
-            return -2;
+        if (EnchantmentHelper.hasBindingCurse(head) && !predicate("bypassBindingCurse").test(ctx.getSource())) {
+            sendFailure(ctx.getSource(),
+                    "binding_curse");
+            return FAILURE;
         }
 
-        sendFeedback(ctx,
-                String.format("text.fabric-essentials.command.hat.%s", self ? "self" : "other"),
-                self ? new Object[]{resourceLocation.getPath()} : new Object[]{target.getDisplayName(), resourceLocation.getPath()}
-        );
-        if (!self) sendFeedback(target,
-                String.format("text.fabric-essentials.command.hat.%s", "victim"),
-                toName(ctx), resourceLocation.getPath()
-        );
+        sendFeedbackWithOptionalTarget(ctx, target, self, new Object[]{resourceLocation.getPath()}, new Object[]{target.getDisplayName(), resourceLocation.getPath()}, new Object[]{ctx.getSource().getDisplayName(), resourceLocation.getPath()});
         target.setItemInHand(InteractionHand.MAIN_HAND, head);
         inventory.armor.set(EquipmentSlot.HEAD.getIndex(), selected);
-        return 0;
+        return SUCCESS;
     }
+
 }

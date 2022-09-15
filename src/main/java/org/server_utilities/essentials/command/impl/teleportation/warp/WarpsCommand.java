@@ -27,9 +27,9 @@ public class WarpsCommand extends Command {
         EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
         List<Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
-            sendFeedback(ctx, "text.fabric-essentials.command.warps.no_warp");
+            sendSuccess(ctx.getSource(), "empty");
         } else {
-            sendFeedback(ctx, "text.fabric-essentials.command.warps");
+            sendSuccess(ctx.getSource(), join());
             Component warpsComponent = ComponentUtils.formatList(warps.stream().map(Warp::name).toList(), name -> Component.literal(name).withStyle(
                     Style.EMPTY
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.warps.hover")))

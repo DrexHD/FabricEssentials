@@ -73,10 +73,10 @@ public class AsyncChunkLoadUtil {
 
     public static CompletableFuture<ChunkAccess> scheduleChunkLoadForCommand(CommandSourceStack src, ServerLevel world, ChunkPos pos, Consumer<Throwable> onFailure) throws CommandSyntaxException {
         CompletableFuture<ChunkAccess> future = new CompletableFuture<>();
-        src.getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.command.async.loading_chunks"), true);
+        src.getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.async.loading_chunks"), true);
         scheduleChunkLoadWithRadius(world, pos, 2).whenCompleteAsync((either, throwable) -> {
             if (throwable != null) {
-                Command.sendError(src, "text.fabric-essentials.command.async.error", throwable.getMessage());
+                src.sendFailure(Component.translatable("text.fabric-essentials.async.error", throwable.getMessage()));
                 onFailure.accept(throwable);
                 return;
             }
@@ -84,7 +84,7 @@ public class AsyncChunkLoadUtil {
                 ChunkAccess chunkAccess = either.orThrow();
                 future.complete(chunkAccess);
             } catch (Throwable throwable1) {
-                Command.sendError(src, "text.fabric-essentials.command.async.error", throwable1.getMessage());
+                src.sendFailure(Component.translatable("text.fabric-essentials.async.error", throwable1.getMessage()));
                 onFailure.accept(throwable1);
             }
         }, src.getServer());

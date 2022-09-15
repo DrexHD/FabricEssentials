@@ -5,14 +5,12 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,10 +52,10 @@ public class RTPCommand extends Command {
     @Override
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
         literal.then(
-                Commands.literal("check").requires(permission("rtp", "check"))
+                Commands.literal("check").requires(predicate("check"))
                         .executes(this::check)
         ).then(
-                Commands.literal("add").requires(permission("rtp", "add"))
+                Commands.literal("add").requires(predicate("add"))
                         .then(Commands.argument("targets", GameProfileArgument.gameProfile())
                                 .then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(this::add))
                         )
@@ -68,7 +66,7 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getUUID());
-        sendFeedback(ctx, "text.fabric-essentials.command.rtp.check", playerData.rtpsLeft);
+        sendSuccess(ctx.getSource(), "check", playerData.rtpsLeft);
         return playerData.rtpsLeft;
     }
 
@@ -89,24 +87,24 @@ public class RTPCommand extends Command {
         ServerPlayer target = src.getPlayerOrException();
         ServerLevel targetLevel = src.getLevel();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
-        if (!Permissions.check(src, createPermission("rtp", "dimension", targetLevel.dimension().location().toString()))) {
-            sendError(ctx, "text.fabric-essentials.command.rtp.dimension");
-            return -1;
+        ResourceLocation resourceLocation = targetLevel.dimension().location();
+        if (!predicate("dimension", resourceLocation.getNamespace(), resourceLocation.getPath()).test(src)) {
+            sendFailure(ctx.getSource(), "dimension");
+            return FAILURE;
         }
-        if (playerData.rtpsLeft <= 0 && !Permissions.check(src, createPermission("rtp", "bypassLimit"))) {
-            sendError(ctx, "text.fabric-essentials.command.rtp.no_left");
-            return -2;
+        if (playerData.rtpsLeft <= 0 && !predicate("bypassLimit").test(src)) {
+            sendFailure(ctx.getSource(), "limit");
+            return FAILURE;
         }
         if (activeRtps.contains(target.getUUID())) {
-            sendError(ctx, "text.fabric-essentials.command.rtp.still_active");
-            return -3;
+            sendFailure(ctx.getSource(), "still_active");
+            return FAILURE;
         }
         RTPLocation location = generateLocation(targetLevel);
         if (location == null) {
-            sendError(ctx, "text.fabric-essentials.command.rtp.no_location");
-            return -4;
+            sendFailure(ctx.getSource(), "no_location");
+            return FAILURE;
         }
-        src.getPlayerOrException().displayClientMessage(Component.translatable("text.fabric-essentials.command.async.loading_chunks"), true);
         long start = System.currentTimeMillis();
         activeRtps.add(target.getUUID());
         ChunkPos chunkPos = new ChunkPos(location.x >> 4, location.z >> 4);
@@ -123,7 +121,7 @@ public class RTPCommand extends Command {
             }
             execute(src, target, targetLevel, start, chunkPos, chunkLoadFuture.join());
         }, src.getServer());
-        return 1;
+        return SUCCESS;
     }
 
     @Nullable
@@ -169,8 +167,8 @@ public class RTPCommand extends Command {
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, Registry.BLOCK.getKey(blockState.getBlock()));
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
-                sendFeedback(src, "text.fabric-essentials.command.rtp.success", (System.currentTimeMillis() - start));
-                if (!Permissions.check(src, createPermission("rtp", "bypassLimit"))) {
+                sendSuccess(src, join(), (System.currentTimeMillis() - start));
+                if (!predicate("bypassLimit").test(src)) {
                     PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
                     playerData.rtpsLeft--;
                     DataStorage.STORAGE.savePlayerData(src.getServer(), target.getUUID(), playerData);
@@ -180,7 +178,7 @@ public class RTPCommand extends Command {
             }
         }
         activeRtps.remove(target.getUUID());
-        sendError(src, "text.fabric-essentials.command.rtp.unsafe");
+        sendFailure(src, "unsafe");
     }
 
 }

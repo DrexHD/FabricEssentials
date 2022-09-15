@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 
@@ -15,13 +16,18 @@ public abstract class OptionalOnlineTargetCommand extends OptionalTargetCommand<
         super(properties);
     }
 
-    public OptionalOnlineTargetCommand(Properties properties, String targetArgumentId) {
-        super(properties, targetArgumentId);
-    }
-
     @Override
     protected ArgumentType<EntitySelector> getArgumentType() {
         return EntityArgument.player();
+    }
+
+    @Override
+    protected ServerPlayer getSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return ctx.getSource().getPlayerOrException();
+    }
+
+    public void sendFeedback(MinecraftServer server, ServerPlayer serverPlayer, String translation, Object... args) {
+        super.sendSuccess(serverPlayer.createCommandSourceStack(), translation, args);
     }
 
     @Override

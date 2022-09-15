@@ -9,9 +9,10 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "CommandSourceStackAccessor",
     "async.IChunkMap",
     "async.IServerChunkCache",
-    "gameplay.AnvilMenuMixin",
-    "gameplay.ServerGamePacketListenerImplMixin"
+    "style.AnvilMenuMixin",
+    "style.ServerGamePacketListenerImplMixin"
   ]
 }

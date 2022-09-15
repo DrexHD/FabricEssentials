@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
-    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.doesnt_exist"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.unknown"));
     private static final String NAME = "name";
     public static final String HOME_COMMAND = "home";
 
@@ -44,22 +44,14 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return teleportHome(ctx, StringArgumentType.getString(ctx, NAME), ctx.getSource().getPlayerOrException().getGameProfile(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) throws CommandSyntaxException {
-        return teleportHome(ctx, StringArgumentType.getString(ctx, NAME), target, false);
-    }
-
-    private int teleportHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
+    protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
+        String name = StringArgumentType.getString(ctx, NAME);
         CommandSourceStack src = ctx.getSource();
         ServerPlayer serverPlayer = src.getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
         PlayerData playerData = dataStorage.getPlayerData(src.getServer(), target.getId());
         Optional<Home> optional = playerData.getHome(name);
-        Home home = optional.orElseThrow(DOESNT_EXIST::create);
+        Home home = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
             CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().homes.waitingPeriod);
@@ -67,16 +59,12 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
                     AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, home.location().getChunkPos())
             ).whenCompleteAsync((unused, throwable) -> {
                 if (waitingPeriod.join().isCancelled()) return;
-                if (self) {
-                    sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.self", name);
-                } else {
-                    sendFeedback(ctx, "text.fabric-essentials.command.home.teleport.other", name, target.getName());
-                }
+                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
                 home.location().teleport(serverPlayer);
             }, src.getServer());
-            return 1;
+            return SUCCESS;
         } else {
-            throw WORLD_DOESNT_EXIST.create();
+            throw WORLD_UNKNOWN.create();
         }
     }
 

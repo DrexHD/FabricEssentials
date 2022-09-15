@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class ModsCommand extends Command {
 
-    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.mods.doesnt_exist"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.mods.unknown"));
     private static final String MOD_ID = "modid";
     public static final String MODS_COMMAND = "mods";
 
@@ -40,7 +40,7 @@ public class ModsCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        sendFeedback(ctx, "text.fabric-essentials.command.mods.list.title", mods.size());
+        sendSuccess(ctx.getSource(), join("list", "title"), mods.size());
         Component modsComponent = ComponentUtils.formatList(mods, this::formatMod);
         ctx.getSource().sendSuccess(modsComponent, false);
         return mods.size();
@@ -54,12 +54,12 @@ public class ModsCommand extends Command {
             ModMetadata metadata = modContainer.getMetadata();
             Component authors = ComponentUtils.formatList(metadata.getAuthors(), person -> Component.literal(person.getName()));
             ctx.getSource().sendSuccess(Component.literal(metadata.getName()), false);
-            sendFeedback(ctx, "text.fabric-essentials.command.mods.info.version", metadata.getVersion().getFriendlyString());
-            sendFeedback(ctx, "text.fabric-essentials.command.mods.info.author", authors);
-            sendFeedback(ctx, "text.fabric-essentials.command.mods.info.description", metadata.getDescription());
-            return 1;
+            sendSuccess(ctx.getSource(), join("info", "version"), metadata.getVersion().getFriendlyString());
+            sendSuccess(ctx.getSource(), join("info", "author"), authors);
+            sendSuccess(ctx.getSource(), join("info", "description"), metadata.getDescription());
+            return SUCCESS;
         } else {
-            throw DOESNT_EXIST.create();
+            throw UNKNOWN.create();
         }
     }
 
@@ -67,7 +67,7 @@ public class ModsCommand extends Command {
         return Component.literal(modContainer.getMetadata().getId())
                 .withStyle(
                         Style.EMPTY
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.mods.info.hover")))
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("info", "hover"))))
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", MODS_COMMAND, modContainer.getMetadata().getId())))
                 );
     }

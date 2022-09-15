@@ -27,7 +27,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class WarpCommand extends Command {
 
-    public static final SimpleCommandExceptionType DOESNT_EXIST = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.warp.doesnt_exist"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.warp.unknown"));
     private static final String NAME = "name";
     public static final String WARP_COMMAND = "warp";
 
@@ -48,7 +48,7 @@ public class WarpCommand extends Command {
         ServerPlayer serverPlayer = src.getPlayerOrException();
         EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(src.getServer());
         Optional<Warp> optional = essentialsData.getWarp(name);
-        Warp warp = optional.orElseThrow(DOESNT_EXIST::create);
+        Warp warp = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
             CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().warps.waitingPeriod);
@@ -56,13 +56,13 @@ public class WarpCommand extends Command {
                     AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, warp.location().getChunkPos())
             ).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (waitingPeriod.join().isCancelled()) return;
-                sendFeedback(ctx, "text.fabric-essentials.command.warp.teleport", name);
+                sendSuccess(ctx.getSource(), "teleport", name);
                 warp.location().teleport(serverPlayer);
             }, src.getServer());
         } else {
-            throw WORLD_DOESNT_EXIST.create();
+            throw WORLD_UNKNOWN.create();
         }
-        return 1;
+        return SUCCESS;
     }
 
     public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer()).getWarps().stream().map(Warp::name).toList(), builder);

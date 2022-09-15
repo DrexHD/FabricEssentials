@@ -15,16 +15,9 @@ public abstract class SimpleMenuCommand extends OptionalOnlineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer sender = ctx.getSource().getPlayerOrException();
-        sender.openMenu(createMenu(ctx, sender));
-        return 1;
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException {
+    protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
         target.openMenu(createMenu(ctx, target));
-        return 1;
+        return SUCCESS;
     }
 
     protected abstract MenuProvider createMenu(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException;

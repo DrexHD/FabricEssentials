@@ -14,24 +14,8 @@ public class HealCommand extends OptionalOnlineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return heal(ctx, ctx.getSource().getPlayerOrException(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
-        return heal(ctx, target, false);
-    }
-
-    private int heal(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) {
-        sendFeedback(ctx,
-                String.format("text.fabric-essentials.command.heal.%s", self ? "self" : "other"),
-                self ? new Object[]{} : new Object[]{target.getDisplayName()}
-        );
-        if (!self) sendFeedback(target,
-                String.format("text.fabric-essentials.command.heal.%s", "victim"),
-                toName(ctx)
-        );
+    protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
+        sendFeedbackWithOptionalTarget(ctx, target, self, EMPTY, new Object[]{target.getDisplayName()}, new Object[]{ctx.getSource().getDisplayName()});
         float health = target.getHealth();
         float maxHealth = target.getMaxHealth();
         target.setHealth(maxHealth);

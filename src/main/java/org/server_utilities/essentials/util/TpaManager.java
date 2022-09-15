@@ -21,7 +21,6 @@ public class TpaManager {
     }
 
     private void onTick(MinecraftServer server) {
-        // TODO: remove if player is offline
         requestMap.entrySet().removeIf(entry -> (entry.getValue().timeStamp + TimeUnit.SECONDS.toMillis(ConfigManager.INSTANCE.config().tpa.expiry)) <= System.currentTimeMillis());
     }
 

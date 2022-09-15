@@ -8,6 +8,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 
 import java.util.Collection;
@@ -19,10 +21,6 @@ public abstract class OptionalOfflineTargetCommand extends OptionalTargetCommand
 
     public OptionalOfflineTargetCommand(Properties properties) {
         super(properties);
-    }
-
-    public OptionalOfflineTargetCommand(Properties properties, String targetArgumentId) {
-        super(properties, targetArgumentId);
     }
 
     @Override
@@ -41,6 +39,19 @@ public abstract class OptionalOfflineTargetCommand extends OptionalTargetCommand
             } else {
                 return profiles.iterator().next();
             }
+        }
+    }
+
+    @Override
+    protected GameProfile getSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return ctx.getSource().getPlayerOrException().getGameProfile();
+    }
+
+    @Override
+    protected void sendFeedback(MinecraftServer server, GameProfile target, String translation, Object... args) {
+        ServerPlayer player = server.getPlayerList().getPlayer(target.getId());
+        if (player != null) {
+            super.sendSuccess(player.createCommandSourceStack(), translation, args);
         }
     }
 }

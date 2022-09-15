@@ -16,7 +16,7 @@ public class WorkBenchCommand extends SimpleMenuCommand {
     private static final MutableComponent WORKBENCH_TITLE = Component.translatable("container.crafting");
 
     public WorkBenchCommand() {
-        super(Properties.create("wb", "workbench").permission("workbench"));
+        super(Properties.create("workbench", "wb").permission("workbench"));
     }
 
     @Override

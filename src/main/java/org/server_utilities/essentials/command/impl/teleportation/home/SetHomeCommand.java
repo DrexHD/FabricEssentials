@@ -27,7 +27,6 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
 
     private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.sethome.already_exists"));
     private static final String NAME = "name";
-    private static final String PERMISSION_BASE = "homes";
     private static final String PERMISSION_LIMIT = "limit";
     private static final String PERMISSION_LIMIT_BYPASS = "bypass";
 
@@ -43,16 +42,8 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return setHome(ctx, StringArgumentType.getString(ctx, NAME), ctx.getSource().getPlayerOrException().getGameProfile(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) throws CommandSyntaxException {
-        return setHome(ctx, StringArgumentType.getString(ctx, NAME), target, false);
-    }
-
-    private int setHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
+    protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
+        String name = StringArgumentType.getString(ctx, NAME);
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
         PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
@@ -62,16 +53,14 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             int limit = getHomesLimit(ctx.getSource());
             if (homes.size() >= limit) {
                 ctx.getSource().sendFailure(Component.translatable("text.fabric-essentials.command.sethome.limit"));
-                return 0;
+                return FAILURE;
             } else {
                 Home newHome = new Home(name, new Location(serverPlayer));
                 homes.add(newHome);
                 dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
-                sendFeedback(ctx,
-                        String.format("text.fabric-essentials.command.sethome.%s", self ? "self" : "other"),
-                        self ? new Object[]{name} : new Object[]{name, target.getName()}
-                );
-                return 1;
+                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+
+                return SUCCESS;
             }
         } else {
             throw ALREADY_EXISTS.create();
@@ -79,14 +68,14 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     private int getHomesLimit(CommandSourceStack source) {
-        if (permission(PERMISSION_BASE, PERMISSION_LIMIT, PERMISSION_LIMIT_BYPASS).test(source)) {
+        if (predicate(PERMISSION_LIMIT, PERMISSION_LIMIT_BYPASS).test(source)) {
             return Integer.MAX_VALUE;
         } else {
             HomesConfig homesConfig = config().homes;
             int limit = homesConfig.defaultLimit;
             int added = 0;
             for (HomesLimit homesLimit : homesConfig.homesLimits) {
-                if (permission(PERMISSION_BASE, PERMISSION_LIMIT, homesLimit.permission).test(source)) {
+                if (predicate(PERMISSION_LIMIT, homesLimit.permission).test(source)) {
                     if (homesLimit.stacks) {
                         added += homesLimit.limit;
                     } else {

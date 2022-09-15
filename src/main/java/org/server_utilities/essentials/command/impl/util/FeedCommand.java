@@ -16,27 +16,12 @@ public class FeedCommand extends OptionalOnlineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return feed(ctx, ctx.getSource().getPlayerOrException(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, ServerPlayer target) {
-        return feed(ctx, target, false);
-    }
-
-    private int feed(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) {
-        sendFeedback(ctx,
-                String.format("text.fabric-essentials.command.feed.%s", self ? "self" : "other"),
-                self ? new Object[]{} : new Object[]{target.getDisplayName()}
-        );
-        if (!self) sendFeedback(target,
-                String.format("text.fabric-essentials.command.feed.%s", "victim"),
-                toName(ctx)
-        );
+    protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
+        sendFeedbackWithOptionalTarget(ctx, target, self, EMPTY, new Object[]{target.getDisplayName()}, new Object[]{ctx.getSource().getDisplayName()});
         int foodLevel = target.getFoodData().getFoodLevel();
         target.getFoodData().setFoodLevel(MAX_FOOD);
         target.getFoodData().setSaturation(MAX_FOOD);
         return MAX_FOOD - foodLevel;
     }
+
 }

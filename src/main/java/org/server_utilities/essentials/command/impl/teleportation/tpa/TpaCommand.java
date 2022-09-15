@@ -37,20 +37,20 @@ public class TpaCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == this.direction) {
-            sendError(ctx, "text.fabric-essentials.command.tpa.pending");
-            return 0;
+            sendFailure(ctx.getSource(), "pending");
+            return FAILURE;
         }
         TpaManager.INSTANCE.addRequest(participants, this.direction);
-        sendFeedback(ctx, "text.fabric-essentials.command.tpa.%s.self".formatted(this.direction.getTranslationKey()), target.getDisplayName());
-        sendFeedback(target, "text.fabric-essentials.command.tpa.%s.victim".formatted(this.direction.getTranslationKey()),
+        sendSuccess(ctx.getSource(), join(this.direction.getTranslationKey(), "self"), target.getDisplayName());
+        sendSuccess(target.createCommandSourceStack(), join(this.direction.getTranslationKey(), "victim"),
                 ctx.getSource().getDisplayName(),
-                Component.translatable("text.fabric-essentials.command.tpa.accept")
+                Component.translatable(translation("accept"))
                         .withStyle(style ->
                                 style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(ctx.getSource().getPlayer().getScoreboardName())))
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.tpa.accept.hover")))
+                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("accept", "hover"))))
                         )
         );
-        return 1;
+        return SUCCESS;
     }
 
 }

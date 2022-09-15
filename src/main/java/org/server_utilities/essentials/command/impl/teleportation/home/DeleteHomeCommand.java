@@ -18,7 +18,7 @@ import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
 
-import static org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand.DOESNT_EXIST;
+import static org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand.UNKNOWN;
 
 public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
 
@@ -36,28 +36,21 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
     @Override
-    protected int onSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        return deleteHome(ctx, StringArgumentType.getString(ctx, NAME), ctx.getSource().getPlayerOrException().getGameProfile(), true);
-    }
-
-    @Override
-    protected int onOther(CommandContext<CommandSourceStack> ctx, GameProfile target) throws CommandSyntaxException {
-        return deleteHome(ctx, StringArgumentType.getString(ctx, NAME), target, false);
-    }
-
-    private int deleteHome(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
+    protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
+        String name = StringArgumentType.getString(ctx, NAME);
         DataStorage dataStorage = DataStorage.STORAGE;
         PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
         Optional<Home> optional = playerData.getHome(name);
         if (optional.isPresent()) {
             playerData.getHomes().remove(optional.get());
             dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
-            sendFeedback(ctx, String.format("text.fabric-essentials.command.delhome.%s", self ? "self" : "other"), name);
-            return 1;
+            sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+            return SUCCESS;
         } else {
-            throw DOESNT_EXIST.create();
+            throw UNKNOWN.create();
         }
     }
+
 
     public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);
 

@@ -45,8 +45,8 @@ public class SetWarpCommand extends Command {
             Warp newWarp = new Warp(name, new Location(serverPlayer), hasAlias);
             warps.add(newWarp);
             DataStorage.STORAGE.saveEssentialsData(ctx.getSource().getServer(), essentialsData);
-            sendFeedback(ctx, "text.fabric-essentials.command.setwarp", name);
-            return 1;
+            sendSuccess(ctx.getSource(), join(), name);
+            return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();
         }

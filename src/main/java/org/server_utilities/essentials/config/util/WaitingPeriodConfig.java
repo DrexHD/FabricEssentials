@@ -1,5 +1,6 @@
 package org.server_utilities.essentials.config.util;
 
+import org.server_utilities.essentials.util.KeyUtil;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -21,27 +22,27 @@ public class WaitingPeriodConfig {
         @Comment("If set to 0 or greater the teleport will get cancelled if the player moves more than the specified amount of blocks")
         public int maxMoveDistance = -1;
 
+
     }
 
+    private static final String CANCEL_TRANSLATION_KEY = KeyUtil.translation("teleport", "cancel");
+
     public enum WaitingResult {
-        DAMAGE("text.fabric-essentials.teleport.cancel.damage", "text.fabric-essentials.teleport.cancel.damage.other"),
-        MOVE("text.fabric-essentials.teleport.cancel.move", "text.fabric-essentials.teleport.cancel.move.other"),
-        OFFLINE("", "text.fabric-essentials.teleport.cancel.offline.other"),
+        DAMAGE(KeyUtil.join(CANCEL_TRANSLATION_KEY, "damage")),
+        MOVE(KeyUtil.join(CANCEL_TRANSLATION_KEY, "move")),
+        OFFLINE(KeyUtil.join(CANCEL_TRANSLATION_KEY, "offline")),
         SUCCESS();
 
         private final String translationKeySelf;
-        private final String translationKeyOther;
-
         private final boolean cancelled;
+
         WaitingResult() {
             this.translationKeySelf = null;
-            this.translationKeyOther = null;
             this.cancelled = false;
         }
 
-        WaitingResult(String translationKeySelf, String translationKeyOther) {
+        WaitingResult(String translationKeySelf) {
             this.translationKeySelf = translationKeySelf;
-            this.translationKeyOther = translationKeyOther;
             this.cancelled = true;
         }
 
@@ -50,7 +51,7 @@ public class WaitingPeriodConfig {
         }
 
         public String getTranslationKeyOther() {
-            return translationKeyOther;
+            return KeyUtil.join(translationKeySelf, "other");
         }
 
         public boolean isCancelled() {

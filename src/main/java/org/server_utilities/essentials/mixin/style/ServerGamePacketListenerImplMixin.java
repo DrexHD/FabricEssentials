@@ -1,10 +1,10 @@
-package org.server_utilities.essentials.mixin.gameplay;
+package org.server_utilities.essentials.mixin.style;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import org.server_utilities.essentials.command.Command;
+import org.server_utilities.essentials.util.KeyUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +28,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             )
     )
     public MutableComponent signFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> Command.permission("style", "sign", textTag.name()).test(player.createCommandSourceStack()));
+        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "sign", textTag.name()).test(player.createCommandSourceStack()));
     }
 
     @ModifyArg(
@@ -40,7 +40,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             index = 1
     )
     public UnaryOperator<String> bookPageFormatting(UnaryOperator<String> original) {
-        return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> Command.permission("style", "book", textTag.name()).test(player.createCommandSourceStack())));
+        return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "book", textTag.name()).test(player.createCommandSourceStack())));
     }
 
 }

@@ -49,6 +49,7 @@ public class CommandManager {
             new HealCommand(),
             new GlowCommand(),
             new PingCommand(),
+            new SignEditCommand(),
             new ModsCommand(),
             new FlyCommand(),
             new InvulnerableCommand(),

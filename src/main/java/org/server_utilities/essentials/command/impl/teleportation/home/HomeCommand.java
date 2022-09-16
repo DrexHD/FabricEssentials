@@ -16,15 +16,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
-import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
-import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
-import org.server_utilities.essentials.util.ScheduleUtil;
 import org.server_utilities.essentials.util.teleportation.Home;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
@@ -54,13 +50,37 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         Home home = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().homes.waitingPeriod);
-            CompletableFuture.allOf(waitingPeriod,
-                    AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, home.location().getChunkPos())
-            ).whenCompleteAsync((unused, throwable) -> {
-                if (waitingPeriod.join().isCancelled()) return;
-                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
-                home.location().teleport(serverPlayer);
+            /*AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) serverPlayer;
+            asyncTeleportPlayer.setAsyncLoadingChunks(true);
+            CompletableFuture<Void> waitFuture = asyncTeleportPlayer.asyncTeleport(src, config().homes.waitingPeriod);
+            CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkFuture = AsyncChunkLoadUtil.scheduleChunkLoad(targetLevel, home.location().getChunkPos());
+            waitFuture.whenCompleteAsync((unused, waitingThrowable) -> {
+                if (waitingThrowable != null) {
+                    asyncTeleportPlayer.setAsyncLoadingChunks(false);
+                    if (waitingThrowable instanceof TeleportCancelException exception) {
+                        src.sendFailure(exception.getRawMessage());
+                    } else {
+                        sendFailure(src, join("teleport", "wait", "error"), waitingThrowable);
+                        LOGGER.error("An unknown error occurred, while waiting", waitingThrowable);
+                    }
+                } else {
+                    chunkFuture.whenCompleteAsync((unused2, chunkThrowable) -> {
+                        asyncTeleportPlayer.setAsyncLoadingChunks(false);
+                        if (chunkThrowable != null) {
+                            sendFailure(src, join("async", "error"), chunkThrowable);
+                            LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
+                        } else {
+
+                        }
+                    }, src.getServer());
+                }
+            }, src.getServer());
+            return SUCCESS;*/
+            asyncTeleport(src, targetLevel, home.location().getChunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
+                if (chunkAccessOptional.isPresent()) {
+                    sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+                    home.location().teleport(serverPlayer);
+                }
             }, src.getServer());
             return SUCCESS;
         } else {

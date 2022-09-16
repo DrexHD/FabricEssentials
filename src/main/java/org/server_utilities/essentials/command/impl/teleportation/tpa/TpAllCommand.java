@@ -42,7 +42,7 @@ public class TpAllCommand extends Command {
                             )));
             success++;
         }
-        sendSuccess(ctx.getSource(), join(), success);
+        sendSuccess(ctx.getSource(), null, success);
         return success;
     }
 }

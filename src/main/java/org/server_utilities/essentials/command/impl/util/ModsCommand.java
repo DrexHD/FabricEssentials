@@ -40,7 +40,7 @@ public class ModsCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        sendSuccess(ctx.getSource(), join("list", "title"), mods.size());
+        sendSuccess(ctx.getSource(), "list.title", mods.size());
         Component modsComponent = ComponentUtils.formatList(mods, this::formatMod);
         ctx.getSource().sendSuccess(modsComponent, false);
         return mods.size();
@@ -54,9 +54,9 @@ public class ModsCommand extends Command {
             ModMetadata metadata = modContainer.getMetadata();
             Component authors = ComponentUtils.formatList(metadata.getAuthors(), person -> Component.literal(person.getName()));
             ctx.getSource().sendSuccess(Component.literal(metadata.getName()), false);
-            sendSuccess(ctx.getSource(), join("info", "version"), metadata.getVersion().getFriendlyString());
-            sendSuccess(ctx.getSource(), join("info", "author"), authors);
-            sendSuccess(ctx.getSource(), join("info", "description"), metadata.getDescription());
+            sendSuccess(ctx.getSource(), "info.version", metadata.getVersion().getFriendlyString());
+            sendSuccess(ctx.getSource(), "info.author", authors);
+            sendSuccess(ctx.getSource(), "info.description", metadata.getDescription());
             return SUCCESS;
         } else {
             throw UNKNOWN.create();

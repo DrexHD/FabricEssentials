@@ -57,15 +57,14 @@ public class EssentialsCommand extends Command {
             return SUCCESS;
         } catch (ConfigurateException e) {
             LOGGER.error("An error occurred while loading the config, keeping old values", e);
-            sendFailure(ctx.getSource(), join("reload", "error"), e.getMessage());
+            sendFailure(ctx.getSource(), "reload.error", e.getMessage());
             return FAILURE;
         }
     }
 
-    // TODO: Only console allowed
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        if (!((CommandSourceStackAccessor)ctx.getSource()).getSource().equals(ctx.getSource().getServer())) {
-            sendFailure(ctx.getSource(), join("import", "console"));
+        if (!((CommandSourceStackAccessor) ctx.getSource()).getSource().equals(ctx.getSource().getServer())) {
+            sendFailure(ctx.getSource(), "import.console");
             return FAILURE;
         }
         String importerId = StringArgumentType.getString(ctx, "importer");

@@ -24,6 +24,7 @@ public class StyledInputUtil {
             }
         }
 
+
         for (ChatFormatting formatting : ChatFormatting.values()) {
             if (handlers.get(formatting.getName()) != null) {
                 input = input.replace(String.copyValueOf(new char[]{'&', formatting.getChar()}), "<" + formatting.getName() + ">");

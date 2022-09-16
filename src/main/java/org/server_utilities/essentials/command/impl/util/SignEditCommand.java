@@ -48,7 +48,7 @@ public class SignEditCommand extends Command {
                     sendFailure(src, "length");
                     return FAILURE;
                 }
-                sendSuccess(src, join(), line, component);
+                sendSuccess(src, null, line, component);
                 signBlockEntity.setMessage(line - 1, component);
                 signBlockEntity.setChanged();
                 src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);

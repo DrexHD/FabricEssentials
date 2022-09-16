@@ -1,12 +1,15 @@
 {
-  "text.fabric-essentials.async.loading_chunks": "Loading chunks...",
+  "text.fabric-essentials.async.loading_chunks.0": "Loading chunks.",
+  "text.fabric-essentials.async.loading_chunks.1": "Loading chunks..",
+  "text.fabric-essentials.async.loading_chunks.2": "Loading chunks...",
   "text.fabric-essentials.async.error": "An error occurred, while loading the chunks: %s",
+  "text.fabric-essentials.async.active": "You are already loading chunks for something else, please wait...",
   "text.fabric-essentials.chat.channel": "[%s] <%s> %s",
   "text.fabric-essentials.chat.channel.staff": "Staff",
   "text.fabric-essentials.command.inventory.other": "Opened %s's Inventory",
   "text.fabric-essentials.command.enderchest.other": "Opened %s's Enderchest",
-  "text.fabric-essentials.command.delhome.self": "Deleted Home %s",
-  "text.fabric-essentials.command.delhome.other": "Deleted Home %s from %s",
+  "text.fabric-essentials.command.deletehome.self": "Deleted Home %s",
+  "text.fabric-essentials.command.deletehome.other": "Deleted Home %s from %s",
   "text.fabric-essentials.command.heal.self": "You have healed yourself",
   "text.fabric-essentials.command.heal.other": "You have healed %s",
   "text.fabric-essentials.command.heal.victim": "You have been healed by %s",
@@ -81,11 +84,10 @@
   "text.fabric-essentials.command.tpa.accept": "[Accept]",
   "text.fabric-essentials.command.tpa.accept.hover": "Click to accept!",
   "text.fabric-essentials.location.world.unknown": "The target world no longer exists",
+  "text.fabric-essentials.teleport.cancel.other": "%s cancelled the teleportation!",
   "text.fabric-essentials.teleport.cancel.move": "Teleportation cancelled. You moved too far!",
-  "text.fabric-essentials.teleport.cancel.move.other": "Teleportation cancelled. %s moved too far!",
   "text.fabric-essentials.teleport.cancel.damage": "Teleportation cancelled. You received damage!",
-  "text.fabric-essentials.teleport.cancel.damage.other": "Teleportation cancelled. %s received damage!",
-  "text.fabric-essentials.teleport.cancel.offline.other": "Teleportation cancelled. %s went offline!",
+  "text.fabric-essentials.teleport.cancel.unknown": "Teleportation cancelled.",
   "text.fabric-essentials.teleport.wait": "Teleporting in %d seconds!",
-  "text.fabric-essentials.teleport.wait.other": "Teleporting %s in %d seconds!"
+  "text.fabric-essentials.teleport.wait.error": "An error occurred, while waiting: %s"
 }

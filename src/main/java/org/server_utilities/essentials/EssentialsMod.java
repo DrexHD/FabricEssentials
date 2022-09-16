@@ -8,12 +8,10 @@ import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.storage.EssentialsData;
 import org.server_utilities.essentials.storage.PlayerData;
-import org.server_utilities.essentials.util.ScheduleUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.ConfigurateException;
 
-// TODO: Color on signs / anvil
 public class EssentialsMod implements DedicatedServerModInitializer {
 
     public static final String MOD_ID = "fabric-essentials";
@@ -34,7 +32,6 @@ public class EssentialsMod implements DedicatedServerModInitializer {
         PlayerDataApi.register(USER_DATA_STORAGE);
         PlayerDataApi.register(ESSENTIALS_DATA_STORAGE);
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
-        ScheduleUtil.INSTANCE.init();
     }
 
 }

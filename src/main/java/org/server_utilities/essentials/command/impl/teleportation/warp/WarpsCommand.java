@@ -29,7 +29,7 @@ public class WarpsCommand extends Command {
         if (warps.isEmpty()) {
             sendSuccess(ctx.getSource(), "empty");
         } else {
-            sendSuccess(ctx.getSource(), join());
+            sendSuccess(ctx.getSource(), null);
             Component warpsComponent = ComponentUtils.formatList(warps.stream().map(Warp::name).toList(), name -> Component.literal(name).withStyle(
                     Style.EMPTY
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.warps.hover")))

@@ -45,7 +45,7 @@ public class SetWarpCommand extends Command {
             Warp newWarp = new Warp(name, new Location(serverPlayer), hasAlias);
             warps.add(newWarp);
             DataStorage.STORAGE.saveEssentialsData(ctx.getSource().getServer(), essentialsData);
-            sendSuccess(ctx.getSource(), join(), name);
+            sendSuccess(ctx.getSource(), null, name);
             return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();

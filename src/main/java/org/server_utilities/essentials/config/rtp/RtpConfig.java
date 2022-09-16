@@ -1,6 +1,8 @@
 package org.server_utilities.essentials.config.rtp;
 
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biomes;
 import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
 import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
@@ -47,9 +49,9 @@ public class RtpConfig {
     public enum Shape {
         CIRCLE, RECTANGLE;
 
-        public RTPCommand.RTPLocation generateLocation(int centerX, int centerZ, int minRadius, int maxRadius) {
+        public ChunkPos generateLocation(int centerX, int centerZ, int minRadius, int maxRadius) {
             Random random = new Random();
-            RTPCommand.RTPLocation location;
+            ChunkPos chunkPos;
             switch (this) {
                 case CIRCLE -> {
                     double radian = random.nextDouble(2 * Math.PI);
@@ -59,14 +61,17 @@ public class RtpConfig {
                     double z = Math.sin(radian);
                     z *= random.nextInt(minRadius, maxRadius + 1);
                     z += centerZ;
-                    location = new RTPCommand.RTPLocation((int) x, (int) z);
+                    chunkPos = new ChunkPos(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z));
                 }
                 case RECTANGLE -> {
-                    location = new RTPCommand.RTPLocation(generateRangeWithCenter(random, centerX, minRadius, maxRadius), generateRangeWithCenter(random, centerZ, minRadius, maxRadius));
+                    chunkPos = new ChunkPos(
+                            SectionPos.blockToSectionCoord(generateRangeWithCenter(random, centerX, minRadius, maxRadius)),
+                            SectionPos.blockToSectionCoord(generateRangeWithCenter(random, centerZ, minRadius, maxRadius))
+                    );
                 }
                 default -> throw new AssertionError();
             }
-            return location;
+            return chunkPos;
         }
 
         public static int generateRangeWithCenter(Random random, int center, int min, int max) {

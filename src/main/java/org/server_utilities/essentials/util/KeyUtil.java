@@ -14,6 +14,7 @@ public class KeyUtil {
     public static final String TRANSLATION_KEY_PREFIX = join("text", EssentialsMod.MOD_ID);
 
     public static String join(String... parts) {
+        if (parts == null) return "";
         return Arrays.stream(parts).filter(s -> s != null && !s.equals("")).collect(Collectors.joining("."));
     }
 

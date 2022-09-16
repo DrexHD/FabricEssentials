@@ -15,15 +15,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.EssentialsData;
-import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
-import org.server_utilities.essentials.util.ScheduleUtil;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 public class WarpCommand extends Command {
 
@@ -51,13 +47,11 @@ public class WarpCommand extends Command {
         Warp warp = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            CompletableFuture<WaitingPeriodConfig.WaitingResult> waitingPeriod = ScheduleUtil.INSTANCE.scheduleTeleport(src, config().warps.waitingPeriod);
-            CompletableFuture.allOf(waitingPeriod,
-                    AsyncChunkLoadUtil.scheduleChunkLoadForCommand(src, targetLevel, warp.location().getChunkPos())
-            ).whenCompleteAsync((chunkAccess, throwable) -> {
-                if (waitingPeriod.join().isCancelled()) return;
-                sendSuccess(ctx.getSource(), "teleport", name);
-                warp.location().teleport(serverPlayer);
+            asyncTeleport(src, targetLevel, warp.location().getChunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
+                if (chunkAccessOptional.isPresent()) {
+                    sendSuccess(ctx.getSource(), "teleport", name);
+                    warp.location().teleport(serverPlayer);
+                }
             }, src.getServer());
         } else {
             throw WORLD_UNKNOWN.create();

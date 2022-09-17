@@ -4,10 +4,9 @@
   "version": "${version}",
 
   "name": "FabricEssentials",
-  "description": "TODO: Description",
+  "description": "Essentials mod for fabric",
   "authors": [
-    "Drex",
-    "Quaint"
+    "Drex"
   ],
   "license": "MIT",
   "icon": "assets/fabric-essentials/icon.png",
@@ -20,7 +19,6 @@
   "mixins": [
     "essentials.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.14.8",
     "fabric-command-api-v2": "*",

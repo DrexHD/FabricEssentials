@@ -3,7 +3,6 @@ package org.server_utilities.essentials.command.impl.util;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -31,11 +30,11 @@ public class StaffMessageCommand extends Command {
         String message = StringArgumentType.getString(ctx, "message");
         for (ServerPlayer player : ctx.getSource().getServer().getPlayerList().getPlayers()) {
             CommandSourceStack src = player.createCommandSourceStack();
-            if (KeyUtil.predicate("isStaff").test(src)) {
+            if (KeyUtil.permission(src, "isStaff")) {
                 player.sendSystemMessage(Component.translatable("text.fabric-essentials.chat.channel",
                         Component.translatable("text.fabric-essentials.chat.channel.staff"),
                         ctx.getSource().getDisplayName(),
-                        StyledInputUtil.parse(message, textTag -> KeyUtil.predicate("style", "staff", textTag.name()).test(src))));
+                        StyledInputUtil.parse(message, textTag -> KeyUtil.permission(src, "style.staff", textTag.name()))));
             }
         }
         return SUCCESS;

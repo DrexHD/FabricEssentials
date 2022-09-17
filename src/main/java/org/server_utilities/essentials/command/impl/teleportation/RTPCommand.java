@@ -127,8 +127,8 @@ public class RTPCommand extends Command {
                     continue;
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, Registry.BLOCK.getKey(blockState.getBlock()));
-                TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 sendSuccess(src, null, (System.currentTimeMillis() - start));
+                TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {
                     DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID()).rtpsLeft--;
                 }

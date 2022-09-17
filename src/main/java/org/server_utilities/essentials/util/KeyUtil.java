@@ -2,10 +2,10 @@ package org.server_utilities.essentials.util;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.Entity;
 import org.server_utilities.essentials.EssentialsMod;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class KeyUtil {
@@ -22,8 +22,22 @@ public class KeyUtil {
         return join(PERMISSION_PREFIX, join(nodes));
     }
 
-    public static Predicate<CommandSourceStack> predicate(String... nodes) {
-        return src -> Permissions.check(src, permission(nodes), 2);
+    public static boolean permission(CommandSourceStack src, String... nodes) {
+        try {
+            return Permissions.check(src, permission(nodes), 2);
+        } catch (Throwable ignored) {
+            // Fallback for datapack compatibility
+            return src.hasPermission(2);
+        }
+    }
+
+    public static boolean permission(Entity entity, String... nodes) {
+        try {
+            return Permissions.check(entity, permission(nodes), 2);
+        } catch (Throwable ignored) {
+            // Fallback for datapack compatibility
+            return entity.createCommandSourceStack().hasPermission(2);
+        }
     }
 
     public static String translation(String... nodes) {

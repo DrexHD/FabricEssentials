@@ -51,8 +51,15 @@ public abstract class Command {
 
     protected abstract void register(LiteralArgumentBuilder<CommandSourceStack> literalArgumentBuilder);
 
-    public Predicate<CommandSourceStack> predicate(String... permission) {
-        return commandSourceStack -> Permissions.check(commandSourceStack, permission(permission), 2);
+    public Predicate<CommandSourceStack> predicate(String... nodes) {
+        return src -> {
+            try {
+                return Permissions.check(src, permission(nodes), 2);
+            } catch (Throwable ignored) {
+                // Fallback for datapack compatibility
+                return src.hasPermission(2);
+            }
+        };
     }
 
     public boolean permission(CommandSourceStack src, String... permission) {

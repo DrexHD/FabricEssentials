@@ -32,12 +32,7 @@ public class KiloEssentialsImporter implements DataImporter {
     }
 
     @Override
-    public boolean supports(DataType dataType) {
-        return dataType == DataType.HOMES;
-    }
-
-    @Override
-    public void importData(MinecraftServer server, DataType dataType) {
+    public void importData(MinecraftServer server) {
         File workingDir = new File(System.getProperty("user.dir"));
         File users = workingDir.toPath().resolve("essentials").resolve("data").resolve("users").toFile();
         int failed = 0;

@@ -6,14 +6,6 @@ public interface DataImporter {
 
     String getImporterId();
 
-    boolean supports(DataType dataType);
-
-    void importData(MinecraftServer server, DataType dataType);
-
-    default void importData(MinecraftServer server) {
-        for (DataType value : DataType.values()) {
-            if (supports(value)) importData(server, value);
-        }
-    }
+    void importData(MinecraftServer server);
 
 }

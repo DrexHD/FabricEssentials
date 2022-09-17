@@ -28,7 +28,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "anvil", textTag.name()).test(this.player.createCommandSourceStack()));
+        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.permission(this.player, "style.anvil", textTag.name()));
     }
 
 }

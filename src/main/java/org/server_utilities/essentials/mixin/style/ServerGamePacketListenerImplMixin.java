@@ -28,7 +28,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             )
     )
     public MutableComponent signFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "sign", textTag.name()).test(player.createCommandSourceStack()));
+        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.permission(player, "style.sign", textTag.name()));
     }
 
     @ModifyArg(
@@ -40,7 +40,7 @@ public abstract class ServerGamePacketListenerImplMixin {
             index = 1
     )
     public UnaryOperator<String> bookPageFormatting(UnaryOperator<String> original) {
-        return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> KeyUtil.predicate("style", "book", textTag.name()).test(player.createCommandSourceStack())));
+        return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> KeyUtil.permission(player, "style.book", textTag.name())));
     }
 
 }

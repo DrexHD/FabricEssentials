@@ -43,7 +43,7 @@ public class SignEditCommand extends Command {
         if (hitResult instanceof BlockHitResult blockHitResult) {
             BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
             if (blockEntity instanceof SignBlockEntity signBlockEntity) {
-                Component component = StyledInputUtil.parse(text, textTag -> KeyUtil.predicate("style", "sign", textTag.name()).test(src));
+                Component component = StyledInputUtil.parse(text, textTag -> KeyUtil.permission(src, "style.sign", textTag.name()));
                 if (component.getString().length() > 45) {
                     sendFailure(src, "length");
                     return FAILURE;

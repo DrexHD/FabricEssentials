@@ -13,6 +13,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.ConfigManager;
+import org.server_utilities.essentials.storage.adapter.RecordTypeAdapterFactory;
 import org.server_utilities.essentials.storage.adapter.ResourceLocationAdapter;
 import org.server_utilities.essentials.storage.adapter.Vec3Adapter;
 
@@ -30,6 +31,7 @@ public class DataStorage {
             .setLenient()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
             .registerTypeAdapter(Vec3.class, new Vec3Adapter())
+            .registerTypeAdapterFactory(new RecordTypeAdapterFactory())
             .create();
     private static final Path DATA_PATH = ConfigManager.CONFIG_DIR.resolve("data.json");
 

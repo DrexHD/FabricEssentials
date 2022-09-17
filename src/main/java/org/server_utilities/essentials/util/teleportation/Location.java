@@ -2,6 +2,7 @@ package org.server_utilities.essentials.util.teleportation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -14,29 +15,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.EssentialsMod;
-import org.slf4j.Logger;
 
-public class Location {
+import java.util.Objects;
 
-    private static final Logger LOGGER = EssentialsMod.LOGGER;
-    private final Vec3 vec3;
-    private final float yaw;
-    private final float pitch;
-    private final ResourceLocation dim;
+import static org.server_utilities.essentials.EssentialsMod.LOGGER;
 
-    public Location(Vec3 location, float yaw, float pitch, ResourceLocation dim) {
-        this.vec3 = location;
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.dim = dim;
-    }
+public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) {
 
     public Location(Entity entity) {
-        this.vec3 = entity.position();
-        this.yaw = entity.getYRot();
-        this.pitch = entity.getXRot();
-        this.dim = entity.getLevel().dimension().location();
+        this(entity.position(), entity.getYRot(), entity.getXRot(), entity.getLevel().dimension().location());
     }
 
     public boolean teleport(@NotNull Entity entity) {
@@ -49,7 +36,7 @@ public class Location {
             return false;
         }
 
-        ServerLevel serverLevel = getLevel(entity.getServer());
+        ServerLevel serverLevel = getLevel(Objects.requireNonNull(entity.getServer()));
         if (serverLevel == null) {
             LOGGER.warn("Can't teleport {} to {}, because dimension doesn't exist!", entity.getScoreboardName(), this);
             return false;
@@ -82,23 +69,12 @@ public class Location {
     }
 
     @Nullable
-    public ServerLevel getLevel(MinecraftServer server) {
+    public ServerLevel getLevel(@NotNull MinecraftServer server) {
         return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dim));
     }
 
-    public ChunkPos getChunkPos() {
-        return new ChunkPos((int) vec3.x >> 4, (int) vec3.z >> 4);
+    public ChunkPos chunkPos() {
+        return new ChunkPos(SectionPos.blockToSectionCoord(vec3.x), SectionPos.blockToSectionCoord(vec3.z));
     }
 
-    public Vec3 getVec3() {
-        return vec3;
-    }
-
-    public float getYaw() {
-        return yaw;
-    }
-
-    public float getPitch() {
-        return pitch;
-    }
 }

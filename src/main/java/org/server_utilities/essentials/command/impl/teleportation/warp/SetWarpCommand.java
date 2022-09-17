@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Warp;
@@ -32,19 +32,18 @@ public class SetWarpCommand extends Command {
     @Override
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
         RequiredArgumentBuilder<CommandSourceStack, String> name = Commands.argument(NAME, StringArgumentType.string());
-        name.executes(ctx -> setWarp(ctx, StringArgumentType.getString(ctx, NAME), false));
+        name.executes(ctx -> setWarp(ctx, StringArgumentType.getString(ctx, NAME)));
         literal.then(name);
     }
 
-    private int setWarp(CommandContext<CommandSourceStack> ctx, String name, boolean hasAlias) throws CommandSyntaxException {
+    private int setWarp(CommandContext<CommandSourceStack> ctx, String name) throws CommandSyntaxException {
         ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
+        ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Optional<Warp> optional = essentialsData.getWarp(name);
         if (optional.isEmpty()) {
             List<Warp> warps = essentialsData.getWarps();
-            Warp newWarp = new Warp(name, new Location(serverPlayer), hasAlias);
+            Warp newWarp = new Warp(name, new Location(serverPlayer));
             warps.add(newWarp);
-            DataStorage.STORAGE.saveEssentialsData(ctx.getSource().getServer(), essentialsData);
             sendSuccess(ctx.getSource(), null, name);
             return SUCCESS;
         } else {

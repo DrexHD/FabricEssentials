@@ -43,7 +43,6 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
         Optional<Home> optional = playerData.getHome(name);
         if (optional.isPresent()) {
             playerData.getHomes().remove(optional.get());
-            dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
             sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
             return SUCCESS;
         } else {

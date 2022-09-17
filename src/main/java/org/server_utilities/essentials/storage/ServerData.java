@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EssentialsData {
+public class ServerData {
 
     private final List<Warp> warps = new ArrayList<>();
 
-    public EssentialsData() {
+    public ServerData() {
     }
 
     public List<Warp> getWarps() {

@@ -58,7 +58,6 @@ public class KiloEssentialsImporter implements DataImporter {
                     if (!homes.isEmpty()) {
                         PlayerData playerData = DataStorage.STORAGE.getPlayerData(server, uuid);
                         playerData.getHomes().addAll(homes);
-                        DataStorage.STORAGE.savePlayerData(server, uuid, playerData);
                     }
                     success++;
                 } catch (IOException e) {

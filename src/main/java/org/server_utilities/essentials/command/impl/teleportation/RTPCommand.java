@@ -28,7 +28,9 @@ import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.TeleportationUtil;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
 
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
@@ -66,9 +68,7 @@ public class RTPCommand extends Command {
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         Collection<GameProfile> targets = GameProfileArgument.getGameProfiles(ctx, "targets");
         for (GameProfile target : targets) {
-            PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId());
-            playerData.rtpsLeft += amount;
-            DataStorage.STORAGE.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
+            DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId()).rtpsLeft += amount;
         }
         return targets.size();
     }
@@ -130,9 +130,7 @@ public class RTPCommand extends Command {
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 sendSuccess(src, null, (System.currentTimeMillis() - start));
                 if (!permission(src, "bypassLimit")) {
-                    PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
-                    playerData.rtpsLeft--;
-                    DataStorage.STORAGE.savePlayerData(src.getServer(), target.getUUID(), playerData);
+                    DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID()).rtpsLeft--;
                 }
                 return;
             }

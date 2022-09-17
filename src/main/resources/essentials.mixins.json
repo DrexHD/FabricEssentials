@@ -10,9 +10,10 @@
   },
   "mixins": [
     "CommandSourceStackAccessor",
-    "async.ServerPlayerMixin",
     "async.IChunkMap",
     "async.IServerChunkCache",
+    "async.ServerPlayerMixin",
+    "event.PlayerListMixin",
     "style.AnvilMenuMixin",
     "style.ServerGamePacketListenerImplMixin"
   ]

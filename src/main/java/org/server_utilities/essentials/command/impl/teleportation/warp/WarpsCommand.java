@@ -6,7 +6,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
@@ -24,7 +24,7 @@ public class WarpsCommand extends Command {
     }
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
-        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer());
+        ServerData essentialsData = DataStorage.STORAGE.getServerData();
         List<Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
             sendSuccess(ctx.getSource(), "empty");

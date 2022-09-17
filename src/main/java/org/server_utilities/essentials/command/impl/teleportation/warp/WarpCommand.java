@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.DataStorage;
-import org.server_utilities.essentials.storage.EssentialsData;
+import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.Optional;
@@ -42,12 +42,12 @@ public class WarpCommand extends Command {
         CommandSourceStack src = ctx.getSource();
         String name = StringArgumentType.getString(ctx, NAME);
         ServerPlayer serverPlayer = src.getPlayerOrException();
-        EssentialsData essentialsData = DataStorage.STORAGE.getEssentialsData(src.getServer());
+        ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Optional<Warp> optional = essentialsData.getWarp(name);
         Warp warp = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            asyncTeleport(src, targetLevel, warp.location().getChunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
+            asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
                 if (chunkAccessOptional.isPresent()) {
                     sendSuccess(ctx.getSource(), "teleport", name);
                     warp.location().teleport(serverPlayer);
@@ -59,6 +59,6 @@ public class WarpCommand extends Command {
         return SUCCESS;
     }
 
-    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getEssentialsData(ctx.getSource().getServer()).getWarps().stream().map(Warp::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getServerData().getWarps().stream().map(Warp::name).toList(), builder);
 
 }

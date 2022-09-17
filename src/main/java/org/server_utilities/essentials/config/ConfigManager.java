@@ -14,9 +14,9 @@ import java.nio.file.Path;
 public class ConfigManager {
 
     private static final Logger LOGGER = EssentialsMod.LOGGER;
-    private static final String SUBDIRECTORY = "fabric-essentials";
-    private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve(SUBDIRECTORY);
-    private static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");
+    public static final String SUBDIRECTORY = "fabric-essentials";
+    public static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve(SUBDIRECTORY);
+    public static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");
     private EssentialsConfig essentialsConfig = new EssentialsConfig();
 
     public static final ConfigManager INSTANCE = new ConfigManager();

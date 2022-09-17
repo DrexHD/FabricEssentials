@@ -57,7 +57,6 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
             } else {
                 Home newHome = new Home(name, new Location(serverPlayer));
                 homes.add(newHome);
-                dataStorage.savePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
                 sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
 
                 return SUCCESS;

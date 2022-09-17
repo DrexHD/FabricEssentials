@@ -20,19 +20,20 @@ import org.slf4j.Logger;
 public class Location {
 
     private static final Logger LOGGER = EssentialsMod.LOGGER;
-    private Vec3 location;
-    private float yaw, pitch;
-    private ResourceLocation dim;
+    private final Vec3 vec3;
+    private final float yaw;
+    private final float pitch;
+    private final ResourceLocation dim;
 
     public Location(Vec3 location, float yaw, float pitch, ResourceLocation dim) {
-        this.location = location;
+        this.vec3 = location;
         this.yaw = yaw;
         this.pitch = pitch;
         this.dim = dim;
     }
 
     public Location(Entity entity) {
-        this.location = entity.position();
+        this.vec3 = entity.position();
         this.yaw = entity.getYRot();
         this.pitch = entity.getXRot();
         this.dim = entity.getLevel().dimension().location();
@@ -42,7 +43,8 @@ public class Location {
         if (entity.level.isClientSide) {
             return false;
         }
-        BlockPos blockPos = new BlockPos(getX(), getY(), getZ());
+
+        BlockPos blockPos = new BlockPos(vec3);
         if (!Level.isInSpawnableBounds(blockPos)) {
             return false;
         }
@@ -52,9 +54,6 @@ public class Location {
             LOGGER.warn("Can't teleport {} to {}, because dimension doesn't exist!", entity.getScoreboardName(), this);
             return false;
         }
-        double x = getX();
-        double y = getY();
-        double z = getZ();
         if (entity instanceof ServerPlayer serverPlayer) {
             if (serverPlayer.connection == null) return false;
             ChunkPos chunkPos = new ChunkPos(blockPos);
@@ -63,7 +62,7 @@ public class Location {
             if (serverPlayer.isSleeping()) {
                 serverPlayer.stopSleepInBed(true, true);
             }
-            serverPlayer.teleportTo(serverLevel, x, y, z, yaw, pitch);
+            serverPlayer.teleportTo(serverLevel, vec3.x, vec3.y, vec3.z, yaw, pitch);
             entity.setYHeadRot(yaw);
         } else {
             entity.unRide();
@@ -71,7 +70,7 @@ public class Location {
             entity = originalEntity.getType().create(serverLevel);
             if (entity != null) {
                 entity.restoreFrom(originalEntity);
-                entity.moveTo(x, y, z, yaw, pitch);
+                entity.moveTo(vec3.x, vec3.y, vec3.z, yaw, pitch);
                 entity.setYHeadRot(yaw);
                 originalEntity.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
                 serverLevel.addDuringTeleport(entity);
@@ -88,23 +87,11 @@ public class Location {
     }
 
     public ChunkPos getChunkPos() {
-        return new ChunkPos((int) location.x >> 4, (int) location.z >> 4);
+        return new ChunkPos((int) vec3.x >> 4, (int) vec3.z >> 4);
     }
 
-    public double getX() {
-        return location.x;
-    }
-
-    public double getY() {
-        return location.y;
-    }
-
-    public double getZ() {
-        return location.z;
-    }
-
-    public Vec3 getLocation() {
-        return location;
+    public Vec3 getVec3() {
+        return vec3;
     }
 
     public float getYaw() {

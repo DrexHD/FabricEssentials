@@ -93,6 +93,9 @@ public abstract class Command {
         asyncTeleportPlayer.setAsyncLoadingChunks(true);
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
         CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(targetLevel, targetPos, 2);
+        chunkAccessFuture.whenCompleteAsync((either, throwable) -> {
+            asyncTeleportPlayer.setAsyncLoadingChunks(false);
+        }, src.getServer());
         waitFuture.whenCompleteAsync((unused, waitingThrowable) -> {
             if (waitingThrowable != null) {
                 asyncTeleportPlayer.setAsyncLoadingChunks(false);
@@ -105,7 +108,6 @@ public abstract class Command {
                 result.complete(Optional.empty());
             } else {
                 chunkAccessFuture.whenCompleteAsync((either, chunkThrowable) -> {
-                    asyncTeleportPlayer.setAsyncLoadingChunks(false);
                     if (chunkThrowable != null) {
                         src.sendFailure(Component.translatable(KeyUtil.translation("async.error")));
                         LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);

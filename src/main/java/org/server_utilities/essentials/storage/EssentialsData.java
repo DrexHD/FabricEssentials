@@ -11,7 +11,6 @@ public class EssentialsData {
     private final List<Warp> warps = new ArrayList<>();
 
     public EssentialsData() {
-
     }
 
     public List<Warp> getWarps() {

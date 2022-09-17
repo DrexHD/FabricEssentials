@@ -50,32 +50,6 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         Home home = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            /*AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) serverPlayer;
-            asyncTeleportPlayer.setAsyncLoadingChunks(true);
-            CompletableFuture<Void> waitFuture = asyncTeleportPlayer.asyncTeleport(src, config().homes.waitingPeriod);
-            CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkFuture = AsyncChunkLoadUtil.scheduleChunkLoad(targetLevel, home.location().getChunkPos());
-            waitFuture.whenCompleteAsync((unused, waitingThrowable) -> {
-                if (waitingThrowable != null) {
-                    asyncTeleportPlayer.setAsyncLoadingChunks(false);
-                    if (waitingThrowable instanceof TeleportCancelException exception) {
-                        src.sendFailure(exception.getRawMessage());
-                    } else {
-                        sendFailure(src, join("teleport", "wait", "error"), waitingThrowable);
-                        LOGGER.error("An unknown error occurred, while waiting", waitingThrowable);
-                    }
-                } else {
-                    chunkFuture.whenCompleteAsync((unused2, chunkThrowable) -> {
-                        asyncTeleportPlayer.setAsyncLoadingChunks(false);
-                        if (chunkThrowable != null) {
-                            sendFailure(src, join("async", "error"), chunkThrowable);
-                            LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
-                        } else {
-
-                        }
-                    }, src.getServer());
-                }
-            }, src.getServer());
-            return SUCCESS;*/
             asyncTeleport(src, targetLevel, home.location().getChunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
                 if (chunkAccessOptional.isPresent()) {
                     sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});

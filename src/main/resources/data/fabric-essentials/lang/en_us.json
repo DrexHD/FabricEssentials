@@ -70,6 +70,7 @@
   "text.fabric-essentials.command.rtp.no_location": "Unable to find correct location, within reasonable attempts.",
   "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again.",
   "text.fabric-essentials.command.signedit": "Changed sign line %d to \"%s\"",
+  "text.fabric-essentials.command.signedit.cantModify": "You can't modify this sign!",
   "text.fabric-essentials.command.signedit.missing": "You need to look at a sign to use this command!",
   "text.fabric-essentials.command.signedit.length": "The text exceeds the maximum length",
   "text.fabric-essentials.command.tpaccept.noPending": "You don't have any pending requests from %s",

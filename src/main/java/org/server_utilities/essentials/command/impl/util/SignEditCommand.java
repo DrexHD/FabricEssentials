@@ -4,10 +4,11 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -38,22 +39,29 @@ public class SignEditCommand extends Command {
     }
 
     protected int execute(CommandSourceStack src, int line, String text) throws CommandSyntaxException {
-        Entity entity = src.getEntityOrException();
-        HitResult hitResult = entity.pick(4.5f, 1, true);
+        ServerPlayer player = src.getPlayerOrException();
+        HitResult hitResult = player.pick(4.5f, 1, true);
         if (hitResult instanceof BlockHitResult blockHitResult) {
-            BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
-            if (blockEntity instanceof SignBlockEntity signBlockEntity) {
-                Component component = StyledInputUtil.parse(text, textTag -> KeyUtil.permission(src, "style.sign", textTag.name()));
-                if (component.getString().length() > 45) {
-                    sendFailure(src, "length");
-                    return FAILURE;
+            if (CommonProtection.canBreakBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player) &&
+                    CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player)) {
+                BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
+                if (blockEntity instanceof SignBlockEntity signBlockEntity) {
+                    Component component = StyledInputUtil.parse(text, textTag -> KeyUtil.permission(src, "style.sign", textTag.name()));
+                    if (component.getString().length() > 45) {
+                        sendFailure(src, "length");
+                        return FAILURE;
+                    }
+                    sendSuccess(src, null, line, component);
+                    signBlockEntity.setMessage(line - 1, component);
+                    signBlockEntity.setChanged();
+                    src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);
+                    return SUCCESS;
                 }
-                sendSuccess(src, null, line, component);
-                signBlockEntity.setMessage(line - 1, component);
-                signBlockEntity.setChanged();
-                src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);
-                return SUCCESS;
+            } else {
+                sendFailure(src, "cantModify");
+                return FAILURE;
             }
+
         }
         sendFailure(src, "missing");
         return FAILURE;

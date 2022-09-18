@@ -30,19 +30,12 @@ dependencies {
         include(modImplementation(fabricApi.module(it, project.fabric_version)))
     }
 
-    // Fabric permission api
+    // Mod dependencies
     modImplementation include("me.lucko:fabric-permissions-api:${project.permission_api_version}")
-
-    // Server side gui
     modImplementation include("eu.pb4:sgui:${project.sgui_version}")
-
-    // Placeholder api
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
-
-    // Player data api
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
-
-    // Server Translations api
+    modImplementation include("eu.pb4:common-protection-api:${project.common_protection_api_version}")
     modImplementation include("fr.catcore:server-translations-api:${project.translations_version}")
 
     // Hocon config

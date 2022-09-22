@@ -21,7 +21,7 @@ public class HomesCommand extends OptionalOfflineTargetCommand {
 
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
-        PlayerData dataStorage = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId());
+        PlayerData dataStorage = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
         List<Home> homes = dataStorage.getHomes();
         if (homes.isEmpty()) {
             sendQueryFeedbackWithOptionalTarget(ctx, self, EMPTY, new Object[]{target.getName()}, "empty");

@@ -9,11 +9,10 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.storage.DataStorage;
+import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
@@ -37,12 +36,11 @@ public class SetWarpCommand extends Command {
     }
 
     private int setWarp(CommandContext<CommandSourceStack> ctx, String name) throws CommandSyntaxException {
-        ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Optional<Warp> optional = essentialsData.getWarp(name);
         if (optional.isEmpty()) {
             List<Warp> warps = essentialsData.getWarps();
-            Warp newWarp = new Warp(name, new Location(serverPlayer));
+            Warp newWarp = new Warp(name, new Location(ctx.getSource()));
             warps.add(newWarp);
             sendSuccess(ctx.getSource(), null, name);
             return SUCCESS;

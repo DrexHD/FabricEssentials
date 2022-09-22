@@ -51,8 +51,9 @@ public class KiloEssentialsImporter implements DataImporter {
                         homes.add(new Home(key, new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
                     }
                     if (!homes.isEmpty()) {
-                        PlayerData playerData = DataStorage.STORAGE.getPlayerData(server, uuid);
+                        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(server, uuid);
                         playerData.getHomes().addAll(homes);
+                        DataStorage.STORAGE.saveOfflinePlayerData(server, uuid, playerData);
                     }
                     success++;
                 } catch (IOException e) {

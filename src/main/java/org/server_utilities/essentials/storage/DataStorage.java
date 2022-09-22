@@ -2,11 +2,16 @@ package org.server_utilities.essentials.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.playerdata.api.PlayerDataApi;
 import eu.pb4.playerdata.api.storage.JsonDataStorage;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -80,11 +85,47 @@ public class DataStorage {
     }
 
     @NotNull
-    public PlayerData getPlayerData(MinecraftServer server, UUID uuid) {
-        PlayerData data = PlayerDataApi.getCustomDataFor(server, uuid, USER_DATA_STORAGE);
-        if (data == null) data = new PlayerData();
-        PlayerDataApi.setCustomDataFor(server, uuid, USER_DATA_STORAGE, data);
-        return data;
+    public PlayerData getPlayerData(ServerPlayer player) {
+        PlayerData playerData = PlayerDataApi.getCustomDataFor(player, USER_DATA_STORAGE);
+        if (playerData == null) playerData = new PlayerData();
+        return playerData;
+    }
+
+    @NotNull
+    public PlayerData getAndSavePlayerData(ServerPlayer player) {
+        PlayerData playerData = PlayerDataApi.getCustomDataFor(player, USER_DATA_STORAGE);
+        if (playerData == null) {
+            playerData = new PlayerData();
+            PlayerDataApi.setCustomDataFor(player, USER_DATA_STORAGE, playerData);
+        }
+        return playerData;
+    }
+
+    @NotNull
+    public PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        return getOfflinePlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID());
+    }
+
+    @NotNull
+    public PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target) {
+        return getOfflinePlayerData(ctx.getSource().getServer(), target.getId());
+    }
+
+    @NotNull
+    public PlayerData getOfflinePlayerData(MinecraftServer server, UUID uuid) {
+        PlayerData playerData = PlayerDataApi.getCustomDataFor(server, uuid, USER_DATA_STORAGE);
+        if (playerData == null) {
+            playerData = new PlayerData();
+        }
+        return playerData;
+    }
+
+    public void saveOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
+        saveOfflinePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
+    }
+
+    public void saveOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {
+        PlayerDataApi.setCustomDataFor(server, uuid, USER_DATA_STORAGE, playerData);
     }
 
 }

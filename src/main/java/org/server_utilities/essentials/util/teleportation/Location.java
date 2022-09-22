@@ -1,5 +1,6 @@
 package org.server_utilities.essentials.util.teleportation;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
@@ -24,6 +25,10 @@ public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) 
 
     public Location(Entity entity) {
         this(entity.position(), entity.getYRot(), entity.getXRot(), entity.getLevel().dimension().location());
+    }
+
+    public Location(CommandSourceStack source) {
+        this(source.getPosition(), source.getRotation().y, source.getRotation().x, source.getLevel().dimension().location());
     }
 
     public boolean teleport(@NotNull Entity entity) {

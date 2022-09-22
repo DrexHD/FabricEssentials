@@ -58,7 +58,7 @@ public class RTPCommand extends Command {
 
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getUUID());
+        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
         sendSuccess(ctx.getSource(), "check", playerData.rtpsLeft);
         return playerData.rtpsLeft;
     }
@@ -68,7 +68,9 @@ public class RTPCommand extends Command {
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         Collection<GameProfile> targets = GameProfileArgument.getGameProfiles(ctx, "targets");
         for (GameProfile target : targets) {
-            DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), target.getId()).rtpsLeft += amount;
+            PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
+            playerData.rtpsLeft += amount;
+            DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
         }
         return targets.size();
     }
@@ -77,7 +79,7 @@ public class RTPCommand extends Command {
         CommandSourceStack src = ctx.getSource();
         ServerPlayer target = src.getPlayerOrException();
         ServerLevel targetLevel = src.getLevel();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID());
+        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
         ResourceLocation resourceLocation = targetLevel.dimension().location();
         if (!permission(src, "dimension", resourceLocation.getNamespace(), resourceLocation.getPath())) {
             sendFailure(ctx.getSource(), "dimension");
@@ -130,7 +132,7 @@ public class RTPCommand extends Command {
                 sendSuccess(src, null, (System.currentTimeMillis() - start));
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {
-                    DataStorage.STORAGE.getPlayerData(src.getServer(), target.getUUID()).rtpsLeft--;
+                    DataStorage.STORAGE.getAndSavePlayerData(target).rtpsLeft--;
                 }
                 return;
             }

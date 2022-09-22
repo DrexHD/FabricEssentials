@@ -38,11 +38,11 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
         String name = StringArgumentType.getString(ctx, NAME);
-        DataStorage dataStorage = DataStorage.STORAGE;
-        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
         Optional<Home> optional = playerData.getHome(name);
         if (optional.isPresent()) {
             playerData.getHomes().remove(optional.get());
+            DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
             sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
             return SUCCESS;
         } else {
@@ -51,6 +51,6 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().stream().map(Home::name).toList(), builder);
 
 }

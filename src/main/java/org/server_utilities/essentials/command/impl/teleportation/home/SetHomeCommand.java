@@ -10,7 +10,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.config.homes.HomesConfig;
@@ -38,15 +37,16 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
         RequiredArgumentBuilder<CommandSourceStack, String> name = Commands.argument(NAME, StringArgumentType.string());
         registerOptionalArgument(name);
-        literal.then(name);
+        literal.then(name).executes(ctx -> execute(ctx, "home", getSelf(ctx), true));
     }
 
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
-        String name = StringArgumentType.getString(ctx, NAME);
-        ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
-        DataStorage dataStorage = DataStorage.STORAGE;
-        PlayerData playerData = dataStorage.getPlayerData(ctx.getSource().getServer(), target.getId());
+        return execute(ctx, StringArgumentType.getString(ctx, NAME), target, self);
+    }
+
+    protected int execute(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
         Optional<Home> optional = playerData.getHome(name);
         if (optional.isEmpty()) {
             List<Home> homes = playerData.getHomes();
@@ -55,8 +55,9 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
                 ctx.getSource().sendFailure(Component.translatable("text.fabric-essentials.command.sethome.limit"));
                 return FAILURE;
             } else {
-                Home newHome = new Home(name, new Location(serverPlayer));
+                Home newHome = new Home(name, new Location(ctx.getSource()));
                 homes.add(newHome);
+                DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
                 sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
 
                 return SUCCESS;

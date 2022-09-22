@@ -36,16 +36,19 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
         RequiredArgumentBuilder<CommandSourceStack, String> name = Commands.argument(NAME, StringArgumentType.string()).suggests(HOMES_PROVIDER);
         registerOptionalArgument(name);
-        literal.then(name);
+        literal.then(name).executes(ctx -> execute(ctx, "home", getSelf(ctx), true));
     }
 
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
-        String name = StringArgumentType.getString(ctx, NAME);
+        return execute(ctx, StringArgumentType.getString(ctx, NAME), target, self);
+    }
+
+    protected int execute(CommandContext<CommandSourceStack> ctx, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         CommandSourceStack src = ctx.getSource();
         ServerPlayer serverPlayer = src.getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
-        PlayerData playerData = dataStorage.getPlayerData(src.getServer(), target.getId());
+        PlayerData playerData = dataStorage.getOfflinePlayerData(ctx, target);
         Optional<Home> optional = playerData.getHome(name);
         Home home = optional.orElseThrow(UNKNOWN::create);
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
@@ -62,6 +65,6 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID()).getHomes().stream().map(Home::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().stream().map(Home::name).toList(), builder);
 
 }

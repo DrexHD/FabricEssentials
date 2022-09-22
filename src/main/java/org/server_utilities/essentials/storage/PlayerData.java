@@ -3,21 +3,16 @@ package org.server_utilities.essentials.storage;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.util.teleportation.Home;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerData {
 
-    public final List<Home> homes = new LinkedList<>();
+    private final Map<String, Home> homes = new HashMap<>();
     public int rtpsLeft = ConfigManager.INSTANCE.config().rtp.defaultRtps;
 
-    public List<Home> getHomes() {
+    public Map<String, Home> getHomes() {
         return homes;
-    }
-
-    public Optional<Home> getHome(String name) {
-        return homes.stream().filter(home -> home.name().equals(name)).findFirst();
     }
 
 }

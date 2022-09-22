@@ -19,7 +19,7 @@ import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
-import java.util.Optional;
+import java.util.Map;
 
 public class WarpCommand extends Command {
 
@@ -43,8 +43,9 @@ public class WarpCommand extends Command {
         String name = StringArgumentType.getString(ctx, NAME);
         ServerPlayer serverPlayer = src.getPlayerOrException();
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
-        Optional<Warp> optional = essentialsData.getWarp(name);
-        Warp warp = optional.orElseThrow(UNKNOWN::create);
+        Map<String, Warp> warps = essentialsData.getWarps();
+        Warp warp = warps.get(name);
+        if (warp == null) throw UNKNOWN.create();
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
             asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
@@ -59,6 +60,6 @@ public class WarpCommand extends Command {
         return SUCCESS;
     }
 
-    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getServerData().getWarps().stream().map(Warp::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> WARPS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getServerData().getWarps().keySet(), builder);
 
 }

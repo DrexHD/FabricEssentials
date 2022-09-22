@@ -21,7 +21,7 @@ import java.util.Objects;
 
 import static org.server_utilities.essentials.EssentialsMod.LOGGER;
 
-public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) {
+public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimension) {
 
     public Location(Entity entity) {
         this(entity.position(), entity.getYRot(), entity.getXRot(), entity.getLevel().dimension().location());
@@ -36,7 +36,7 @@ public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) 
             return false;
         }
 
-        BlockPos blockPos = new BlockPos(vec3);
+        BlockPos blockPos = new BlockPos(pos);
         if (!Level.isInSpawnableBounds(blockPos)) {
             return false;
         }
@@ -54,7 +54,7 @@ public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) 
             if (serverPlayer.isSleeping()) {
                 serverPlayer.stopSleepInBed(true, true);
             }
-            serverPlayer.teleportTo(serverLevel, vec3.x, vec3.y, vec3.z, yaw, pitch);
+            serverPlayer.teleportTo(serverLevel, pos.x, pos.y, pos.z, yaw, pitch);
             entity.setYHeadRot(yaw);
         } else {
             entity.unRide();
@@ -62,7 +62,7 @@ public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) 
             entity = originalEntity.getType().create(serverLevel);
             if (entity != null) {
                 entity.restoreFrom(originalEntity);
-                entity.moveTo(vec3.x, vec3.y, vec3.z, yaw, pitch);
+                entity.moveTo(pos.x, pos.y, pos.z, yaw, pitch);
                 entity.setYHeadRot(yaw);
                 originalEntity.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
                 serverLevel.addDuringTeleport(entity);
@@ -75,11 +75,11 @@ public record Location(Vec3 vec3, float yaw, float pitch, ResourceLocation dim) 
 
     @Nullable
     public ServerLevel getLevel(@NotNull MinecraftServer server) {
-        return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dim));
+        return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dimension));
     }
 
     public ChunkPos chunkPos() {
-        return new ChunkPos(SectionPos.blockToSectionCoord(vec3.x), SectionPos.blockToSectionCoord(vec3.z));
+        return new ChunkPos(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z));
     }
 
 }

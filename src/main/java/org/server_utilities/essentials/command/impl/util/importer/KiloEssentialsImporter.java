@@ -45,16 +45,16 @@ public class KiloEssentialsImporter implements DataImporter {
                     PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(server, uuid);
                     CompoundTag tag = NbtIo.readCompressed(new FileInputStream(file));
                     CompoundTag homesTag = tag.getCompound("homes");
-                    List<Home> homes = new ArrayList<>();
+                    Map<String, Home> homes = new HashMap<>();
                     for (String key : homesTag.getAllKeys()) {
                         CompoundTag loc = homesTag.getCompound(key).getCompound("loc");
                         CompoundTag pos = loc.getCompound("pos");
                         CompoundTag view = loc.getCompound("view");
-                        homes.add(new Home(key, new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
+                        homes.put(key, new Home(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
                     }
                     if (!homes.isEmpty()) {
                         shouldSave = true;
-                        playerData.getHomes().addAll(homes);
+                        playerData.getHomes().putAll(homes);
                     }
                     CompoundTag settingsTag = tag.getCompound("settings");
                     if (settingsTag.contains("rtps_left")) {
@@ -76,15 +76,15 @@ public class KiloEssentialsImporter implements DataImporter {
         if (warpsFile.exists()) {
             try {
                 CompoundTag tag = NbtIo.readCompressed(new FileInputStream(warpsFile));
-                List<Warp> warps = new ArrayList<>();
+                Map<String, Warp> warps = new HashMap<>();
                 for (String key : tag.getAllKeys()) {
                     CompoundTag loc = tag.getCompound(key).getCompound("loc");
                     CompoundTag pos = loc.getCompound("pos");
                     CompoundTag view = loc.getCompound("view");
-                    warps.add(new Warp(key, new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
+                    warps.put(key, new Warp(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
                 }
                 ServerData serverData = DataStorage.STORAGE.getServerData();
-                serverData.getWarps().addAll(warps);
+                serverData.getWarps().putAll(warps);
                 EssentialsMod.LOGGER.info("Warps data imported, imported {} warps!", warps.size());
             } catch (Throwable e) {
                 EssentialsMod.LOGGER.error("An error occurred while parsing warps file", e);

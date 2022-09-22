@@ -16,8 +16,6 @@ import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
-import java.util.Optional;
-
 import static org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand.UNKNOWN;
 
 public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
@@ -39,9 +37,9 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     protected int execute(CommandContext<CommandSourceStack> ctx, GameProfile target, boolean self) throws CommandSyntaxException {
         String name = StringArgumentType.getString(ctx, NAME);
         PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
-        Optional<Home> optional = playerData.getHome(name);
-        if (optional.isPresent()) {
-            playerData.getHomes().remove(optional.get());
+        Home home = playerData.getHomes().get(name);
+        if (home != null) {
+            playerData.getHomes().remove(name);
             DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
             sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
             return SUCCESS;
@@ -51,6 +49,6 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().stream().map(Home::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().keySet(), builder);
 
 }

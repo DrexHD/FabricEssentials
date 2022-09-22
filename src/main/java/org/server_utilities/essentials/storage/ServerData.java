@@ -2,23 +2,17 @@ package org.server_utilities.essentials.storage;
 
 import org.server_utilities.essentials.util.teleportation.Warp;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ServerData {
 
-    private final List<Warp> warps = new ArrayList<>();
+    private final Map<String, Warp> warps = new HashMap<>();
 
-    public ServerData() {
+    protected ServerData() {
     }
 
-    public List<Warp> getWarps() {
-        return warps;
-    }
-
-    public Optional<Warp> getWarp(String name) {
-        return warps.stream().filter(warp -> warp.name().equals(name)).findFirst();
+    public Map<String, Warp> getWarps() {
+        return this.warps;
     }
 
 }

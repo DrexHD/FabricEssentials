@@ -20,8 +20,6 @@ import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.teleportation.Home;
 
-import java.util.Optional;
-
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
     public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.unknown"));
@@ -49,8 +47,8 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         ServerPlayer serverPlayer = src.getPlayerOrException();
         DataStorage dataStorage = DataStorage.STORAGE;
         PlayerData playerData = dataStorage.getOfflinePlayerData(ctx, target);
-        Optional<Home> optional = playerData.getHome(name);
-        Home home = optional.orElseThrow(UNKNOWN::create);
+        Home home = playerData.getHomes().get(name);
+        if (home == null) throw UNKNOWN.create();
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
             asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
@@ -65,6 +63,6 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().stream().map(Home::name).toList(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().keySet(), builder);
 
 }

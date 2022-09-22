@@ -6,11 +6,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
-import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.storage.DataStorage;
+import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
-import java.util.List;
+import java.util.Map;
 
 public class WarpsCommand extends Command {
 
@@ -25,12 +25,12 @@ public class WarpsCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
-        List<Warp> warps = essentialsData.getWarps();
+        Map<String, Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
             sendSuccess(ctx.getSource(), "empty");
         } else {
             sendSuccess(ctx.getSource(), null);
-            Component warpsComponent = ComponentUtils.formatList(warps.stream().map(Warp::name).toList(), name -> Component.literal(name).withStyle(
+            Component warpsComponent = ComponentUtils.formatList(warps.keySet(), name -> Component.literal(name).withStyle(
                     Style.EMPTY
                             .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.warps.hover")))
                             .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", WarpCommand.WARP_COMMAND, name)))

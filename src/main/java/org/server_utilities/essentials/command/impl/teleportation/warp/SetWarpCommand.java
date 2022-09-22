@@ -16,8 +16,7 @@ import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Location;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class SetWarpCommand extends Command {
 
@@ -37,11 +36,9 @@ public class SetWarpCommand extends Command {
 
     private int setWarp(CommandContext<CommandSourceStack> ctx, String name) throws CommandSyntaxException {
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
-        Optional<Warp> optional = essentialsData.getWarp(name);
-        if (optional.isEmpty()) {
-            List<Warp> warps = essentialsData.getWarps();
-            Warp newWarp = new Warp(name, new Location(ctx.getSource()));
-            warps.add(newWarp);
+        Map<String, Warp> warps = essentialsData.getWarps();
+        if (!warps.containsKey(name)) {
+            warps.put(name, new Warp(new Location(ctx.getSource())));
             sendSuccess(ctx.getSource(), null, name);
             return SUCCESS;
         } else {

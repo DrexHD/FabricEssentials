@@ -24,7 +24,7 @@ public class TpAcceptCommand extends Command {
     private static final String TARGET_ARGUMENT_ID = "target";
 
     public TpAcceptCommand() {
-        super(Properties.create("tpaccept").permission("tpaccept"));
+        super(Properties.create("tpaccept"));
     }
 
     @Override

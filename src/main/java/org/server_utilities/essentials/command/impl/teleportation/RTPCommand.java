@@ -39,7 +39,7 @@ public class RTPCommand extends Command {
     public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "unsafe_rtp_location"));
 
     public RTPCommand() {
-        super(Properties.create("rtp", "wild").permission("rtp"));
+        super(Properties.create("rtp", "wild"));
     }
 
     @Override

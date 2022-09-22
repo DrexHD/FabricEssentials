@@ -32,10 +32,7 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
     protected void registerOptionalArgument(ArgumentBuilder<CommandSourceStack, ?> argument) {
         argument.executes(ctx -> this.execute(ctx, getSelf(ctx), true));
         RequiredArgumentBuilder<CommandSourceStack, T> target = Commands.argument(targetArgumentId, getArgumentType());
-        String permission = this.properties.permission();
-        if (permission != null) {
-            target.requires(predicate("other"));
-        }
+        target.requires(predicate("other"));
         target.executes(ctx -> this.execute(ctx, getArgument(ctx, targetArgumentId), false));
         argument.then(target);
     }

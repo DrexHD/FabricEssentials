@@ -24,7 +24,7 @@ public class SetWarpCommand extends Command {
     private static final String NAME = "name";
 
     public SetWarpCommand() {
-        super(Properties.create("setwarp").permission("setwarp"));
+        super(Properties.create("setwarp"));
     }
 
     @Override

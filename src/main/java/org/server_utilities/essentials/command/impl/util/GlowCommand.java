@@ -10,7 +10,7 @@ import org.server_utilities.essentials.command.util.OptionalOnlineTargetCommand;
 public class GlowCommand extends OptionalOnlineTargetCommand {
 
     public GlowCommand() {
-        super(Properties.create("glow").permission("glow"));
+        super(Properties.create("glow"));
     }
 
     @Override

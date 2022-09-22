@@ -28,7 +28,7 @@ public class WarpCommand extends Command {
     public static final String WARP_COMMAND = "warp";
 
     public WarpCommand() {
-        super(Properties.create(WARP_COMMAND).permission("warp"));
+        super(Properties.create(WARP_COMMAND));
     }
 
     @Override

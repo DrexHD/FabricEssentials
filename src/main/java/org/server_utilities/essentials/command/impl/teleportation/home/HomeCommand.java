@@ -27,7 +27,7 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
     public static final String HOME_COMMAND = "home";
 
     public HomeCommand() {
-        super(Properties.create(HOME_COMMAND).permission("home"));
+        super(Properties.create(HOME_COMMAND));
     }
 
     @Override

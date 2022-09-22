@@ -17,7 +17,7 @@ import org.server_utilities.essentials.command.util.OptionalOnlineTargetCommand;
 public class HatCommand extends OptionalOnlineTargetCommand {
 
     public HatCommand() {
-        super(Properties.create("hat").permission("hat"));
+        super(Properties.create("hat"));
     }
 
     @Override

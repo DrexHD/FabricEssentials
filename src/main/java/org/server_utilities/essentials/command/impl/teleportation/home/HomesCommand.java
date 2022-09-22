@@ -16,7 +16,7 @@ import java.util.Map;
 public class HomesCommand extends OptionalOfflineTargetCommand {
 
     public HomesCommand() {
-        super(Properties.create("homes").permission("homes"));
+        super(Properties.create("homes"));
     }
 
     @Override

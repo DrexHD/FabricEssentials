@@ -28,7 +28,7 @@ public class EssentialsCommand extends Command {
     private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS};
 
     public EssentialsCommand() {
-        super(Properties.create("essentials").permission("essentials"));
+        super(Properties.create("essentials"));
     }
 
     @Override

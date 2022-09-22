@@ -17,7 +17,7 @@ import java.util.List;
 public class TpAllCommand extends Command {
 
     public TpAllCommand() {
-        super(Properties.create("tpall").permission("tpall"));
+        super(Properties.create("tpall"));
     }
 
     @Override

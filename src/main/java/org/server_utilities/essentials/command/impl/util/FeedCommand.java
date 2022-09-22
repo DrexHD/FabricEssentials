@@ -12,7 +12,7 @@ public class FeedCommand extends OptionalOnlineTargetCommand {
     private static final int MAX_FOOD = 20;
 
     public FeedCommand() {
-        super(Properties.create("feed").permission("feed"));
+        super(Properties.create("feed"));
     }
 
     @Override

@@ -16,7 +16,7 @@ public class AnvilCommand extends SimpleMenuCommand {
     private static final MutableComponent ANVIL_TITLE = Component.translatable("container.repair");
 
     public AnvilCommand() {
-        super(Properties.create("anvil").permission("anvil"));
+        super(Properties.create("anvil"));
     }
 
     @Override

@@ -16,7 +16,7 @@ public class FlyCommand extends OptionalOnlineTargetCommand {
     private static final String ENABLE = "enable";
 
     public FlyCommand() {
-        super(Properties.create("fly").permission("fly"));
+        super(Properties.create("fly"));
     }
 
     @Override

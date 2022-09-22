@@ -10,7 +10,7 @@ import org.server_utilities.essentials.command.util.OptionalOnlineTargetCommand;
 public class HealCommand extends OptionalOnlineTargetCommand {
 
     public HealCommand() {
-        super(Properties.create("heal").permission("heal"));
+        super(Properties.create("heal"));
     }
 
     @Override

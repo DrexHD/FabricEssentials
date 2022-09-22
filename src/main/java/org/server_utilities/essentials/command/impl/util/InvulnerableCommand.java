@@ -16,7 +16,7 @@ public class InvulnerableCommand extends OptionalOnlineTargetCommand {
     private static final String ENABLE = "enable";
 
     public InvulnerableCommand() {
-        super(Properties.create("invulnerable", "godmode").permission("invulnerable"));
+        super(Properties.create("invulnerable", "godmode"));
     }
 
     @Override

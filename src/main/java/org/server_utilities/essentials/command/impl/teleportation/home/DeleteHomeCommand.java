@@ -23,7 +23,7 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     private static final String NAME = "name";
 
     public DeleteHomeCommand() {
-        super(Properties.create("deletehome", "delhome", "removehome").permission("deletehome"));
+        super(Properties.create("deletehome", "delhome", "removehome"));
     }
 
     @Override

@@ -45,8 +45,8 @@ public class TpaManager {
     }
 
     public enum Direction {
-        HERE("here", Properties.create("tpahere", "tprhere").permission("tpahere")),
-        THERE("there", Properties.create("tpa", "tpr").permission("tpa"));
+        HERE("here", Properties.create("tpahere", "tprhere")),
+        THERE("there", Properties.create("tpa", "tpr"));
 
         private final String translationKey;
         private final Properties properties;

@@ -1,7 +1,6 @@
 package org.server_utilities.essentials.command;
 
 import net.minecraft.commands.CommandSourceStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -9,8 +8,6 @@ public class Properties {
 
     private final String literal;
     private final String[] alias;
-    @Nullable
-    private String permission;
     @Deprecated
     private Predicate<CommandSourceStack> predicate = stack -> true;
 
@@ -21,11 +18,6 @@ public class Properties {
 
     public static Properties create(String literal, String... alias) {
         return new Properties(literal, alias);
-    }
-
-    public Properties permission(String permission) {
-        this.permission = permission;
-        return this;
     }
 
     @Deprecated
@@ -46,15 +38,6 @@ public class Properties {
 
     public String literal() {
         return literal;
-    }
-
-    public Predicate<CommandSourceStack> predicate() {
-        return predicate;
-    }
-
-    @Nullable
-    public String permission() {
-        return permission;
     }
 
 }

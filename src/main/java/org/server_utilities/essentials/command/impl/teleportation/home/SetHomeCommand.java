@@ -29,7 +29,7 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
     private static final String PERMISSION_LIMIT_BYPASS = "bypass";
 
     public SetHomeCommand() {
-        super(Properties.create("sethome").permission("sethome"));
+        super(Properties.create("sethome"));
     }
 
     @Override

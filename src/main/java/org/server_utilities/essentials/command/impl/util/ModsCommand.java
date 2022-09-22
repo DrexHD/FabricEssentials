@@ -27,7 +27,7 @@ public class ModsCommand extends Command {
     public static final String MODS_COMMAND = "mods";
 
     public ModsCommand() {
-        super(Properties.create(MODS_COMMAND).permission("mods"));
+        super(Properties.create(MODS_COMMAND));
     }
 
     @Override

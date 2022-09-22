@@ -15,7 +15,7 @@ import java.util.Map;
 public class WarpsCommand extends Command {
 
     public WarpsCommand() {
-        super(Properties.create("warps").permission("warps"));
+        super(Properties.create("warps"));
     }
 
     @Override

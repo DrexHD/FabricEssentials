@@ -10,7 +10,7 @@ import org.server_utilities.essentials.command.util.OptionalOnlineTargetCommand;
 public class PingCommand extends OptionalOnlineTargetCommand {
 
     public PingCommand() {
-        super(Properties.create("ping").permission("ping"));
+        super(Properties.create("ping"));
     }
 
     @Override

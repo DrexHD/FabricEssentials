@@ -4,9 +4,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
@@ -34,12 +31,7 @@ public class TpAllCommand extends Command {
             TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
             if (direction == TpaManager.Direction.HERE) continue;
             TpaManager.INSTANCE.addRequest(participants, TpaManager.Direction.HERE);
-            target.sendSystemMessage(Component.translatable(translation(TpaManager.Direction.HERE.getTranslationKey(), "victim"), ctx.getSource().getDisplayName(),
-                    Component.translatable(translation("accept"))
-                            .withStyle(style ->
-                                    style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(ctx.getSource().getPlayer().getScoreboardName())))
-                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("accept", "hover"))))
-                            )));
+            TpaCommand.TPA_HERE.sendVictimMessage(ctx.getSource().getPlayerOrException(), target);
             success++;
         }
         sendSuccess(ctx.getSource(), null, success);

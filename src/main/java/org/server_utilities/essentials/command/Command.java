@@ -40,12 +40,17 @@ public abstract class Command {
     }
 
     public void registerCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
-        String[] alias = this.properties.alias();
+        String[] aliasLiterals = this.properties.alias();
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(properties.literal()).requires(predicate());
         register(builder);
         LiteralCommandNode<CommandSourceStack> root = dispatcher.register(builder);
-        for (String s : alias) {
-            dispatcher.register(Commands.literal(s).requires(predicate()).redirect(root));
+        for (String aliasLiteral : aliasLiterals) {
+            dispatcher.register(
+                    Commands.literal(aliasLiteral)
+                            .requires(builder.getRequirement())
+                            .executes(builder.getCommand())
+                            .redirect(root)
+            );
         }
     }
 

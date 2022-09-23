@@ -20,7 +20,10 @@ public class TpaCommand extends Command {
     private static final String TARGET_ARGUMENT_ID = "target";
     private final TpaManager.Direction direction;
 
-    public TpaCommand(TpaManager.Direction direction) {
+    public static final TpaCommand TPA = new TpaCommand(TpaManager.Direction.THERE);
+    public static final TpaCommand TPA_HERE = new TpaCommand(TpaManager.Direction.HERE);
+
+    private TpaCommand(TpaManager.Direction direction) {
         super(direction.getProperties());
         this.direction = direction;
     }
@@ -41,16 +44,20 @@ public class TpaCommand extends Command {
             return FAILURE;
         }
         TpaManager.INSTANCE.addRequest(participants, this.direction);
-        sendSuccess(ctx.getSource(), join(this.direction.getTranslationKey(), "self"), target.getDisplayName());
-        sendSuccess(target.createCommandSourceStack(), join(this.direction.getTranslationKey(), "victim"),
-                ctx.getSource().getDisplayName(),
-                Component.translatable(translation("accept"))
+        sendSuccess(ctx.getSource(), "self", target.getDisplayName());
+        sendVictimMessage(ctx.getSource().getPlayerOrException(), target);
+        return SUCCESS;
+    }
+
+    public void sendVictimMessage(ServerPlayer source, ServerPlayer target) {
+        sendSuccess(target.createCommandSourceStack(), "victim",
+                source.getDisplayName(),
+                Component.translatable(TPA.translation("accept"))
                         .withStyle(style ->
-                                style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(ctx.getSource().getPlayer().getScoreboardName())))
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("accept", "hover"))))
+                                style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(source.getScoreboardName())))
+                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(TPA.translation("accept.hover"))))
                         )
         );
-        return SUCCESS;
     }
 
 }

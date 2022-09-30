@@ -49,6 +49,6 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
     }
 
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx).getHomes().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx).getHomes().keySet(), builder);
 
 }

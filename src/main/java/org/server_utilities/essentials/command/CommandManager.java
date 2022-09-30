@@ -44,6 +44,7 @@ public class CommandManager {
             new TpAllCommand(),
             new TpAcceptCommand(),
             // Util
+            new CommandSpyCommand(),
             new EssentialsCommand(),
             new FeedCommand(),
             new HatCommand(),
@@ -51,6 +52,7 @@ public class CommandManager {
             new GlowCommand(),
             new PingCommand(),
             new SignEditCommand(),
+            new SocialSpyCommand(),
             new ModsCommand(),
             new FlyCommand(),
             new InvulnerableCommand(),

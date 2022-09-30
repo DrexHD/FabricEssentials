@@ -102,7 +102,7 @@ public class DataStorage {
     }
 
     @NotNull
-    public PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    public PlayerData getPlayerData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return getOfflinePlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID());
     }
 

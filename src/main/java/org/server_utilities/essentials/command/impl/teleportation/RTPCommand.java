@@ -59,8 +59,8 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        sendSuccess(ctx.getSource(), "check", playerData.rtpsLeft);
-        return playerData.rtpsLeft;
+        sendSuccess(ctx.getSource(), "check", playerData.rtpCount);
+        return playerData.rtpCount;
     }
 
     // TODO: add messages, rework optional targets
@@ -69,7 +69,7 @@ public class RTPCommand extends Command {
         Collection<GameProfile> targets = GameProfileArgument.getGameProfiles(ctx, "targets");
         for (GameProfile target : targets) {
             PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
-            playerData.rtpsLeft += amount;
+            playerData.rtpCount += amount;
             DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
         }
         return targets.size();
@@ -85,7 +85,7 @@ public class RTPCommand extends Command {
             sendFailure(ctx.getSource(), "dimension");
             return FAILURE;
         }
-        if (playerData.rtpsLeft <= 0 && !permission(src, "bypassLimit")) {
+        if (playerData.rtpCount <= 0 && !permission(src, "bypassLimit")) {
             sendFailure(ctx.getSource(), "limit");
             return FAILURE;
         }
@@ -132,7 +132,7 @@ public class RTPCommand extends Command {
                 sendSuccess(src, null, (System.currentTimeMillis() - start));
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {
-                    DataStorage.STORAGE.getAndSavePlayerData(target).rtpsLeft--;
+                    DataStorage.STORAGE.getAndSavePlayerData(target).rtpCount--;
                 }
                 return;
             }

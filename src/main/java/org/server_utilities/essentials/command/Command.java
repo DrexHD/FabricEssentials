@@ -104,7 +104,7 @@ public abstract class Command {
         CompletableFuture<Optional<ChunkAccess>> result = new CompletableFuture<>();
         asyncTeleportPlayer.setAsyncLoadingChunks(true);
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
-        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(targetLevel, targetPos, 2);
+        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(targetLevel, targetPos, 2, config.period * 20 + 20);
         chunkAccessFuture.whenCompleteAsync((either, throwable) -> {
             asyncTeleportPlayer.setAsyncLoadingChunks(false);
         }, src.getServer());

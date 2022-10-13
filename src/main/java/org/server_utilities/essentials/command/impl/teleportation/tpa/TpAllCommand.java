@@ -34,7 +34,7 @@ public class TpAllCommand extends Command {
             TpaCommand.TPA_HERE.sendVictimMessage(ctx.getSource().getPlayerOrException(), target);
             success++;
         }
-        sendSuccess(ctx.getSource(), null, success);
+        sendSuccess(ctx.getSource(), success);
         return success;
     }
 }

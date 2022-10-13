@@ -6,7 +6,7 @@
   "text.fabric-essentials.async.active": "You are already loading chunks for something else, please wait...",
   "text.fabric-essentials.chat.channel": "[%s] <%s> %s",
   "text.fabric-essentials.chat.channel.staff": "Staff",
-  "text.fabric-essentials.command.inventory.other": "Opened %s's Inventory",
+  "text.fabric-essentials.command.broadcast": "[Broadcast] %s",
   "text.fabric-essentials.command.commandspy.enable": "CommandSpy enabled",
   "text.fabric-essentials.command.commandspy.disable": "CommandSpy disabled",
   "text.fabric-essentials.command.deletehome.self": "Deleted Home %s",

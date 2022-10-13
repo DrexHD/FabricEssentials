@@ -51,7 +51,7 @@ public abstract class OptionalOfflineTargetCommand extends OptionalTargetCommand
     protected void sendFeedback(MinecraftServer server, GameProfile target, String translation, Object... args) {
         ServerPlayer player = server.getPlayerList().getPlayer(target.getId());
         if (player != null) {
-            super.sendSuccess(player.createCommandSourceStack(), translation, args);
+            sendSystemMessage(player, translation, args);
         }
     }
 }

@@ -44,6 +44,7 @@ public class CommandManager {
             new TpAllCommand(),
             new TpAcceptCommand(),
             // Util
+            new BroadcastCommand(),
             new CommandSpyCommand(),
             new EssentialsCommand(),
             new FeedCommand(),
@@ -57,6 +58,7 @@ public class CommandManager {
             new FlyCommand(),
             new InvulnerableCommand(),
             new StaffMessageCommand(),
+            new TellMessageCommand(),
     };
 
     public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {

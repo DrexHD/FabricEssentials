@@ -27,7 +27,7 @@ public abstract class OptionalOnlineTargetCommand extends OptionalTargetCommand<
     }
 
     public void sendFeedback(MinecraftServer server, ServerPlayer serverPlayer, String translation, Object... args) {
-        super.sendSuccess(serverPlayer.createCommandSourceStack(), translation, args);
+        sendSystemMessage(serverPlayer, translation, args);
     }
 
     @Override

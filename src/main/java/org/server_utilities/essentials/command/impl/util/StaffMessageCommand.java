@@ -28,13 +28,15 @@ public class StaffMessageCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         String message = StringArgumentType.getString(ctx, "message");
+        Component component = StyledInputUtil.parse(message, textTag -> KeyUtil.permission(ctx.getSource(), "style.staff", textTag.name()));
         for (ServerPlayer player : ctx.getSource().getServer().getPlayerList().getPlayers()) {
             CommandSourceStack src = player.createCommandSourceStack();
             if (KeyUtil.permission(src, "isStaff")) {
                 player.sendSystemMessage(Component.translatable("text.fabric-essentials.chat.channel",
                         Component.translatable("text.fabric-essentials.chat.channel.staff"),
                         ctx.getSource().getDisplayName(),
-                        StyledInputUtil.parse(message, textTag -> KeyUtil.permission(src, "style.staff", textTag.name()))));
+                        component
+                ));
             }
         }
         return SUCCESS;

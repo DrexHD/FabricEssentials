@@ -129,7 +129,7 @@ public class RTPCommand extends Command {
                     continue;
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, Registry.BLOCK.getKey(blockState.getBlock()));
-                sendSuccess(src, null, (System.currentTimeMillis() - start));
+                sendSuccess(src, (System.currentTimeMillis() - start));
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {
                     DataStorage.STORAGE.getAndSavePlayerData(target).rtpCount--;

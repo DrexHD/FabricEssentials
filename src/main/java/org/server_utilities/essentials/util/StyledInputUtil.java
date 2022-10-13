@@ -1,6 +1,7 @@
 package org.server_utilities.essentials.util;
 
 import eu.pb4.placeholders.api.TextParserUtils;
+import eu.pb4.placeholders.api.node.parent.ParentTextNode;
 import eu.pb4.placeholders.api.parsers.TextParserV1;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,10 @@ import java.util.function.Predicate;
 public class StyledInputUtil {
 
     public static Component parse(String input, Predicate<TextParserV1.TextTag> predicate) {
+        return parseNodes(input, predicate).toText(null, true);
+    }
+
+    public static ParentTextNode parseNodes(String input, Predicate<TextParserV1.TextTag> predicate) {
         Map<String, TextParserV1.TagNodeBuilder> handlers = new HashMap<>();
         for (TextParserV1.TextTag textTag : TextParserV1.SAFE.getTags()) {
             if (predicate.test(textTag)) {
@@ -31,7 +36,7 @@ public class StyledInputUtil {
             }
         }
 
-        return TextParserUtils.formatText(input, handlers::get);
+        return TextParserUtils.formatNodes(input, handlers::get);
     }
 
 }

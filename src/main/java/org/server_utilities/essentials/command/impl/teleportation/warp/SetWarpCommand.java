@@ -39,7 +39,7 @@ public class SetWarpCommand extends Command {
         Map<String, Warp> warps = essentialsData.getWarps();
         if (!warps.containsKey(name)) {
             warps.put(name, new Warp(new Location(ctx.getSource())));
-            sendSuccess(ctx.getSource(), null, name);
+            sendSuccess(ctx.getSource(), Component.literal(name));
             return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();

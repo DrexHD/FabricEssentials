@@ -12,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.jetbrains.annotations.NotNull;
@@ -91,8 +92,20 @@ public abstract class Command {
         src.sendSuccess(Component.translatable(translation(subKey), args), false);
     }
 
+    public void sendSuccess(CommandSourceStack src, Object... args) {
+        sendSuccess(src, null, args);
+    }
+
     public void sendFailure(CommandSourceStack src, String subKey, Object... args) {
         src.sendFailure(Component.translatable(translation(subKey), args));
+    }
+
+    public void sendSystemMessage(Entity entity, String subKey, Object... args) {
+        entity.sendSystemMessage(Component.translatable(translation(subKey), args));
+    }
+
+    public void sendSystemMessage(Entity entity, Object... args) {
+        sendSystemMessage(entity, null, args);
     }
 
     protected static CompletableFuture<Optional<ChunkAccess>> asyncTeleport(CommandSourceStack src, ServerLevel targetLevel, ChunkPos targetPos, WaitingPeriodConfig config) throws CommandSyntaxException {

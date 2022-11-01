@@ -1,9 +1,6 @@
 package org.server_utilities.essentials.mixin.spy;
 
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +25,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     private MinecraftServer server;
 
     @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"))
-    public void onCommand(ServerboundChatCommandPacket packet, CallbackInfo ci) {
+    public void onCommand(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
         MutableComponent spyMessage = Component.translatable(KeyUtil.translation("spy.commandspy"),
                 this.player.getDisplayName(),
                 Component.literal(packet.command()).withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, packet.command())))

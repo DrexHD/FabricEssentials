@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +25,7 @@ public class HatCommand extends OptionalOnlineTargetCommand {
     protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
         Inventory inventory = target.getInventory();
         ItemStack selected = inventory.getSelected();
-        ResourceLocation resourceLocation = Registry.ITEM.getKey(selected.getItem());
+        ResourceLocation resourceLocation = BuiltInRegistries.ITEM.getKey(selected.getItem());
         if (!predicate("item", resourceLocation.getPath()).test(ctx.getSource())) {
             sendFailure(ctx.getSource(),
                     "no_permission");

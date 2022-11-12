@@ -4,6 +4,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -75,7 +76,7 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
 
     @Nullable
     public ServerLevel getLevel(@NotNull MinecraftServer server) {
-        return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, dimension));
+        return server.getLevel(ResourceKey.create(Registries.DIMENSION, dimension));
     }
 
     public ChunkPos chunkPos() {

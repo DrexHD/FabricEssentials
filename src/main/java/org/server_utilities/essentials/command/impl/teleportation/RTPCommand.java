@@ -11,6 +11,8 @@ import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +38,7 @@ import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
 public class RTPCommand extends Command {
 
-    public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "unsafe_rtp_location"));
+    public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "unsafe_rtp_location"));
 
     public RTPCommand() {
         super(Properties.create("rtp", "wild"));
@@ -107,7 +109,7 @@ public class RTPCommand extends Command {
         for (int i = 0; i < 50; i++) {
             ChunkPos chunkPos = config.shape.generateLocation(config.centerX, config.centerZ, config.minRadius, config.maxRadius);
             Holder<Biome> holder = level.getBiome(chunkPos.getMiddleBlockPosition(70));
-            ResourceLocation location = level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(holder.value());
+            ResourceLocation location = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(holder.value());
             if (!Arrays.stream(config.blacklistedBiomes).toList().contains(location)) {
                 return Optional.of(chunkPos);
             }
@@ -128,7 +130,7 @@ public class RTPCommand extends Command {
                 if (blockState.is(UNSAFE_RTP_LOCATION)) {
                     continue;
                 }
-                LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, Registry.BLOCK.getKey(blockState.getBlock()));
+                LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, BuiltInRegistries.BLOCK.getKey(blockState.getBlock()));
                 sendSuccess(src, (System.currentTimeMillis() - start));
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {

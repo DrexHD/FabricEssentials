@@ -11,6 +11,7 @@
   "text.fabric-essentials.command.commandspy.disable": "CommandSpy disabled",
   "text.fabric-essentials.command.deletehome.self": "Deleted Home %s",
   "text.fabric-essentials.command.deletehome.other": "Deleted Home %s from %s",
+  "text.fabric-essentials.command.deletewarp": "Deleted Warp %s",
   "text.fabric-essentials.command.heal.self": "You have healed yourself",
   "text.fabric-essentials.command.heal.other": "You have healed %s",
   "text.fabric-essentials.command.heal.victim": "You have been healed by %s",

@@ -34,11 +34,11 @@ public class WarpCommand extends Command {
     @Override
     protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
         RequiredArgumentBuilder<CommandSourceStack, String> name = Commands.argument(NAME, StringArgumentType.string()).suggests(WARPS_PROVIDER);
-        name.executes(this::execute);
+        name.executes(this::teleport);
         literal.then(name);
     }
 
-    private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private int teleport(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         CommandSourceStack src = ctx.getSource();
         String name = StringArgumentType.getString(ctx, NAME);
         ServerPlayer serverPlayer = src.getPlayerOrException();

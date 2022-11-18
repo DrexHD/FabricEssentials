@@ -33,26 +33,11 @@ public class BroadcastCommand extends Command {
     }
 
     public int tellMessage(CommandSourceStack src, String message) {
-        boolean isSimple = true;
-        if (message.startsWith("!")) {
-            message = message.substring(1);
-            isSimple = false;
+        ParentTextNode textNode = StyledInputUtil.parseNodes(message, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
+        List<ServerPlayer> players = src.getServer().getPlayerList().getPlayers();
+        for (ServerPlayer player : players) {
+            sendSystemMessage(player, Placeholders.parseText(textNode, PlaceholderContext.of(player)));
         }
-
-        if (isSimple) {
-            ParentTextNode textNode = StyledInputUtil.parseNodes(message, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
-            List<ServerPlayer> players = src.getServer().getPlayerList().getPlayers();
-            for (ServerPlayer player : players) {
-                sendSystemMessage(player, Placeholders.parseText(textNode, PlaceholderContext.of(player)));
-            }
-            return players.size();
-        } else {
-            ParentTextNode textNode = StyledInputUtil.parseNodes(message, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
-            List<ServerPlayer> players = src.getServer().getPlayerList().getPlayers();
-            for (ServerPlayer player : players) {
-                player.sendSystemMessage(Placeholders.parseText(textNode, PlaceholderContext.of(player)));
-            }
-            return players.size();
-        }
+        return players.size();
     }
 }

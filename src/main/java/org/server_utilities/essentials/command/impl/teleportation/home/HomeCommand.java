@@ -51,11 +51,10 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         if (home == null) throw UNKNOWN.create();
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
-                if (chunkAccessOptional.isPresent()) {
-                    sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
-                    home.location().teleport(serverPlayer);
-                }
+            asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+                if (chunkAccess == null) return;
+                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+                home.location().teleport(serverPlayer);
             }, src.getServer());
             return SUCCESS;
         } else {

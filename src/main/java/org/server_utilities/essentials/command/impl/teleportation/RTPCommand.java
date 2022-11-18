@@ -10,7 +10,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.config.rtp.RtpConfig;
@@ -32,7 +32,6 @@ import org.server_utilities.essentials.util.TeleportationUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
@@ -91,31 +90,31 @@ public class RTPCommand extends Command {
             sendFailure(ctx.getSource(), "limit");
             return FAILURE;
         }
-        Optional<ChunkPos> optional = generateLocation(targetLevel);
-        if (optional.isEmpty()) {
+        ChunkPos chunkPos = generateLocation(targetLevel);
+        if (chunkPos == null) {
             sendFailure(ctx.getSource(), "no_location");
             return FAILURE;
         }
-        ChunkPos chunkPos = optional.get();
         long start = System.currentTimeMillis();
-        asyncTeleport(src, targetLevel, chunkPos, config().rtp.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
-            chunkAccessOptional.ifPresent(chunkAccess -> execute(src, target, targetLevel, start, chunkPos, chunkAccess));
+        asyncTeleport(src, targetLevel, chunkPos, config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+            if (chunkAccess != null) execute(src, target, targetLevel, start, chunkPos, chunkAccess);
         }, src.getServer());
         return SUCCESS;
     }
 
-    private Optional<ChunkPos> generateLocation(ServerLevel level) {
+    @Nullable
+    private ChunkPos generateLocation(ServerLevel level) {
         RtpConfig config = config().rtp;
         for (int i = 0; i < 50; i++) {
             ChunkPos chunkPos = config.shape.generateLocation(config.centerX, config.centerZ, config.minRadius, config.maxRadius);
             Holder<Biome> holder = level.getBiome(chunkPos.getMiddleBlockPosition(70));
             ResourceLocation location = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(holder.value());
             if (!Arrays.stream(config.blacklistedBiomes).toList().contains(location)) {
-                return Optional.of(chunkPos);
+                return chunkPos;
             }
         }
         // No location found
-        return Optional.empty();
+        return null;
     }
 
     private void execute(CommandSourceStack src, ServerPlayer target, ServerLevel targetLevel, long start, ChunkPos chunkPos, ChunkAccess chunkAccess) {

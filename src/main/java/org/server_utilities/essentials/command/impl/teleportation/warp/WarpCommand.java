@@ -48,11 +48,10 @@ public class WarpCommand extends Command {
         if (warp == null) throw UNKNOWN.create();
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccessOptional, throwable) -> {
-                if (chunkAccessOptional.isPresent()) {
-                    sendSuccess(ctx.getSource(), "teleport", name);
-                    warp.location().teleport(serverPlayer);
-                }
+            asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+                if (chunkAccess == null) return;
+                sendSuccess(ctx.getSource(), "teleport", name);
+                warp.location().teleport(serverPlayer);
             }, src.getServer());
         } else {
             throw WORLD_UNKNOWN.create();

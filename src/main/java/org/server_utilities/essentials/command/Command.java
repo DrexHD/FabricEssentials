@@ -6,11 +6,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Unit;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.DistanceManager;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -20,6 +23,7 @@ import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.config.EssentialsConfig;
 import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
+import org.server_utilities.essentials.mixin.async.IServerChunkCache;
 import org.server_utilities.essentials.util.AsyncChunkLoadUtil;
 import org.server_utilities.essentials.util.AsyncTeleportPlayer;
 import org.server_utilities.essentials.util.KeyUtil;
@@ -29,6 +33,8 @@ import org.slf4j.Logger;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+
+import static org.server_utilities.essentials.util.AsyncChunkLoadUtil.ASYNC_CHUNK_LOAD;
 
 public abstract class Command {
 
@@ -108,16 +114,19 @@ public abstract class Command {
         sendSystemMessage(entity, null, args);
     }
 
-    protected static CompletableFuture<Optional<ChunkAccess>> asyncTeleport(CommandSourceStack src, ServerLevel targetLevel, ChunkPos targetPos, WaitingPeriodConfig config) throws CommandSyntaxException {
+    protected static CompletableFuture<ChunkAccess> asyncTeleport(CommandSourceStack src, ServerLevel level, ChunkPos pos, WaitingPeriodConfig config) throws CommandSyntaxException {
         AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) src.getPlayerOrException();
         if (asyncTeleportPlayer.isAsyncLoadingChunks()) {
             src.sendFailure(Component.translatable(KeyUtil.translation("async.active")));
-            return CompletableFuture.completedFuture(Optional.empty());
+            return CompletableFuture.completedFuture(null);
         }
-        CompletableFuture<Optional<ChunkAccess>> result = new CompletableFuture<>();
+        final int RADIUS = 2;
+        CompletableFuture<ChunkAccess> result = new CompletableFuture<>();
         asyncTeleportPlayer.setAsyncLoadingChunks(true);
+        final ServerChunkCache chunkCache = level.getChunkSource();
+        final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
-        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(targetLevel, targetPos, 2, config.period * 20 + 20);
+        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(level, pos, RADIUS);
         chunkAccessFuture.whenCompleteAsync((either, throwable) -> {
             asyncTeleportPlayer.setAsyncLoadingChunks(false);
         }, src.getServer());
@@ -130,17 +139,25 @@ public abstract class Command {
                     src.sendFailure(Component.translatable(KeyUtil.translation("teleport.wait.error")));
                     LOGGER.error("An unknown error occurred, during waiting period", waitingThrowable);
                 }
-                result.complete(Optional.empty());
+                result.cancel(false);
+                ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
+                ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
             } else {
                 chunkAccessFuture.whenCompleteAsync((either, chunkThrowable) -> {
                     if (chunkThrowable != null) {
                         src.sendFailure(Component.translatable(KeyUtil.translation("async.error")));
                         LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
-                        result.complete(Optional.empty());
+                        result.cancel(false);
                     } else {
-                        // TODO: check if player is still online / hasnt died / changed dimension
-                        result.complete(either.left());
+                        if (either.left().isPresent()) {
+                            result.complete(either.left().get());
+                        } else {
+                            src.sendFailure(Component.translatable(KeyUtil.translation("async.error")));
+                            LOGGER.error("Chunk not there when requested: {}", either.right().get());
+                        }
                     }
+                    ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
+                    ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
                 }, src.getServer());
             }
         }, src.getServer());

@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.node.parent.ParentTextNode;
+import eu.pb4.placeholders.api.parsers.TextParserV1;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -38,7 +39,7 @@ public class TellMessageCommand extends Command {
     }
 
     protected int tellMessage(CommandSourceStack src, Collection<ServerPlayer> players, String message) {
-        ParentTextNode textNode = StyledInputUtil.parseNodes(message, textTag -> KeyUtil.permission(src, "style.tellmessage", textTag.name()));
+        ParentTextNode textNode = StyledInputUtil.parseNodes(message, TextParserV1.DEFAULT, textTag -> KeyUtil.permission(src, "style.tellmessage", textTag.name()));
         for (ServerPlayer player : players) {
             Component component = Placeholders.parseText(textNode, PlaceholderContext.of(player));
             player.sendSystemMessage(component);

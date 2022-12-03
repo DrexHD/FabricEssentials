@@ -10,7 +10,6 @@ public class PlayerData {
 
     private final Map<String, Home> homes = new HashMap<>();
     public int rtpCount = ConfigManager.INSTANCE.config().rtp.defaultRtps;
-    public boolean socialSpy = false;
     public boolean commandSpy = false;
 
     public Map<String, Home> getHomes() {

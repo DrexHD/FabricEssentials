@@ -17,8 +17,12 @@ public class StyledInputUtil {
     }
 
     public static ParentTextNode parseNodes(String input, Predicate<TextParserV1.TextTag> predicate) {
+        return parseNodes(input, TextParserV1.SAFE, predicate);
+    }
+
+    public static ParentTextNode parseNodes(String input, TextParserV1 textParser, Predicate<TextParserV1.TextTag> predicate) {
         Map<String, TextParserV1.TagNodeBuilder> handlers = new HashMap<>();
-        for (TextParserV1.TextTag textTag : TextParserV1.SAFE.getTags()) {
+        for (TextParserV1.TextTag textTag : textParser.getTags()) {
             if (predicate.test(textTag)) {
                 handlers.put(textTag.name(), textTag.parser());
                 if (textTag.aliases() != null) {

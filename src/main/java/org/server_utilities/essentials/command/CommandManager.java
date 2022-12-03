@@ -55,11 +55,9 @@ public class CommandManager {
             new GlowCommand(),
             new PingCommand(),
             new SignEditCommand(),
-            new SocialSpyCommand(),
             new ModsCommand(),
             new FlyCommand(),
             new InvulnerableCommand(),
-            new StaffMessageCommand(),
             new TellMessageCommand(),
     };
 

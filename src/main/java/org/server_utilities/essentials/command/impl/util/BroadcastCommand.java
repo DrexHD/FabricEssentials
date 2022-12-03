@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.node.parent.ParentTextNode;
+import eu.pb4.placeholders.api.parsers.TextParserV1;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +34,7 @@ public class BroadcastCommand extends Command {
     }
 
     public int tellMessage(CommandSourceStack src, String message) {
-        ParentTextNode textNode = StyledInputUtil.parseNodes(message, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
+        ParentTextNode textNode = StyledInputUtil.parseNodes(message, TextParserV1.DEFAULT, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
         List<ServerPlayer> players = src.getServer().getPlayerList().getPlayers();
         for (ServerPlayer player : players) {
             sendSystemMessage(player, Placeholders.parseText(textNode, PlaceholderContext.of(player)));

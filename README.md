@@ -14,7 +14,6 @@ Fabric Essentials is a rewrite of [KiloEssentials](https://github.com/KiloCraft/
   - etc 
 
 ### Features
-- Socialspy
 - Commandspy
 
 ## Discontinued
@@ -26,6 +25,7 @@ A list of features from KiloEssentials that will not be included in Fabric Essen
 | Chat System         | [StyledChat](https://modrinth.com/mod/styled-chat)                                                                                |
 | Nicknames           | [StyledNickNames](https://modrinth.com/mod/styled-nicknames)                                                                      |
 | Tab System          | [StyledPlayerList](https://modrinth.com/mod/styledplayerlist)                                                                     |
+| Chat Channels       | [AdvancedChat](https://github.com/Wesley1808/AdvancedChat)                                                                        |
 | Discord<->Minecraft | [BlockBot](https://modrinth.com/mod/blockbot)                                                                                     |
 | MOTD System         | [MiniMotd](https://modrinth.com/mod/minimotd)                                                                                     |
 | Particle System     | *There is currently no alternative for this. KiloEssentials' particle<br/> system may be released as a standalone project later!* |

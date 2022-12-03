@@ -14,7 +14,6 @@
     "async.IServerChunkCache",
     "async.ServerPlayerMixin",
     "event.PlayerListMixin",
-    "spy.MsgCommandMixin",
     "spy.ServerGamePacketListenerImplMixin",
     "style.AnvilMenuMixin",
     "style.ServerGamePacketListenerImplMixin"

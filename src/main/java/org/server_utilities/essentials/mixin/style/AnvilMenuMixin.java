@@ -1,5 +1,6 @@
 package org.server_utilities.essentials.mixin.style;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -28,7 +29,13 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        return (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.permission(this.player, "style.anvil", textTag.name()));
+        MutableComponent result = (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.permission(this.player, "style.anvil", textTag.name()));
+        // This check is required to stay compatible with datapacks, which rely on vanilla text formatting
+        if (result.getString().equals(input)) {
+            return Component.literal(input);
+        } else {
+            return result;
+        }
     }
 
 }

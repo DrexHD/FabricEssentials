@@ -38,7 +38,7 @@ public class InvulnerableCommand extends OptionalOnlineTargetCommand {
     }
 
     private int setInvulnerable(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean value, boolean self) {
-        sendFeedbackWithOptionalTarget(ctx, target, self, new Object[]{value}, new Object[]{value, target.getDisplayName()}, new Object[]{value, ctx.getSource().getDisplayName()});
+        sendFeedbackWithOptionalTarget(ctx, target, self, value ? "fabric-essentials.commands.invulnerable.enable" : "fabric-essentials.commands.invulnerable.disable");
         target.setInvulnerable(value);
         target.onUpdateAbilities();
         return value ? SUCCESS : FAILURE;

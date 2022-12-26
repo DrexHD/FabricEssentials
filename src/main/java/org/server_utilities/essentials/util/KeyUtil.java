@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class KeyUtil {
 
     public static final String PERMISSION_PREFIX = EssentialsMod.MOD_ID;
-    public static final String TRANSLATION_KEY_PREFIX = join("text", EssentialsMod.MOD_ID);
 
     public static String join(String... parts) {
         if (parts == null) return "";
@@ -38,10 +37,6 @@ public class KeyUtil {
             // Fallback for datapack compatibility
             return entity.createCommandSourceStack().hasPermission(2);
         }
-    }
-
-    public static String translation(String... nodes) {
-        return join(TRANSLATION_KEY_PREFIX, join(nodes));
     }
 
 }

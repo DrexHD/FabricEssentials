@@ -6,6 +6,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import me.drex.message.api.Message;
+import me.drex.message.api.MessageAPI;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -17,14 +19,16 @@ import org.server_utilities.essentials.command.impl.util.importer.DataImporter;
 import org.server_utilities.essentials.command.impl.util.importer.KiloEssentialsImporter;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.mixin.CommandSourceStackAccessor;
+import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
 import org.spongepowered.configurate.ConfigurateException;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class EssentialsCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.essentials.import.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.essentials.import.unknown"));
     private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS};
 
     public EssentialsCommand() {
@@ -52,19 +56,22 @@ public class EssentialsCommand extends Command {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             ConfigManager.INSTANCE.load();
+            MessageAPI.reload();
             stopWatch.stop();
-            sendSuccess(ctx.getSource(), "reload", stopWatch.getTime());
+            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
+                put("time", Component.literal(String.valueOf(stopWatch.getTime())));
+            }}));
             return SUCCESS;
-        } catch (ConfigurateException e) {
-            LOGGER.error("An error occurred while loading the config, keeping old values", e);
-            sendFailure(ctx.getSource(), "reload.error", e.getMessage());
+        } catch (ConfigurateException configurateException) {
+            LOGGER.error("An error occurred while loading the config, keeping old values", configurateException);
+            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.reload.error", ComponentPlaceholderUtil.exceptionPlaceholders(configurateException)));
             return FAILURE;
         }
     }
 
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         if (!((CommandSourceStackAccessor) ctx.getSource()).getSource().equals(ctx.getSource().getServer())) {
-            sendFailure(ctx.getSource(), "import.console");
+            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.import.console"));
             return FAILURE;
         }
         String importerId = StringArgumentType.getString(ctx, "importer");

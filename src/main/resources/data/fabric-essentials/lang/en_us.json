@@ -70,7 +70,7 @@
   "text.fabric-essentials.command.rtp.still_active": "RTP process already running!",
   "text.fabric-essentials.command.rtp.limit": "You don't have any RTPs left.",
   "text.fabric-essentials.command.rtp.dimension": "You don't have permission to RTP in this dimension.",
-  "text.fabric-essentials.command.rtp": "RTP successfully completed after %sms.",
+  "text.fabric-essentials.command.rtp": "RTP successfully completed after ${time}ms.",
   "text.fabric-essentials.command.rtp.no_location": "Unable to find correct location, within reasonable attempts.",
   "text.fabric-essentials.command.rtp.unsafe": "Target location is not safe. Please try again.",
   "text.fabric-essentials.command.signedit": "Changed sign line %d to \"%s\"",

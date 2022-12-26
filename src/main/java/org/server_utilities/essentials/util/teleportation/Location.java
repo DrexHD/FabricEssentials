@@ -2,9 +2,9 @@ package org.server_utilities.essentials.util.teleportation;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -18,6 +18,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.server_utilities.essentials.EssentialsMod.LOGGER;
@@ -82,5 +84,17 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
     public ChunkPos chunkPos() {
         return new ChunkPos(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z));
     }
+
+    public Map<String, Component> placeholders() {
+        return new HashMap<>() {{
+            put("location_pos_x", Component.literal(String.format("%.2f", pos.x)));
+            put("location_pos_y", Component.literal(String.format("%.2f", pos.y)));
+            put("location_pos_z", Component.literal(String.format("%.2f", pos.z)));
+            put("location_yaw", Component.literal(String.format("%.2f", yaw)));
+            put("location_pitch", Component.literal(String.format("%.2f", pitch)));
+            put("location_dimension", Component.literal(dimension.toString()));
+        }};
+    }
+
 
 }

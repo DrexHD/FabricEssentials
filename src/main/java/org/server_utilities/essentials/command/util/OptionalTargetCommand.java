@@ -6,11 +6,17 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.api.PlaceholderContext;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
+
+import java.util.Collections;
+import java.util.Map;
 
 public abstract class OptionalTargetCommand<T, S> extends Command {
 
@@ -37,20 +43,28 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
         argument.then(target);
     }
 
-    protected void sendFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, S target, boolean self, Object[] selfArgs, Object[] otherArgs, Object[] victimArgs, String... keys) {
+    protected void sendFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, S target, boolean self, String messageId) {
+        sendFeedbackWithOptionalTarget(ctx, target, self, Collections.emptyMap(), messageId);
+    }
+
+    protected void sendFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, S target, boolean self, Map<String, Component> placeholders, String messageId) {
         if (self) {
-            sendSuccess(ctx.getSource(), join(join(keys), "self"), selfArgs);
+            ctx.getSource().sendSystemMessage(Message.message(join(messageId, "self"), placeholders));
         } else {
-            sendSuccess(ctx.getSource(), join(join(keys), "other"), otherArgs);
-            sendFeedback(ctx.getSource().getServer(), target, join(join(keys), "victim"), victimArgs);
+            ctx.getSource().sendSystemMessage(Message.message(join(messageId, "other"), placeholders, getTargetPlaceholderContext(target, ctx.getSource().getServer())));
+            sendTargetFeedback(target, ctx.getSource().getServer(), Message.message(join(messageId, "victim"), placeholders, PlaceholderContext.of(ctx.getSource())));
         }
     }
 
-    protected void sendQueryFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, boolean self, Object[] selfArgs, Object[] otherArgs, String... keys) {
+    protected void sendQueryFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, S target, boolean self, String messageId) {
+        sendQueryFeedbackWithOptionalTarget(ctx, target, self, Collections.emptyMap(), messageId);
+    }
+
+    protected void sendQueryFeedbackWithOptionalTarget(CommandContext<CommandSourceStack> ctx, S target, boolean self, Map<String, Component> placeholders, String messageId) {
         if (self) {
-            sendSuccess(ctx.getSource(), join(join(keys), "self"), selfArgs);
+            ctx.getSource().sendSystemMessage(Message.message(join(messageId, "self"), placeholders));
         } else {
-            sendSuccess(ctx.getSource(), join(join(keys), "other"), otherArgs);
+            ctx.getSource().sendSystemMessage(Message.message(join(messageId, "other"), placeholders, getTargetPlaceholderContext(target, ctx.getSource().getServer())));
         }
     }
 
@@ -60,8 +74,10 @@ public abstract class OptionalTargetCommand<T, S> extends Command {
 
     protected abstract S getSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException;
 
-    protected abstract void sendFeedback(MinecraftServer server, S target, String translation, Object... args);
+    protected abstract void sendTargetFeedback(S target, MinecraftServer server, Component component);
 
     protected abstract int execute(CommandContext<CommandSourceStack> ctx, S target, boolean self) throws CommandSyntaxException;
+
+    protected abstract PlaceholderContext getTargetPlaceholderContext(S target, MinecraftServer server);
 
 }

@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,16 +24,20 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.config.rtp.RtpConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
+import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
 import org.server_utilities.essentials.util.TeleportationUtil;
+import org.server_utilities.essentials.util.teleportation.Location;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
@@ -60,7 +66,7 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        sendSuccess(ctx.getSource(), "check", playerData.rtpCount);
+        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.rtp.check"), false);
         return playerData.rtpCount;
     }
 
@@ -83,16 +89,17 @@ public class RTPCommand extends Command {
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
         ResourceLocation resourceLocation = targetLevel.dimension().location();
         if (!permission(src, "dimension", resourceLocation.getNamespace(), resourceLocation.getPath())) {
-            sendFailure(ctx.getSource(), "dimension");
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.dimension"));
             return FAILURE;
         }
         if (playerData.rtpCount <= 0 && !permission(src, "bypassLimit")) {
-            sendFailure(ctx.getSource(), "limit");
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.limit"));
+
             return FAILURE;
         }
         ChunkPos chunkPos = generateLocation(targetLevel);
         if (chunkPos == null) {
-            sendFailure(ctx.getSource(), "no_location");
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.no_location"));
             return FAILURE;
         }
         long start = System.currentTimeMillis();
@@ -130,7 +137,10 @@ public class RTPCommand extends Command {
                     continue;
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, BuiltInRegistries.BLOCK.getKey(blockState.getBlock()));
-                sendSuccess(src, (System.currentTimeMillis() - start));
+                Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
+                src.sendSuccess(Message.message("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
+                    put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
+                }}, location.placeholders())), false);
                 TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
                 if (!permission(src, "bypassLimit")) {
                     DataStorage.STORAGE.getAndSavePlayerData(target).rtpCount--;
@@ -138,7 +148,7 @@ public class RTPCommand extends Command {
                 return;
             }
         }
-        sendFailure(src, "unsafe");
+        src.sendFailure(Message.message("fabric-essentials.commands.rtp.unsafe"));
     }
 
 }

@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import eu.pb4.placeholders.api.PlaceholderContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
@@ -48,10 +49,15 @@ public abstract class OptionalOfflineTargetCommand extends OptionalTargetCommand
     }
 
     @Override
-    protected void sendFeedback(MinecraftServer server, GameProfile target, String translation, Object... args) {
+    protected void sendTargetFeedback(GameProfile target, MinecraftServer server, Component component) {
         ServerPlayer player = server.getPlayerList().getPlayer(target.getId());
         if (player != null) {
-            sendSystemMessage(player, translation, args);
+            player.sendSystemMessage(component);
         }
+    }
+
+    @Override
+    protected PlaceholderContext getTargetPlaceholderContext(GameProfile target, MinecraftServer server) {
+        return PlaceholderContext.of(target, server);
     }
 }

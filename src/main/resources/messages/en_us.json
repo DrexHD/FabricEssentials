@@ -1,0 +1,125 @@
+{
+  "fabric-essentials.async.loading_chunks.0": "<aqua>Loading chunks.",
+  "fabric-essentials.async.loading_chunks.1": "<aqua>Loading chunks..",
+  "fabric-essentials.async.loading_chunks.2": "<aqua>Loading chunks...",
+  "fabric-essentials.async.loading_chunks.done": "<green>Chunks loaded!",
+  "fabric-essentials.async.active": "<red>You are already loading chunks for something else, please wait...",
+  "fabric-essentials.async.error": "<red>An error occurred, while loading the chunks: ${exception_message}",
+  "fabric-essentials.async.not_loaded": "<red>Chunk has not been loaded correctly!",
+
+  "fabric-essentials.commands.broadcast": "<white>[<red>Broadcast<white>] <gray>${message}",
+
+  "fabric-essentials.commands.commandspy.enable": "<green>CommandSpy enabled",
+  "fabric-essentials.commands.commandspy.disable": "<red>CommandSpy disabled",
+
+  "fabric-essentials.commands.deletehome.self": "<red>Deleted home <dark_red>${home_name}<red>!",
+  "fabric-essentials.commands.deletehome.other": "<red>Deleted home <dark_red>${home_name} <red>from <dark_red>%player:displayname%<red>!",
+
+  "fabric-essentials.commands.deletewarp": "<red>Deleted warp <dark_red>${warp_name}<red>!",
+
+  "fabric-essentials.commands.essentials.reload": "<gray>Essentials config successfully reloaded in <white>${time}ms<gray>!",
+  "fabric-essentials.commands.essentials.reload.error": "<red>An error occurred while reloading the config, keeping old values: ${exception_message}",
+  "fabric-essentials.commands.essentials.import.unknown": "<red>No importer with that name exists!",
+  "fabric-essentials.commands.essentials.import.console": "<red>This command can only be used from the console!",
+
+  "fabric-essentials.commands.feed.self": "<yellow>You have fed yourself.",
+  "fabric-essentials.commands.feed.other": "<yellow>You have fed <gold>%player:displayname%<yellow>.",
+  "fabric-essentials.commands.feed.victim": "<yellow>You have been fed by <gold>%player:displayname%<yellow>.",
+
+  "fabric-essentials.commands.fly.enable.self": "<green>Enabled flying!",
+  "fabric-essentials.commands.fly.enable.other": "<green>Enabled flying for <dark_green>%player:displayname%<green>!",
+  "fabric-essentials.commands.fly.enable.victim": "<dark_green>%player:displayname% <green>enabled flying for you!",
+  "fabric-essentials.commands.fly.disable.self": "<red>Disabled flying!",
+  "fabric-essentials.commands.fly.disable.other": "<red>Disabled flying for <dark_red>%player:displayname%<red>!",
+  "fabric-essentials.commands.fly.disable.victim": "<dark_red>%player:displayname% <red>disabled flying for you!",
+
+  "fabric-essentials.commands.glow.self": "<yellow>You have toggled glow yourself.",
+  "fabric-essentials.commands.glow.other": "<yellow>You have toggled flow for <gold>%player:displayname%<yellow>.",
+  "fabric-essentials.commands.glow.victim": "<gold>%player:displayname%<yellow> toggled your glow.",
+
+  "fabric-essentials.commands.hat": "<yellow>Set your hat item to <gold>%player:equipment_slot head%<yellow>.",
+  "fabric-essentials.commands.hat.no_permission": "<red>You can't wear that item!",
+  "fabric-essentials.commands.hat.binding_curse": "<red>You can't remove your head item",
+
+  "fabric-essentials.commands.heal.self": "<yellow>You have healed yourself.",
+  "fabric-essentials.commands.heal.other": "<yellow>You have healed <gold>%player:displayname%<yellow>.",
+  "fabric-essentials.commands.heal.victim": "<yellow>You have been healed by <gold>%player:displayname%<yellow>.",
+
+  "fabric-essentials.commands.home.self": "<yellow>Teleporting to home <gold>${home_name}<yellow>!",
+  "fabric-essentials.commands.home.other": "<yellow>Teleporting to home <gold>${home_name} <yellow>from <gold>%player:displayname%<yellow>!",
+  "fabric-essentials.commands.home.unknown": "<red>Unknown home name!",
+
+  "fabric-essentials.commands.homes.empty.self": "<red>You don't have any homes!",
+  "fabric-essentials.commands.homes.empty.other": "<dark_red>%player:displayname% <red>doesn't have any homes!",
+  "fabric-essentials.commands.homes.self": "<gold>Homes [<yellow>${home_count}<gold>]:\n${home_list}",
+  "fabric-essentials.commands.homes.other": "<gold>%player:displayname%'s Homes [<yellow>${home_count}<gold>]:\n${home_list}",
+  "fabric-essentials.commands.homes.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.homes.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
+
+  "fabric-essentials.commands.invulnerable.enable.self": "<green>Enabled invincibility!",
+  "fabric-essentials.commands.invulnerable.enable.other": "<green>Enabled invincibility for <dark_green>%player:displayname%<green>!",
+  "fabric-essentials.commands.invulnerable.enable.victim": "<dark_green>%player:displayname% <green>enabled invincibility for you!",
+  "fabric-essentials.commands.invulnerable.disable.self": "<red>Disabled invincibility!",
+  "fabric-essentials.commands.invulnerable.disable.other": "<red>Disabled invincibility for <dark_red>%player:displayname%<red>!",
+  "fabric-essentials.commands.invulnerable.disable.victim": "<dark_red>%player:displayname% <red>disabled invincibility for you!",
+
+  "fabric-essentials.commands.mods": "<gold>Mods [<yellow>${mod_count}<gold>]:\n${mod_list}",
+  "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>Version: <aqua>${mod_version}\n<gray>Authors: <green>${mod_authors}\n<gray>Description: <yellow>${mod_description}",
+  "fabric-essentials.commands.mods.mod.unknown": "<red>No mod with that id exists!",
+  "fabric-essentials.commands.mods.list.seperator": "<gray>, </gray>",
+  "fabric-essentials.commands.mods.list.element": "<hover:'<aqua>Click for more information!'><run_cmd:'/mods ${mod_id}'>${mod_name}",
+
+  "fabric-essentials.commands.ping.self": "<yellow>Pong! Your connection latency to the server is %player:ping_colored%<yellow>ms!",
+  "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%'s connection latency to the server is %player:ping_colored%<yellow>ms!",
+
+  "fabric-essentials.commands.rtp": "<yellow>Randomly teleported to <gold>${location_pos_x} ${location_pos_y} ${location_pos_z} <yellow>after <gold>${time}ms<yellow>.",
+  "fabric-essentials.commands.rtp.check": "<yellow>You have <gold>%fabric-essentials:rtp_count% <yellow>RTPs left!",
+  "fabric-essentials.commands.rtp.dimension": "<red>You don't have permission to RTP in this dimension.",
+  "fabric-essentials.commands.rtp.limit": "<red>You don't have any RTPs left.",
+  "fabric-essentials.commands.rtp.no_location": "<red>Unable to find correct location, within reasonable attempts.",
+  "fabric-essentials.commands.rtp.unsafe": "<red>Target location is not safe. Please try again.",
+
+  "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
+  "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",
+  "fabric-essentials.commands.sethome.limit": "<red>Home limited reached! You can't set any more homes!",
+  "fabric-essentials.commands.sethome.already_exists": "<red>A home with that name already exists!",
+
+  "fabric-essentials.commands.setwarp": "<yellow>Set the warp <gold>${warp_name}<yellow>!",
+  "fabric-essentials.commands.setwarp.already_exists": "<red>A warp with that name already exists!",
+
+  "fabric-essentials.commands.signedit": "<yellow>Changed sign line <gold>${sign_line}<yellow> to \"<gold>${sign_text}<yellow>\".",
+  "fabric-essentials.commands.signedit.cant_modify": "<red>You can't modify this sign!",
+  "fabric-essentials.commands.signedit.missing": "<red>You need to look at a sign to use this command!",
+  "fabric-essentials.commands.signedit.length": "<red>The text exceeds the maximum length!",
+
+  "fabric-essentials.commands.tpa.self": "<yellow>Request to teleport <gold>you <yellow>to <gold>%player:displayname% <yellow>has been sent!",
+  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname% <yellow>requested to teleport to <gold>you<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔]",
+  "fabric-essentials.commands.tpa.pending": "<red>You already have a pending teleport request for <dark_red>%player:displayname%<red>!",
+  "fabric-essentials.commands.tpahere.self": "<yellow>Request to teleport <gold>%player:displayname% <yellow>to <gold>you <yellow>has been sent!",
+  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname% <yellow>requested to teleport <gold>you<yellow> to <gold>them<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔]",
+
+  "fabric-essentials.commands.tpaccept.self": "<green>Teleport request from <dark_green>%player:displayname% <green>accepted!",
+  "fabric-essentials.commands.tpaccept.victim": "<dark_green>%player:displayname% <green>accepted your teleport request!",
+  "fabric-essentials.commands.tpaccept.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
+
+  "fabric-essentials.commands.tpall": "<yellow>Request to teleport to you has been sent to <gold>${count} <yellow>players.",
+
+  "fabric-essentials.commands.warp": "<yellow>Teleporting to warp <gold>${warp_name}<yellow>.",
+  "fabric-essentials.commands.warp.unknown": "<red>No warp with that name exists!",
+
+  "fabric-essentials.commands.warps": "<gold>Warps [<yellow>%fabric-essentials:warp_count%<gold>]:\n${warp_list}",
+  "fabric-essentials.commands.warps.empty": "<red>There aren't any warps!",
+  "fabric-essentials.commands.warps.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.warps.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
+
+  "fabric-essentials.commandspy": "<white>[<light_purple>CommandSpy<white>] <dark_gray>${player_name} <gray><italic>${command}<reset>",
+
+  "fabric-essentials.location.world.unknown": "<red>The target world no longer exists!",
+
+  "fabric-essentials.teleport.wait": "<yellow>Teleporting in <gold>${time} <yellow>seconds!",
+  "fabric-essentials.teleport.wait.error": "<red>An error occurred, while waiting: ${exception_message}",
+  "fabric-essentials.teleport.cancel.other": "<dark_red>%player:displayname% <red>cancelled the teleportation!",
+  "fabric-essentials.teleport.cancel.move": "<red>Teleportation cancelled. You moved too far!",
+  "fabric-essentials.teleport.cancel.damage": "<red>Teleportation cancelled. You received damage!",
+  "fabric-essentials.teleport.cancel.unknown": "<red>Teleportation cancelled."
+}

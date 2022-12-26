@@ -4,13 +4,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.api.PlaceholderContext;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.util.TpaManager;
@@ -40,24 +39,13 @@ public class TpaCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == this.direction) {
-            sendFailure(ctx.getSource(), "pending");
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.tpa.pending", PlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.addRequest(participants, this.direction);
-        sendSuccess(ctx.getSource(), "self", target.getDisplayName());
-        sendVictimMessage(ctx.getSource().getPlayerOrException(), target);
+        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", PlaceholderContext.of(target)), false);
+        target.sendSystemMessage(Message.message("fabric-essentials.commands." + this.direction.getTranslationKey() + ".victim", PlaceholderContext.of(ctx.getSource())));
         return SUCCESS;
-    }
-
-    public void sendVictimMessage(ServerPlayer source, ServerPlayer target) {
-        sendSuccess(target.createCommandSourceStack(), "victim",
-                source.getDisplayName(),
-                Component.translatable(TPA.translation("accept"))
-                        .withStyle(style ->
-                                style.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tpaccept %s".formatted(source.getScoreboardName())))
-                                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(TPA.translation("accept.hover"))))
-                        )
-        );
     }
 
 }

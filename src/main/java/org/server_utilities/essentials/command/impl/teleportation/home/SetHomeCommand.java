@@ -7,9 +7,9 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.command.util.OptionalOfflineTargetCommand;
 import org.server_utilities.essentials.config.homes.HomesConfig;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class SetHomeCommand extends OptionalOfflineTargetCommand {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.sethome.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.sethome.already_exists"));
     private static final String NAME = "name";
     private static final String PERMISSION_LIMIT = "limit";
     private static final String PERMISSION_LIMIT_BYPASS = "bypass";
@@ -50,13 +50,13 @@ public class SetHomeCommand extends OptionalOfflineTargetCommand {
         if (!homes.containsKey(name)) {
             int limit = getHomesLimit(ctx.getSource());
             if (homes.size() >= limit) {
-                ctx.getSource().sendFailure(Component.translatable("text.fabric-essentials.command.sethome.limit"));
+                ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.sethome.limit"));
                 return FAILURE;
             } else {
-                homes.put(name, new Home(new Location(ctx.getSource())));
+                Home home = new Home(new Location(ctx.getSource()));
+                homes.put(name, home);
                 DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
-                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
-
+                sendQueryFeedbackWithOptionalTarget(ctx, target, self, home.placeholders(name), "fabric-essentials.commands.sethome");
                 return SUCCESS;
             }
         } else {

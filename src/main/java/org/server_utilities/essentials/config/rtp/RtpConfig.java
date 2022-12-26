@@ -4,7 +4,6 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biomes;
-import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
 import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;

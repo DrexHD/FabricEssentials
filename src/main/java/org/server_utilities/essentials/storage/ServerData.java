@@ -2,7 +2,8 @@ package org.server_utilities.essentials.storage;
 
 import org.server_utilities.essentials.util.teleportation.Warp;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerData {
 

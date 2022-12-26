@@ -1,7 +1,7 @@
 package org.server_utilities.essentials.config.util;
 
+import me.drex.message.api.Message;
 import net.minecraft.network.chat.Component;
-import org.server_utilities.essentials.util.KeyUtil;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
@@ -25,12 +25,10 @@ public class WaitingPeriodConfig {
 
     }
 
-    private static final String CANCEL_TRANSLATION_KEY = KeyUtil.translation("teleport.cancel");
-
     public enum WaitingResult {
-        DAMAGE(KeyUtil.join(CANCEL_TRANSLATION_KEY, "damage")),
-        MOVE(KeyUtil.join(CANCEL_TRANSLATION_KEY, "move")),
-        UNKNOWN(KeyUtil.join(CANCEL_TRANSLATION_KEY, "unknown"));
+        DAMAGE("fabric-essentials.teleport.cancel.damage"),
+        MOVE("fabric-essentials.teleport.cancel.move"),
+        UNKNOWN("fabric-essentials.teleport.cancel.unknown");
 
         private final String translationKeySelf;
 
@@ -39,7 +37,7 @@ public class WaitingPeriodConfig {
         }
 
         public Component component() {
-            return Component.translatable(translationKeySelf);
+            return Message.message(translationKeySelf);
         }
 
     }

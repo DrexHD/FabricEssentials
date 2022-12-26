@@ -5,9 +5,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.DataStorage;
@@ -39,8 +39,9 @@ public class DeleteWarpCommand extends Command {
         if (!warps.containsKey(name)) {
             throw UNKNOWN.create();
         } else {
+            Warp warp = warps.get(name);
             warps.remove(name);
-            sendSuccess(ctx.getSource(), Component.literal(name));
+            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.deletewarp", warp.placeholders(name)), false);
         }
         return SUCCESS;
     }

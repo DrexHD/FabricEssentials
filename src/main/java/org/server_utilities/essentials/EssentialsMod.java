@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.storage.DataStorage;
+import org.server_utilities.essentials.util.FabricEssentialsPlaceholders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.configurate.ConfigurateException;
@@ -25,6 +26,7 @@ public class EssentialsMod implements DedicatedServerModInitializer {
             LOGGER.error("An error occurred while loading the config, keeping default values", e);
         }
         DataStorage.STORAGE.init();
+        FabricEssentialsPlaceholders.register();
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
     }
 

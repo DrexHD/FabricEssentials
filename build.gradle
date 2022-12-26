@@ -12,8 +12,9 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://maven.nucleoid.xyz/" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -36,7 +37,7 @@ dependencies {
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
     modImplementation include("eu.pb4:common-protection-api:${project.common_protection_api_version}")
-    modImplementation include("fr.catcore:server-translations-api:${project.translations_version}")
+    modImplementation include("com.github.DrexHD:message-api:${project.message_api_version}")
 
     // Hocon config
     implementation shadow("org.spongepowered:configurate-hocon:${project.configurate_hocon_version}")

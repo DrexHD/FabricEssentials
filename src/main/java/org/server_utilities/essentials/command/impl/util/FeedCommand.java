@@ -17,7 +17,7 @@ public class FeedCommand extends OptionalOnlineTargetCommand {
 
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
-        sendFeedbackWithOptionalTarget(ctx, target, self, EMPTY, new Object[]{target.getDisplayName()}, new Object[]{ctx.getSource().getDisplayName()});
+        sendFeedbackWithOptionalTarget(ctx, target, self, "fabric-essentials.commands.feed");
         int foodLevel = target.getFoodData().getFoodLevel();
         target.getFoodData().setFoodLevel(MAX_FOOD);
         target.getFoodData().setSaturation(MAX_FOOD);

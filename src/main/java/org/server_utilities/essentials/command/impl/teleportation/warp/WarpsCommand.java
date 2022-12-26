@@ -2,14 +2,17 @@ package org.server_utilities.essentials.command.impl.teleportation.warp;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.ServerData;
 import org.server_utilities.essentials.util.teleportation.Warp;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class WarpsCommand extends Command {
@@ -27,15 +30,14 @@ public class WarpsCommand extends Command {
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Map<String, Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
-            sendSuccess(ctx.getSource(), "empty");
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.warps.empty"));
         } else {
-            sendSuccess(ctx.getSource());
-            Component warpsComponent = ComponentUtils.formatList(warps.keySet(), name -> Component.literal(name).withStyle(
-                    Style.EMPTY
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.fabric-essentials.command.warps.hover")))
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", WarpCommand.WARP_COMMAND, name)))
-            ));
-            ctx.getSource().sendSuccess(warpsComponent, false);
+            Component warpsList = ComponentUtils.formatList(warps.entrySet(), Message.message("fabric-essentials.commands.warps.list.separator"), entry -> {
+                return Message.message("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()));
+            });
+            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.warps", new HashMap<>(){{
+                put("warp_list",warpsList);
+            }}), false);
         }
         return warps.size();
     }

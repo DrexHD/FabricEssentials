@@ -6,15 +6,15 @@ import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.node.parent.ParentTextNode;
 import eu.pb4.placeholders.api.parsers.TextParserV1;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.util.KeyUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 
-import java.util.List;
+import java.util.HashMap;
 
 public class BroadcastCommand extends Command {
 
@@ -35,10 +35,9 @@ public class BroadcastCommand extends Command {
 
     public int tellMessage(CommandSourceStack src, String message) {
         ParentTextNode textNode = StyledInputUtil.parseNodes(message, TextParserV1.DEFAULT, textTag -> KeyUtil.permission(src, "style.broadcast", textTag.name()));
-        List<ServerPlayer> players = src.getServer().getPlayerList().getPlayers();
-        for (ServerPlayer player : players) {
-            sendSystemMessage(player, Placeholders.parseText(textNode, PlaceholderContext.of(player)));
-        }
-        return players.size();
+        src.getServer().getPlayerList().broadcastSystemMessage(Message.message("fabric-essentials.commands.broadcast", new HashMap<>() {{
+           put("message", Placeholders.parseText(textNode, PlaceholderContext.of(src)));
+        }}), false);
+        return 1;
     }
 }

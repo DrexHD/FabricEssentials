@@ -6,9 +6,9 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
 import org.server_utilities.essentials.storage.DataStorage;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class SetWarpCommand extends Command {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.setwarp.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.setwarp.already_exists"));
     private static final String NAME = "name";
 
     public SetWarpCommand() {
@@ -38,8 +38,9 @@ public class SetWarpCommand extends Command {
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Map<String, Warp> warps = essentialsData.getWarps();
         if (!warps.containsKey(name)) {
-            warps.put(name, new Warp(new Location(ctx.getSource())));
-            sendSuccess(ctx.getSource(), Component.literal(name));
+            Warp warp = new Warp(new Location(ctx.getSource()));
+            warps.put(name, warp);
+            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.setwarp", warp.placeholders(name)), false);
             return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();

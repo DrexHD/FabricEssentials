@@ -8,10 +8,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Properties;
@@ -22,7 +22,7 @@ import org.server_utilities.essentials.util.teleportation.Home;
 
 public class HomeCommand extends OptionalOfflineTargetCommand {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.home.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.home.unknown"));
     private static final String NAME = "name";
     public static final String HOME_COMMAND = "home";
 
@@ -53,7 +53,7 @@ public class HomeCommand extends OptionalOfflineTargetCommand {
         if (targetLevel != null) {
             asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+                sendQueryFeedbackWithOptionalTarget(ctx, target, self, home.placeholders(name), "fabric-essentials.commands.home");
                 home.location().teleport(serverPlayer);
             }, src.getServer());
             return SUCCESS;

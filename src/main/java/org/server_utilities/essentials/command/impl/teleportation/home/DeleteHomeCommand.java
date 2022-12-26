@@ -41,7 +41,7 @@ public class DeleteHomeCommand extends OptionalOfflineTargetCommand {
         if (home != null) {
             playerData.getHomes().remove(name);
             DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
-            sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{name}, new Object[]{name, target.getName()});
+            sendQueryFeedbackWithOptionalTarget(ctx, target, self, home.placeholders(name), "fabric-essentials.commands.deletehome");
             return SUCCESS;
         } else {
             throw UNKNOWN.create();

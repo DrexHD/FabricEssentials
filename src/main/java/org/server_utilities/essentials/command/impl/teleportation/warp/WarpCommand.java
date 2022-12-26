@@ -7,10 +7,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class WarpCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.warp.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.warp.unknown"));
     private static final String NAME = "name";
     public static final String WARP_COMMAND = "warp";
 
@@ -50,7 +50,7 @@ public class WarpCommand extends Command {
         if (targetLevel != null) {
             asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                sendSuccess(ctx.getSource(), "teleport", name);
+                ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.warp", warp.placeholders(name)), false);
                 warp.location().teleport(serverPlayer);
             }, src.getServer());
         } else {

@@ -15,7 +15,7 @@ public class PingCommand extends OptionalOnlineTargetCommand {
 
     @Override
     protected int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean self) throws CommandSyntaxException {
-        sendQueryFeedbackWithOptionalTarget(ctx, self, new Object[]{target.latency}, new Object[]{target.getDisplayName(), target.latency});
+        sendQueryFeedbackWithOptionalTarget(ctx, target, self, "fabric-essentials.commands.ping");
         return target.latency;
     }
 

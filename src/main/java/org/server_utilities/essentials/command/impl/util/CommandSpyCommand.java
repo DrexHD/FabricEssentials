@@ -3,6 +3,7 @@ package org.server_utilities.essentials.command.impl.util;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
@@ -23,7 +24,7 @@ public class CommandSpyCommand extends Command {
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(ctx.getSource().getPlayerOrException());
         playerData.commandSpy = !playerData.commandSpy;
-        sendSuccess(ctx.getSource(), playerData.commandSpy ? "enable" : "disable");
+        ctx.getSource().sendSystemMessage(Message.message(playerData.commandSpy ? "fabric-essentials.commands.commandspy.enable" : "fabric-essentials.commands.commandspy.disable"));
         return playerData.commandSpy ? 1 : 0;
     }
 }

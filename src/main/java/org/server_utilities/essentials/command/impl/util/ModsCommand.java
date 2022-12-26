@@ -7,22 +7,25 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import me.drex.message.api.Message;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
+import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class ModsCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Component.translatable("text.fabric-essentials.command.mods.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.mods.mod.unknown"));
     private static final String MOD_ID = "modid";
     public static final String MODS_COMMAND = "mods";
 
@@ -40,9 +43,13 @@ public class ModsCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
         Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        sendSuccess(ctx.getSource(), "list.title", mods.size());
-        Component modsComponent = ComponentUtils.formatList(mods, this::formatMod);
-        ctx.getSource().sendSuccess(modsComponent, false);
+        Component modsList = ComponentUtils.formatList(mods, Message.message("fabric-essentials.commands.mods.list.separator"), mod -> {
+            return Message.message("fabric-essentials.commands.mods.list.element", ComponentPlaceholderUtil.modPlaceholders(mod));
+        });
+        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.mods", new HashMap<>() {{
+            put("count", Component.literal(String.valueOf(mods.size())));
+            put("mod_list", modsList);
+        }}), false);
         return mods.size();
     }
 
@@ -50,26 +57,11 @@ public class ModsCommand extends Command {
         String modId = StringArgumentType.getString(ctx, MOD_ID);
         Optional<ModContainer> optional = FabricLoader.getInstance().getModContainer(modId);
         if (optional.isPresent()) {
-            ModContainer modContainer = optional.get();
-            ModMetadata metadata = modContainer.getMetadata();
-            Component authors = ComponentUtils.formatList(metadata.getAuthors(), person -> Component.literal(person.getName()));
-            ctx.getSource().sendSuccess(Component.literal(metadata.getName()), false);
-            sendSuccess(ctx.getSource(), "info.version", metadata.getVersion().getFriendlyString());
-            sendSuccess(ctx.getSource(), "info.author", authors);
-            sendSuccess(ctx.getSource(), "info.description", metadata.getDescription());
+            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.mods.mod", ComponentPlaceholderUtil.modPlaceholders(optional.get())), false);
             return SUCCESS;
         } else {
             throw UNKNOWN.create();
         }
-    }
-
-    private Component formatMod(ModContainer modContainer) {
-        return Component.literal(modContainer.getMetadata().getId())
-                .withStyle(
-                        Style.EMPTY
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable(translation("info", "hover"))))
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.format("/%s %s", MODS_COMMAND, modContainer.getMetadata().getId())))
-                );
     }
 
     public static final SuggestionProvider<CommandSourceStack> MODS_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(FabricLoader.getInstance().getAllMods().stream().map(modContainer -> modContainer.getMetadata().getId()), builder);

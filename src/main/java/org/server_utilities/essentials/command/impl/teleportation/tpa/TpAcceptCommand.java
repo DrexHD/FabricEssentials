@@ -4,11 +4,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.api.PlaceholderContext;
+import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.Properties;
@@ -40,12 +41,12 @@ public class TpAcceptCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == null) {
-            sendFailure(ctx.getSource(), "noPending", target.getDisplayName());
+            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.tpaccept.no_pending", PlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        sendSuccess(ctx.getSource(), "self");
-        sendSuccess(target.createCommandSourceStack(), "victim", player.getDisplayName());
+        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.tpaccept.self", PlaceholderContext.of(target)), false);
+        target.sendSystemMessage(Message.message("fabric-essentials.commands.tpaccept.victim", PlaceholderContext.of(ctx.getSource())), false);
         ServerPlayer teleporting = direction == HERE ? player : target;
         ServerPlayer teleportingTarget = direction == HERE ? target : player;
         CommandSourceStack teleportingSource = teleporting.createCommandSourceStack();
@@ -57,10 +58,10 @@ public class TpAcceptCommand extends Command {
             if (throwable instanceof CompletionException completionException) {
                 if (completionException.getCause() instanceof TeleportCancelException exception) {
                     teleportingSource.sendFailure(exception.getRawMessage());
-                    teleportingTargetSource.sendFailure(Component.translatable(KeyUtil.translation("teleport.cancel.other"), teleporting.getDisplayName()));
+                    teleportingTargetSource.sendFailure(Message.message("fabric-essentials.teleport.cancel.other", PlaceholderContext.of(teleporting)));
                 } else {
-                    teleportingSource.sendFailure(Component.translatable(KeyUtil.translation("teleport.wait.error")));
-                    teleportingTargetSource.sendFailure(Component.translatable(KeyUtil.translation("teleport.wait.error")));
+                    teleportingSource.sendFailure(Message.message("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));
+                    teleportingTargetSource.sendFailure(Message.message("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));
                     LOGGER.error("An unknown error occurred, during waiting period", completionException.getCause());
                 }
             } else {

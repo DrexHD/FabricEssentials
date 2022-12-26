@@ -38,7 +38,7 @@ public class FlyCommand extends OptionalOnlineTargetCommand {
     }
 
     private int setFly(CommandContext<CommandSourceStack> ctx, ServerPlayer target, boolean value, boolean self) {
-        sendFeedbackWithOptionalTarget(ctx, target, self, new Object[]{value}, new Object[]{value, target.getDisplayName()}, new Object[]{value, ctx.getSource().getDisplayName()});
+        sendFeedbackWithOptionalTarget(ctx, target, self, value ? "fabric-essentials.commands.fly.enable" : "fabric-essentials.commands.fly.disable");
         target.getAbilities().mayfly = value;
         if (!value) target.getAbilities().flying = false;
         target.onUpdateAbilities();

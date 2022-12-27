@@ -24,7 +24,7 @@ public class CommandSpyCommand extends Command {
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(ctx.getSource().getPlayerOrException());
         playerData.commandSpy = !playerData.commandSpy;
-        ctx.getSource().sendSystemMessage(Message.message(playerData.commandSpy ? "fabric-essentials.commands.commandspy.enable" : "fabric-essentials.commands.commandspy.disable"));
+        ctx.getSource().sendSuccess(Message.message(playerData.commandSpy ? "fabric-essentials.commands.commandspy.enable" : "fabric-essentials.commands.commandspy.disable"), false);
         return playerData.commandSpy ? 1 : 0;
     }
 }

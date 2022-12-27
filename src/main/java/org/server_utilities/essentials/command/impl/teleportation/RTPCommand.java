@@ -66,7 +66,7 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.rtp.check"), false);
+        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check"));
         return playerData.rtpCount;
     }
 

@@ -66,7 +66,7 @@
   "fabric-essentials.commands.mods": "<gold>Mods [<yellow>${mod_count}<gold>]:\n${mod_list}",
   "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>Version: <aqua>${mod_version}\n<gray>Authors: <green>${mod_authors}\n<gray>Description: <yellow>${mod_description}",
   "fabric-essentials.commands.mods.mod.unknown": "<red>No mod with that id exists!",
-  "fabric-essentials.commands.mods.list.seperator": "<gray>, </gray>",
+  "fabric-essentials.commands.mods.list.separator": "<gray>, </gray>",
   "fabric-essentials.commands.mods.list.element": "<hover:'<aqua>Click for more information!'><run_cmd:'/mods ${mod_id}'>${mod_name}",
 
   "fabric-essentials.commands.ping.self": "<yellow>Pong! Your connection latency to the server is %player:ping_colored%<yellow>ms!",

@@ -46,10 +46,10 @@ public class ModsCommand extends Command {
         Component modsList = ComponentUtils.formatList(mods, Message.message("fabric-essentials.commands.mods.list.separator"), mod -> {
             return Message.message("fabric-essentials.commands.mods.list.element", ComponentPlaceholderUtil.modPlaceholders(mod));
         });
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.mods", new HashMap<>() {{
+        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.mods", new HashMap<>() {{
             put("count", Component.literal(String.valueOf(mods.size())));
             put("mod_list", modsList);
-        }}), false);
+        }}));
         return mods.size();
     }
 
@@ -57,7 +57,7 @@ public class ModsCommand extends Command {
         String modId = StringArgumentType.getString(ctx, MOD_ID);
         Optional<ModContainer> optional = FabricLoader.getInstance().getModContainer(modId);
         if (optional.isPresent()) {
-            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.mods.mod", ComponentPlaceholderUtil.modPlaceholders(optional.get())), false);
+            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.mods.mod", ComponentPlaceholderUtil.modPlaceholders(optional.get())));
             return SUCCESS;
         } else {
             throw UNKNOWN.create();

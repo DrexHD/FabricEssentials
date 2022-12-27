@@ -35,9 +35,9 @@ public class WarpsCommand extends Command {
             Component warpsList = ComponentUtils.formatList(warps.entrySet(), Message.message("fabric-essentials.commands.warps.list.separator"), entry -> {
                 return Message.message("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()));
             });
-            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.warps", new HashMap<>(){{
+            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.warps", new HashMap<>(){{
                 put("warp_list",warpsList);
-            }}), false);
+            }}));
         }
         return warps.size();
     }

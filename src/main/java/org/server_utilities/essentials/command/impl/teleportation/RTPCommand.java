@@ -1,14 +1,11 @@
 package org.server_utilities.essentials.command.impl.teleportation;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,18 +24,24 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.command.Command;
-import org.server_utilities.essentials.command.Properties;
+import org.server_utilities.essentials.command.CommandProperties;
+import org.server_utilities.essentials.command.util.CommandUtil;
 import org.server_utilities.essentials.config.rtp.RtpConfig;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
-import org.server_utilities.essentials.util.TeleportationUtil;
 import org.server_utilities.essentials.util.teleportation.Location;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static net.minecraft.commands.Commands.argument;
+import static net.minecraft.commands.Commands.literal;
+import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
+import static net.minecraft.commands.arguments.GameProfileArgument.getGameProfiles;
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 
 public class RTPCommand extends Command {
@@ -46,21 +49,23 @@ public class RTPCommand extends Command {
     public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "unsafe_rtp_location"));
 
     public RTPCommand() {
-        super(Properties.create("rtp", "wild"));
+        super(CommandProperties.create("rtp", new String[]{"wild"}, 2));
     }
 
     @Override
-    protected void register(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
         literal.then(
-                Commands.literal("check").requires(predicate("check"))
+                literal("check").requires(require("check", true))
                         .executes(this::check)
         ).then(
-                Commands.literal("add").requires(predicate("add"))
-                        .then(Commands.argument("targets", GameProfileArgument.gameProfile())
-                                .then(Commands.argument("amount", IntegerArgumentType.integer(1)).executes(this::add))
+                literal("add").requires(require("add"))
+                        .then(argument("targets", gameProfile())
+                                .then(argument("amount", integer(1)).executes(this::add))
                         )
-        );
-        literal.executes(this::rtp);
+        ).then(
+                literal("back").requires(require("back"))
+                        .executes(this::back)
+        ).executes(this::rtp);
     }
 
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
@@ -72,8 +77,8 @@ public class RTPCommand extends Command {
 
     // TODO: add messages, rework optional targets
     private int add(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        int amount = IntegerArgumentType.getInteger(ctx, "amount");
-        Collection<GameProfile> targets = GameProfileArgument.getGameProfiles(ctx, "targets");
+        int amount = getInteger(ctx, "amount");
+        Collection<GameProfile> targets = getGameProfiles(ctx, "targets");
         for (GameProfile target : targets) {
             PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
             playerData.rtpCount += amount;
@@ -88,25 +93,40 @@ public class RTPCommand extends Command {
         ServerLevel targetLevel = src.getLevel();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
         ResourceLocation resourceLocation = targetLevel.dimension().location();
-        if (!permission(src, "dimension", resourceLocation.getNamespace(), resourceLocation.getPath())) {
+        if (!check(src, "dimension" + "." + resourceLocation.getNamespace() + "." + resourceLocation.getPath())) {
             ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.dimension"));
-            return FAILURE;
+            return -1;
         }
-        if (playerData.rtpCount <= 0 && !permission(src, "bypassLimit")) {
+        if (playerData.rtpCount <= 0 && !check(src, "bypassLimit", false)) {
             ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.limit"));
-
-            return FAILURE;
+            return -2;
         }
         ChunkPos chunkPos = generateLocation(targetLevel);
         if (chunkPos == null) {
             ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.no_location"));
-            return FAILURE;
+            return -3;
         }
         long start = System.currentTimeMillis();
-        asyncTeleport(src, targetLevel, chunkPos, config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+        CommandUtil.asyncTeleport(src, targetLevel, chunkPos, config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
             if (chunkAccess != null) execute(src, target, targetLevel, start, chunkPos, chunkAccess);
         }, src.getServer());
         return SUCCESS;
+    }
+
+    private int back(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = ctx.getSource().getPlayerOrException();
+        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
+        Location lastRtpLocation = playerData.lastRtpLocation;
+        if (lastRtpLocation != null) {
+            CommandUtil.asyncTeleport(ctx.getSource(), lastRtpLocation.getLevel(ctx.getSource().getServer()), lastRtpLocation.chunkPos(), config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+                if (chunkAccess == null) return;
+                ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.rtp.back"), false);
+                lastRtpLocation.teleport(target);
+            });
+            return 1;
+        }
+        ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.back.none"));
+        return 0;
     }
 
     @Nullable
@@ -138,11 +158,13 @@ public class RTPCommand extends Command {
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, BuiltInRegistries.BLOCK.getKey(blockState.getBlock()));
                 Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
+                PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(target);
+                playerData.lastRtpLocation = location;
                 src.sendSuccess(Message.message("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
                     put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
                 }}, location.placeholders())), false);
-                TeleportationUtil.teleportEntity(target, targetLevel, blockPos);
-                if (!permission(src, "bypassLimit")) {
+                CommandUtil.teleportEntity(target, targetLevel, blockPos);
+                if (!check(src, "bypassLimit", false)) {
                     DataStorage.STORAGE.getAndSavePlayerData(target).rtpCount--;
                 }
                 return;

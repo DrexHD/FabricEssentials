@@ -7,21 +7,21 @@ import net.minecraft.commands.Commands;
 import org.server_utilities.essentials.command.impl.menu.AnvilCommand;
 import org.server_utilities.essentials.command.impl.menu.EnderChestCommand;
 import org.server_utilities.essentials.command.impl.menu.WorkBenchCommand;
+import org.server_utilities.essentials.command.impl.misc.admin.*;
 import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
-import org.server_utilities.essentials.command.impl.teleportation.home.DeleteHomeCommand;
-import org.server_utilities.essentials.command.impl.teleportation.home.HomeCommand;
-import org.server_utilities.essentials.command.impl.teleportation.home.HomesCommand;
-import org.server_utilities.essentials.command.impl.teleportation.home.SetHomeCommand;
-import org.server_utilities.essentials.command.impl.teleportation.tpa.TpAcceptCommand;
-import org.server_utilities.essentials.command.impl.teleportation.tpa.TpAllCommand;
-import org.server_utilities.essentials.command.impl.teleportation.tpa.TpaCommand;
-import org.server_utilities.essentials.command.impl.teleportation.warp.DeleteWarpCommand;
-import org.server_utilities.essentials.command.impl.teleportation.warp.SetWarpCommand;
-import org.server_utilities.essentials.command.impl.teleportation.warp.WarpCommand;
-import org.server_utilities.essentials.command.impl.teleportation.warp.WarpsCommand;
-import org.server_utilities.essentials.command.impl.util.*;
+import org.server_utilities.essentials.command.impl.home.DeleteHomeCommand;
+import org.server_utilities.essentials.command.impl.home.HomeCommand;
+import org.server_utilities.essentials.command.impl.home.HomesCommand;
+import org.server_utilities.essentials.command.impl.home.SetHomeCommand;
+import org.server_utilities.essentials.command.impl.tpa.TpAcceptCommand;
+import org.server_utilities.essentials.command.impl.tpa.TpAllCommand;
+import org.server_utilities.essentials.command.impl.tpa.TpaCommand;
+import org.server_utilities.essentials.command.impl.warp.DeleteWarpCommand;
+import org.server_utilities.essentials.command.impl.warp.SetWarpCommand;
+import org.server_utilities.essentials.command.impl.warp.WarpCommand;
+import org.server_utilities.essentials.command.impl.warp.WarpsCommand;
+import org.server_utilities.essentials.command.impl.misc.*;
 
-// TODO:
 public class CommandManager {
 
     public static final Command[] COMMANDS = {
@@ -63,7 +63,7 @@ public class CommandManager {
 
     public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {
         for (Command command : COMMANDS) {
-            command.registerCommand(dispatcher);
+            command.register(dispatcher);
         }
     }
 

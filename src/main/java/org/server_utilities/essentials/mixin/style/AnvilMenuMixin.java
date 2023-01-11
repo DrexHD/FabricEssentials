@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.util.KeyUtil;
+import org.server_utilities.essentials.util.IdentifierUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +29,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        MutableComponent result = (MutableComponent) StyledInputUtil.parse(input, textTag -> KeyUtil.permission(this.player, "style.anvil", textTag.name()));
+        MutableComponent result = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(this.player, "style.anvil." + textTag.name()));
         // This check is required to stay compatible with datapacks, which rely on vanilla text formatting
         if (result.getString().equals(input)) {
             return Component.literal(input);

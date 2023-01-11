@@ -3,7 +3,7 @@ package org.server_utilities.essentials.util;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.command.Properties;
+import org.server_utilities.essentials.command.CommandProperties;
 import org.server_utilities.essentials.config.ConfigManager;
 
 import java.util.HashMap;
@@ -45,23 +45,23 @@ public class TpaManager {
     }
 
     public enum Direction {
-        HERE("tpahere", Properties.create("tpahere", "tprhere")),
-        THERE("tpa", Properties.create("tpa", "tpr"));
+        HERE("tpahere", CommandProperties.create("tpahere", new String[]{"tprhere"}, 0)),
+        THERE("tpa", CommandProperties.create("tpa", new String[]{"tpr"}, 0));
 
         private final String translationKey;
-        private final Properties properties;
+        private final CommandProperties commandProperties;
 
-        Direction(String translationKey, Properties properties) {
+        Direction(String translationKey, CommandProperties commandProperties) {
             this.translationKey = translationKey;
-            this.properties = properties;
+            this.commandProperties = commandProperties;
         }
 
         public String getTranslationKey() {
             return translationKey;
         }
 
-        public Properties getProperties() {
-            return properties;
+        public CommandProperties getProperties() {
+            return commandProperties;
         }
     }
 

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
 import org.server_utilities.essentials.util.AsyncTeleportPlayer;
-import org.server_utilities.essentials.util.KeyUtil;
+import org.server_utilities.essentials.util.IdentifierUtil;
 import org.server_utilities.essentials.util.TeleportCancelException;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -100,11 +100,11 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                 if (waitingPeriodConfig != null) {
                     WaitingPeriodConfig.CancellationConfig cancellation = waitingPeriodConfig.cancellation;
                     double distance = waitingPeriodSource.getPosition().distanceTo(this.position());
-                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !KeyUtil.permission(this, "teleport.cancel.bypass.move")) {
+                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !IdentifierUtil.check(this, "teleport.cancel.bypass.move")) {
                         cancelDelayedTeleport(new TeleportCancelException(MOVE.component()));
                         return;
                     }
-                    if (cancellation.damage && this.getLastDamageSource() != null && !KeyUtil.permission(this, "teleport.cancel.bypass.damage")) {
+                    if (cancellation.damage && this.getLastDamageSource() != null && !IdentifierUtil.check(this, "teleport.cancel.bypass.damage")) {
                         cancelDelayedTeleport(new TeleportCancelException(DAMAGE.component()));
                         return;
                     }

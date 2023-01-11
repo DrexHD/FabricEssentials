@@ -24,18 +24,16 @@
 
   "fabric-essentials.commands.feed.self": "<yellow>You have fed yourself.",
   "fabric-essentials.commands.feed.other": "<yellow>You have fed <gold>%player:displayname%<yellow>.",
-  "fabric-essentials.commands.feed.victim": "<yellow>You have been fed by <gold>%player:displayname%<yellow>.",
 
-  "fabric-essentials.commands.fly.enable.self": "<green>Enabled flying!",
-  "fabric-essentials.commands.fly.enable.other": "<green>Enabled flying for <dark_green>%player:displayname%<green>!",
-  "fabric-essentials.commands.fly.enable.victim": "<dark_green>%player:displayname% <green>enabled flying for you!",
-  "fabric-essentials.commands.fly.disable.self": "<red>Disabled flying!",
-  "fabric-essentials.commands.fly.disable.other": "<red>Disabled flying for <dark_red>%player:displayname%<red>!",
-  "fabric-essentials.commands.fly.disable.victim": "<dark_red>%player:displayname% <red>disabled flying for you!",
+  "fabric-essentials.commands.fly.enable.self": "<green>Enabled fly.",
+  "fabric-essentials.commands.fly.enable.other": "<green>Enabled fly for <dark_green>%player:displayname%<green>.",
+  "fabric-essentials.commands.fly.disable.self": "<red>Disabled fly.",
+  "fabric-essentials.commands.fly.disable.other": "<red>Disabled fly for <dark_red>%player:displayname%<red>.",
 
-  "fabric-essentials.commands.glow.self": "<yellow>You have toggled glow yourself.",
-  "fabric-essentials.commands.glow.other": "<yellow>You have toggled flow for <gold>%player:displayname%<yellow>.",
-  "fabric-essentials.commands.glow.victim": "<gold>%player:displayname%<yellow> toggled your glow.",
+  "fabric-essentials.commands.glow.enable.self": "<green>Enabled glow.",
+  "fabric-essentials.commands.glow.disable.self": "<red>Disabled glow.",
+  "fabric-essentials.commands.glow.enable.other": "<green>Enabled glow for <dark_green>%player:displayname%<green>.",
+  "fabric-essentials.commands.glow.disable.other": "<red>Disabled glow for <dark_red>%player:displayname%<red>.",
 
   "fabric-essentials.commands.hat": "<yellow>Set your hat item to <gold>%player:equipment_slot head%<yellow>.",
   "fabric-essentials.commands.hat.no_permission": "<red>You can't wear that item!",
@@ -43,25 +41,24 @@
 
   "fabric-essentials.commands.heal.self": "<yellow>You have healed yourself.",
   "fabric-essentials.commands.heal.other": "<yellow>You have healed <gold>%player:displayname%<yellow>.",
-  "fabric-essentials.commands.heal.victim": "<yellow>You have been healed by <gold>%player:displayname%<yellow>.",
 
   "fabric-essentials.commands.home.self": "<yellow>Teleporting to home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.home.other": "<yellow>Teleporting to home <gold>${home_name} <yellow>from <gold>%player:displayname%<yellow>!",
   "fabric-essentials.commands.home.unknown": "<red>Unknown home name!",
 
-  "fabric-essentials.commands.homes.empty.self": "<red>You don't have any homes!",
-  "fabric-essentials.commands.homes.empty.other": "<dark_red>%player:displayname% <red>doesn't have any homes!",
+  "fabric-essentials.commands.homes.self.empty": "<red>You don't have any homes!",
+  "fabric-essentials.commands.homes.other.empty": "<dark_red>%player:displayname% <red>doesn't have any homes!",
   "fabric-essentials.commands.homes.self": "<gold>Homes [<yellow>${home_count}<gold>]:\n${home_list}",
+  "fabric-essentials.commands.homes.self.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.homes.self.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
   "fabric-essentials.commands.homes.other": "<gold>%player:displayname%'s Homes [<yellow>${home_count}<gold>]:\n${home_list}",
-  "fabric-essentials.commands.homes.list.separator": "<gray>, </gray>",
-  "fabric-essentials.commands.homes.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
+  "fabric-essentials.commands.homes.other.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.homes.other.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name} %player:name%'><yellow>${home_name}",
 
-  "fabric-essentials.commands.invulnerable.enable.self": "<green>Enabled invincibility!",
-  "fabric-essentials.commands.invulnerable.enable.other": "<green>Enabled invincibility for <dark_green>%player:displayname%<green>!",
-  "fabric-essentials.commands.invulnerable.enable.victim": "<dark_green>%player:displayname% <green>enabled invincibility for you!",
-  "fabric-essentials.commands.invulnerable.disable.self": "<red>Disabled invincibility!",
-  "fabric-essentials.commands.invulnerable.disable.other": "<red>Disabled invincibility for <dark_red>%player:displayname%<red>!",
-  "fabric-essentials.commands.invulnerable.disable.victim": "<dark_red>%player:displayname% <red>disabled invincibility for you!",
+  "fabric-essentials.commands.invulnerable.enable.self": "<green>Enabled godmode.",
+  "fabric-essentials.commands.invulnerable.enable.other": "<green>Enabled godmode for <dark_green>%player:displayname%<green>.",
+  "fabric-essentials.commands.invulnerable.disable.self": "<red>Disabled godmode.",
+  "fabric-essentials.commands.invulnerable.disable.other": "<red>Disabled godmode for <dark_red>%player:displayname%<red>.",
 
   "fabric-essentials.commands.mods": "<gold>Mods [<yellow>${mod_count}<gold>]:\n${mod_list}",
   "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>Version: <aqua>${mod_version}\n<gray>Authors: <green>${mod_authors}\n<gray>Description: <yellow>${mod_description}",
@@ -73,6 +70,8 @@
   "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%'s connection latency to the server is %player:ping_colored%<yellow>ms!",
 
   "fabric-essentials.commands.rtp": "<yellow>Randomly teleported to <gold>${location_pos_x} ${location_pos_y} ${location_pos_z} <yellow>after <gold>${time}ms<yellow>.",
+  "fabric-essentials.commands.rtp.back": "<yellow>Teleporting to most recent RTP location.",
+  "fabric-essentials.commands.rtp.back.none": "<red>You haven't RTPed yet!",
   "fabric-essentials.commands.rtp.check": "<yellow>You have <gold>%fabric-essentials:rtp_count% <yellow>RTPs left!",
   "fabric-essentials.commands.rtp.dimension": "<red>You don't have permission to RTP in this dimension.",
   "fabric-essentials.commands.rtp.limit": "<red>You don't have any RTPs left.",
@@ -112,7 +111,7 @@
   "fabric-essentials.commands.warps.list.separator": "<gray>, </gray>",
   "fabric-essentials.commands.warps.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
 
-  "fabric-essentials.commandspy": "<white>[<light_purple>CommandSpy<white>] <dark_gray>${player_name} <gray><italic>${command}<reset>",
+  "fabric-essentials.commandspy": "<white>[<light_purple>CommandSpy<white>] <dark_gray>%player:name% <gray><italic>${command}<reset>",
 
   "fabric-essentials.location.world.unknown": "<red>The target world no longer exists!",
 

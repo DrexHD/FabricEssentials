@@ -1,5 +1,6 @@
 package org.server_utilities.essentials.mixin.spy;
 
+import eu.pb4.placeholders.api.PlaceholderContext;
 import me.drex.message.api.Message;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
@@ -32,8 +33,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     public void onCommand(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
         MutableComponent spyMessage = Message.message("fabric-essentials.commandspy", new HashMap<>(){{
             put("command", Component.literal(packet.command()));
-            put("player_name", player.getDisplayName());
-        }});
+        }}, PlaceholderContext.of(player));
         for (ServerPlayer player : this.server.getPlayerList().getPlayers()) {
             if (DataStorage.STORAGE.getPlayerData(player).commandSpy && player != this.player) {
                 player.sendSystemMessage(spyMessage);

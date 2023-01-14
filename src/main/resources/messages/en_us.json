@@ -78,6 +78,8 @@
   "fabric-essentials.commands.rtp.limit": "<red>You don't have any RTPs left.",
   "fabric-essentials.commands.rtp.no_location": "<red>Unable to find correct location, within reasonable attempts.",
   "fabric-essentials.commands.rtp.unsafe": "<red>Target location is not safe. Please try again.",
+  "fabric-essentials.commands.rtp.add": "<green>Added <gold>${amount} <green>RTPs to <gold>%player:displayname%<green>. New RTP count: <gold>${newRtpCount}",
+  "fabric-essentials.commands.rtp.remove": "<red>Removed <gold>${amount} <red>RTPs from <gold>%player:displayname%<red>. New RTP count: <gold>${newRtpCount}",
 
   "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",

@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.api.PlaceholderContext;
 import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -11,10 +12,12 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -43,6 +46,8 @@ import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static net.minecraft.commands.arguments.GameProfileArgument.getGameProfiles;
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
+import static org.server_utilities.essentials.command.util.CommandUtil.PROFILES_PROVIDER;
+import static org.server_utilities.essentials.command.util.CommandUtil.getGameProfile;
 
 public class RTPCommand extends Command {
 
@@ -55,8 +60,12 @@ public class RTPCommand extends Command {
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
         literal.then(
-                literal("check").requires(require("check", true))
-                        .executes(this::check)
+                literal("check")
+                        .requires(require("check", true))
+                        .then(argument("player", gameProfile()).suggests(PROFILES_PROVIDER)
+                                .requires(require("other", true))
+                                .executes(ctx -> checkOther(ctx.getSource(), getGameProfile(ctx, "player")))
+                        ).executes(this::check)
         ).then(
                 literal("add").requires(require("add"))
                         .then(argument("targets", gameProfile())
@@ -68,10 +77,19 @@ public class RTPCommand extends Command {
         ).executes(this::rtp);
     }
 
+    private int checkOther(CommandSourceStack src, GameProfile target) {
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(src.getServer(), target.getId());
+        MutableComponent message = Message.message("fabric-essentials.commands.rtp.check.other", new HashMap<>() {{
+            put("rtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
+        }}, PlaceholderContext.of(target, src.getServer()));
+        src.sendSystemMessage(message);
+        return playerData.rtpCount;
+    }
+
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check"));
+        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check.self"));
         return playerData.rtpCount;
     }
 

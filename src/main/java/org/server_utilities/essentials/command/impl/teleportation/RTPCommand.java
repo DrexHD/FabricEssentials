@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.api.PlaceholderContext;
 import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -11,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,7 +35,6 @@ import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
 import org.server_utilities.essentials.util.teleportation.Location;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -41,8 +42,9 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
-import static net.minecraft.commands.arguments.GameProfileArgument.getGameProfiles;
 import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
+import static org.server_utilities.essentials.command.util.CommandUtil.PROFILES_PROVIDER;
+import static org.server_utilities.essentials.command.util.CommandUtil.getGameProfile;
 
 public class RTPCommand extends Command {
 
@@ -55,36 +57,70 @@ public class RTPCommand extends Command {
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
         literal.then(
-                literal("check").requires(require("check", true))
-                        .executes(this::check)
+                literal("check")
+                        .requires(require("check", true))
+                        .then(argument("player", gameProfile()).suggests(PROFILES_PROVIDER)
+                                .requires(require("other", true))
+                                .executes(ctx -> checkOther(ctx.getSource(), getGameProfile(ctx, "player")))
+                        ).executes(this::check)
         ).then(
                 literal("add").requires(require("add"))
-                        .then(argument("targets", gameProfile())
+                        .then(argument("target", gameProfile()).suggests(PROFILES_PROVIDER)
                                 .then(argument("amount", integer(1)).executes(this::add))
                         )
+        ).then(
+                literal("remove").requires(require("remove"))
+                        .then(argument("target", gameProfile()).suggests(PROFILES_PROVIDER)
+                                .then(argument("amount", integer(1)).executes(ctx -> remove(ctx, getGameProfile(ctx, "target"), getInteger(ctx, "amount")))))
         ).then(
                 literal("back").requires(require("back"))
                         .executes(this::back)
         ).executes(this::rtp);
     }
 
-    private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer target = ctx.getSource().getPlayerOrException();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check"));
+    private int checkOther(CommandSourceStack src, GameProfile target) {
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(src.getServer(), target.getId());
+        MutableComponent message = Message.message("fabric-essentials.commands.rtp.check.other", new HashMap<>() {{
+            put("rtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
+        }}, PlaceholderContext.of(target, src.getServer()));
+        src.sendSystemMessage(message);
         return playerData.rtpCount;
     }
 
-    // TODO: add messages, rework optional targets
+    private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = ctx.getSource().getPlayerOrException();
+        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
+        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check.self"));
+        return playerData.rtpCount;
+    }
+
     private int add(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int amount = getInteger(ctx, "amount");
-        Collection<GameProfile> targets = getGameProfiles(ctx, "targets");
-        for (GameProfile target : targets) {
-            PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
-            playerData.rtpCount += amount;
-            DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
-        }
-        return targets.size();
+        GameProfile target = getGameProfile(ctx, "target");
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
+        playerData.rtpCount += amount;
+        DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
+
+        MutableComponent message = Message.message("fabric-essentials.commands.rtp.add", new HashMap<>() {{
+            put("amount", Component.literal(String.valueOf(amount)));
+            put("newRtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
+        }}, PlaceholderContext.of(target , ctx.getSource().getServer()));
+        ctx.getSource().sendSystemMessage(message);
+
+        return playerData.rtpCount;
+    }
+
+    private int remove(CommandContext<CommandSourceStack> ctx, GameProfile target, int amount) {
+        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
+        playerData.rtpCount -= amount;
+        DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
+
+        MutableComponent message = Message.message("fabric-essentials.commands.rtp.remove", new HashMap<>() {{
+            put("amount", Component.literal(String.valueOf(amount)));
+            put("newRtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
+        }}, PlaceholderContext.of(target, ctx.getSource().getServer()));
+        ctx.getSource().sendSystemMessage(message);
+        return playerData.rtpCount;
     }
 
     private int rtp(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

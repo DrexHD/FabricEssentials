@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.common.protection.api.CommonProtection;
 import me.drex.message.api.Message;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +33,7 @@ public class SignEditCommand extends Command {
     }
 
     @Override
-    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
                 argument("line", integer(1, 4))
                         .then(

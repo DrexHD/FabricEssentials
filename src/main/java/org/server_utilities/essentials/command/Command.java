@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.drex.message.api.Message;
 import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +28,11 @@ public abstract class Command {
         this.commandProperties = commandProperties;
     }
 
-    public void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         String[] aliasLiterals = this.commandProperties.alias();
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(commandProperties.literal())
                 .requires(require(null, commandProperties.defaultRequiredLevel()));
-        registerArguments(builder);
+        registerArguments(builder, context);
         LiteralCommandNode<CommandSourceStack> root = dispatcher.register(builder);
         for (String aliasLiteral : aliasLiterals) {
             dispatcher.register(
@@ -43,7 +44,7 @@ public abstract class Command {
         }
     }
 
-    protected abstract void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal);
+    protected abstract void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext);
 
     public Predicate<CommandSourceStack> require(@Nullable String permission) {
         return require(permission, 2);

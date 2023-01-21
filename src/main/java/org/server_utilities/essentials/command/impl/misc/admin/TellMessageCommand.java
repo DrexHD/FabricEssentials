@@ -5,6 +5,7 @@ import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
 import eu.pb4.placeholders.api.node.parent.ParentTextNode;
 import eu.pb4.placeholders.api.parsers.TextParserV1;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,7 +29,7 @@ public class TellMessageCommand extends Command {
     }
 
     @Override
-    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
                 argument("targets", players()).then(
                         argument("message", greedyString())

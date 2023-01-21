@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import me.drex.message.api.Message;
 import me.drex.message.api.MessageAPI;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -39,7 +40,7 @@ public class EssentialsCommand extends Command {
     }
 
     @Override
-    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
                 literal("reload")
                         .requires(require("reload"))

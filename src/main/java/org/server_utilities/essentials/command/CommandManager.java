@@ -63,7 +63,7 @@ public class CommandManager {
 
     public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {
         for (Command command : COMMANDS) {
-            command.register(dispatcher);
+            command.register(dispatcher, context);
         }
     }
 

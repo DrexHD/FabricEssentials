@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import me.drex.message.api.Message;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
@@ -32,7 +33,7 @@ public class TpAcceptCommand extends Command {
     }
 
     @Override
-    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
                 argument(TARGET_ARGUMENT_ID, player())
                         .executes(this::execute)

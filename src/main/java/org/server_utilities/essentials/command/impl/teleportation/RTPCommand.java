@@ -6,7 +6,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import me.drex.message.api.Message;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.ResourceOrTagArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -55,7 +57,7 @@ public class RTPCommand extends Command {
     }
 
     @Override
-    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal) {
+    protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
                 literal("check")
                         .requires(require("check", true))
@@ -75,7 +77,10 @@ public class RTPCommand extends Command {
         ).then(
                 literal("back").requires(require("back"))
                         .executes(this::back)
-        ).executes(this::rtp);
+        ).then(
+                literal("biome").requires(require("biome"))
+                        .then(argument("biome", ResourceOrTagArgument.resourceOrTag(commandBuildContext, Registries.BIOME)).executes(ctx -> rtp(ctx, ResourceOrTagArgument.getResourceOrTag(ctx, "biome", Registries.BIOME))))
+        ).executes(ctx -> rtp(ctx, null));
     }
 
     private int checkOther(CommandSourceStack src, GameProfile target) {
@@ -104,7 +109,7 @@ public class RTPCommand extends Command {
         MutableComponent message = Message.message("fabric-essentials.commands.rtp.add", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
             put("newRtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
-        }}, PlaceholderContext.of(target , ctx.getSource().getServer()));
+        }}, PlaceholderContext.of(target, ctx.getSource().getServer()));
         ctx.getSource().sendSystemMessage(message);
 
         return playerData.rtpCount;
@@ -123,7 +128,7 @@ public class RTPCommand extends Command {
         return playerData.rtpCount;
     }
 
-    private int rtp(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    private int rtp(CommandContext<CommandSourceStack> ctx, ResourceOrTagArgument.Result<Biome> biomeFilter) throws CommandSyntaxException {
         CommandSourceStack src = ctx.getSource();
         ServerPlayer target = src.getPlayerOrException();
         ServerLevel targetLevel = src.getLevel();
@@ -137,7 +142,7 @@ public class RTPCommand extends Command {
             ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.limit"));
             return -2;
         }
-        ChunkPos chunkPos = generateLocation(targetLevel);
+        ChunkPos chunkPos = generateLocation(targetLevel, biomeFilter);
         if (chunkPos == null) {
             ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.no_location"));
             return -3;
@@ -166,13 +171,15 @@ public class RTPCommand extends Command {
     }
 
     @Nullable
-    private ChunkPos generateLocation(ServerLevel level) {
+    private ChunkPos generateLocation(ServerLevel level, ResourceOrTagArgument.Result<Biome> biomeFilter) {
         RtpConfig config = config().rtp;
         for (int i = 0; i < 50; i++) {
             ChunkPos chunkPos = config.shape.generateLocation(config.centerX, config.centerZ, config.minRadius, config.maxRadius);
             Holder<Biome> holder = level.getBiome(chunkPos.getMiddleBlockPosition(70));
-            ResourceLocation location = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(holder.value());
-            if (!Arrays.stream(config.blacklistedBiomes).toList().contains(location)) {
+            ResourceLocation biomeId = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(holder.value());
+
+            if (Arrays.asList(config.blacklistedBiomes).contains(biomeId)) continue;
+            if (biomeFilter == null || biomeFilter.test(holder)) {
                 return chunkPos;
             }
         }

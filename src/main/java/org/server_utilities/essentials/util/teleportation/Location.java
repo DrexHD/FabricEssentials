@@ -39,7 +39,7 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
             return false;
         }
 
-        BlockPos blockPos = new BlockPos(pos);
+        BlockPos blockPos = BlockPos.containing(pos);
         if (!Level.isInSpawnableBounds(blockPos)) {
             return false;
         }

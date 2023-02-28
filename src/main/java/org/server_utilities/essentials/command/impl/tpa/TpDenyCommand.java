@@ -10,19 +10,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
-import org.server_utilities.essentials.command.util.CommandUtil;
-import org.server_utilities.essentials.util.AsyncTeleportPlayer;
-import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
-import org.server_utilities.essentials.util.TeleportCancelException;
 import org.server_utilities.essentials.util.TpaManager;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
 import static net.minecraft.commands.arguments.EntityArgument.player;
-import static org.server_utilities.essentials.util.TpaManager.Direction.HERE;
 
 public class TpDenyCommand extends Command {
 

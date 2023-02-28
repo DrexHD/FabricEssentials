@@ -104,8 +104,8 @@
   "fabric-essentials.commands.tpaccept.victim": "<dark_green>%player:displayname% <green>accepted your teleport request!",
   "fabric-essentials.commands.tpaccept.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
 
-  "fabric-essentials.commands.tpdeny.self": "<green>Teleport request from <dark_green>%player:displayname% <green>denied!",
-  "fabric-essentials.commands.tpdeny.victim": "<dark_green>%player:displayname% <green>denied your teleport request!",
+  "fabric-essentials.commands.tpdeny.self": "<yellow>Teleport request from <dark_green>%player:displayname% <yellow>denied!",
+  "fabric-essentials.commands.tpdeny.victim": "<dark_green>%player:displayname% <yellow>denied your teleport request!",
   "fabric-essentials.commands.tpdeny.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
 
   "fabric-essentials.commands.tpall": "<yellow>Request to teleport to you has been sent to <gold>${count} <yellow>players.",

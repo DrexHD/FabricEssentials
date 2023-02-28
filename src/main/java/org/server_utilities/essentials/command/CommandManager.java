@@ -15,6 +15,7 @@ import org.server_utilities.essentials.command.impl.home.HomesCommand;
 import org.server_utilities.essentials.command.impl.home.SetHomeCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAcceptCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAllCommand;
+import org.server_utilities.essentials.command.impl.tpa.TpDenyCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpaCommand;
 import org.server_utilities.essentials.command.impl.warp.DeleteWarpCommand;
 import org.server_utilities.essentials.command.impl.warp.SetWarpCommand;
@@ -45,6 +46,7 @@ public class CommandManager {
             TpaCommand.TPA_HERE,
             new TpAllCommand(),
             new TpAcceptCommand(),
+            new TpDenyCommand(),
             // Util
             new BroadcastCommand(),
             new CommandSpyCommand(),

@@ -95,17 +95,17 @@
   "fabric-essentials.commands.signedit.length": "<red>The text exceeds the maximum length!",
 
   "fabric-essentials.commands.tpa.self": "<yellow>Request to teleport <gold>you <yellow>to <gold>%player:displayname% <yellow>has been sent!",
-  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname% <yellow>requested to teleport to <gold>you<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔]",
+  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname% <yellow>requested to teleport to <gold>you<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
   "fabric-essentials.commands.tpa.pending": "<red>You already have a pending teleport request for <dark_red>%player:displayname%<red>!",
   "fabric-essentials.commands.tpahere.self": "<yellow>Request to teleport <gold>%player:displayname% <yellow>to <gold>you <yellow>has been sent!",
-  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname% <yellow>requested to teleport <gold>you<yellow> to <gold>them<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔]",
+  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname% <yellow>requested to teleport <gold>you<yellow> to <gold>them<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
 
   "fabric-essentials.commands.tpaccept.self": "<green>Teleport request from <dark_green>%player:displayname% <green>accepted!",
   "fabric-essentials.commands.tpaccept.victim": "<dark_green>%player:displayname% <green>accepted your teleport request!",
   "fabric-essentials.commands.tpaccept.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
 
-  "fabric-essentials.commands.tpdeny.self": "<yellow>Teleport request from <dark_green>%player:displayname% <yellow>denied!",
-  "fabric-essentials.commands.tpdeny.victim": "<dark_green>%player:displayname% <yellow>denied your teleport request!",
+  "fabric-essentials.commands.tpdeny.self": "<red>Teleport request from <dark_red>%player:displayname% <red>denied!",
+  "fabric-essentials.commands.tpdeny.victim": "<dark_red>%player:displayname% <red>denied your teleport request!",
   "fabric-essentials.commands.tpdeny.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
 
   "fabric-essentials.commands.tpall": "<yellow>Request to teleport to you has been sent to <gold>${count} <yellow>players.",

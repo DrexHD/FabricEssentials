@@ -16,6 +16,7 @@
     "event.PlayerListMixin",
     "spy.ServerGamePacketListenerImplMixin",
     "style.AnvilMenuMixin",
-    "style.ServerGamePacketListenerImplMixin"
+    "style.ServerGamePacketListenerImplMixin",
+    "style.SignBlockEntityMixin"
   ]
 }

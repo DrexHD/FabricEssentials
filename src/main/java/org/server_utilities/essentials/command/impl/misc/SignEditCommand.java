@@ -63,7 +63,7 @@ public class SignEditCommand extends Command {
                         put("sign_line", Component.literal(String.valueOf(line)));
                         put("sign_text", component);
                     }}), false);
-                    signBlockEntity.setMessage(line - 1, component);
+                    signBlockEntity.updateText(signText -> signText.setMessage(line - 1, component), signBlockEntity.isFacingFrontText(player));
                     signBlockEntity.setChanged();
                     src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);
                     return SUCCESS;

@@ -70,7 +70,7 @@ public class TpAcceptCommand extends Command {
                     LOGGER.error("An unknown error occurred, during waiting period", completionException.getCause());
                 }
             } else {
-                CommandUtil.teleportEntity(teleporting, teleportingTarget.getLevel(), teleportingTarget.getOnPos().above());
+                CommandUtil.teleportEntity(teleporting, teleportingTarget.serverLevel(), teleportingTarget.getOnPos().above());
             }
         }, ctx.getSource().getServer());
         return SUCCESS;

@@ -27,7 +27,7 @@ import static org.server_utilities.essentials.EssentialsMod.LOGGER;
 public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimension) {
 
     public Location(Entity entity) {
-        this(entity.position(), entity.getYRot(), entity.getXRot(), entity.getLevel().dimension().location());
+        this(entity.position(), entity.getYRot(), entity.getXRot(), entity.level().dimension().location());
     }
 
     public Location(CommandSourceStack source) {
@@ -35,7 +35,7 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
     }
 
     public boolean teleport(@NotNull Entity entity) {
-        if (entity.level.isClientSide) {
+        if (entity.level().isClientSide) {
             return false;
         }
 

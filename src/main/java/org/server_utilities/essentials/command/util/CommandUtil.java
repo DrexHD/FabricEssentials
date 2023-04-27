@@ -64,13 +64,13 @@ public class CommandUtil {
             if (serverPlayer.isSleeping()) {
                 serverPlayer.stopSleepInBed(true, true);
             }
-            if (targetLevel == serverPlayer.level) {
+            if (targetLevel == serverPlayer.serverLevel()) {
                 serverPlayer.connection.teleport(x + 0.5, y, z + 0.5, yRot, xRot);
             } else {
                 serverPlayer.teleportTo(targetLevel, x + 0.5, y, z + 0.5, yRot, xRot);
             }
         } else {
-            if (targetLevel == target.level) {
+            if (targetLevel == target.level()) {
                 target.moveTo(x, y, z, yRot, xRot);
             } else {
                 target.unRide();

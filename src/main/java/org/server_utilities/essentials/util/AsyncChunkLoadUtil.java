@@ -38,11 +38,11 @@ public class AsyncChunkLoadUtil {
         if (chunkHolder == null) {
             throw new IllegalStateException("Chunk not there when requested");
         }
-        final ChunkHolder.FullChunkStatus levelType = ChunkHolder.getFullChunkStatus(level);
+        final FullChunkStatus levelType = ChunkLevel.fullStatus(level);
         final CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = switch (levelType) {
-            case INACCESSIBLE -> chunkHolder.getOrScheduleFuture(ChunkHolder.getStatus(level), world.getChunkSource().chunkMap);
-            case BORDER -> chunkHolder.getFullChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
-            case TICKING -> chunkHolder.getTickingChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
+            case INACCESSIBLE -> chunkHolder.getOrScheduleFuture(ChunkLevel.generationStatus(level), world.getChunkSource().chunkMap);
+            case FULL -> chunkHolder.getFullChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
+            case BLOCK_TICKING -> chunkHolder.getTickingChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
             case ENTITY_TICKING -> chunkHolder.getEntityTickingChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
         };
         future.whenCompleteAsync((unused, throwable) -> {

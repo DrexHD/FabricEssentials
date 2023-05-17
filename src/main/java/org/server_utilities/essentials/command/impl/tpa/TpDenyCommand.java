@@ -42,7 +42,7 @@ public class TpDenyCommand extends Command {
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.tpdeny.self", PlaceholderContext.of(target)), false);
+        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.tpdeny.self", PlaceholderContext.of(target)), false);
         target.sendSystemMessage(Message.message("fabric-essentials.commands.tpdeny.victim", PlaceholderContext.of(ctx.getSource())), false);
         return SUCCESS;
     }

@@ -30,12 +30,12 @@ public abstract class SimpleTargetCommand extends Command {
                         .requires(require("other"))
                         .executes(ctx -> {
                             ServerPlayer target = getPlayer(ctx, "player");
-                            ctx.getSource().sendSuccess(Message.message(messageId + ".other", PlaceholderContext.of(target)), false);
+                            ctx.getSource().sendSuccess(() -> Message.message(messageId + ".other", PlaceholderContext.of(target)), false);
                             return execute(target);
                         })
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
-            ctx.getSource().sendSuccess(Message.message(messageId + ".self"), false);
+            ctx.getSource().sendSuccess(() -> Message.message(messageId + ".self"), false);
             return execute(player);
         });
     }

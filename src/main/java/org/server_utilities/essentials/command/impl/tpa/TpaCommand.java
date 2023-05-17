@@ -45,7 +45,7 @@ public class TpaCommand extends Command {
             return FAILURE;
         }
         TpaManager.INSTANCE.addRequest(participants, this.direction);
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", PlaceholderContext.of(target)), false);
+        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", PlaceholderContext.of(target)), false);
         target.sendSystemMessage(Message.message("fabric-essentials.commands." + this.direction.getTranslationKey() + ".victim", PlaceholderContext.of(ctx.getSource())));
         return SUCCESS;
     }

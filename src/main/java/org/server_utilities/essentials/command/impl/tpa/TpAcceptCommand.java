@@ -50,7 +50,7 @@ public class TpAcceptCommand extends Command {
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.tpaccept.self", PlaceholderContext.of(target)), false);
+        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.tpaccept.self", PlaceholderContext.of(target)), false);
         target.sendSystemMessage(Message.message("fabric-essentials.commands.tpaccept.victim", PlaceholderContext.of(ctx.getSource())), false);
         ServerPlayer teleporting = direction == HERE ? player : target;
         ServerPlayer teleportingTarget = direction == HERE ? target : player;

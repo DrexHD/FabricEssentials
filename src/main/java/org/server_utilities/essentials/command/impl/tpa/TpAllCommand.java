@@ -40,7 +40,7 @@ public class TpAllCommand extends Command {
             success++;
         }
         final int count = success;
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.tpall", new HashMap<>() {{
+        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.tpall", new HashMap<>() {{
             put("count", Component.literal(String.valueOf(count)));
         }}), false);
         return success;

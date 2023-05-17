@@ -44,7 +44,7 @@ public class HatCommand extends Command {
             return FAILURE;
         }
 
-        ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.hat"), false);
+        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.hat"), false);
         player.setItemInHand(InteractionHand.MAIN_HAND, head);
         inventory.armor.set(EquipmentSlot.HEAD.getIndex(), selected);
         return SUCCESS;

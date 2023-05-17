@@ -161,7 +161,7 @@ public class RTPCommand extends Command {
         if (lastRtpLocation != null) {
             CommandUtil.asyncTeleport(ctx.getSource(), lastRtpLocation.getLevel(ctx.getSource().getServer()), lastRtpLocation.chunkPos(), config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.rtp.back"), false);
+                ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.rtp.back"), false);
                 lastRtpLocation.teleport(target);
             });
             return 1;
@@ -203,7 +203,7 @@ public class RTPCommand extends Command {
                 Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
                 PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(target);
                 playerData.lastRtpLocation = location;
-                src.sendSuccess(Message.message("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
+                src.sendSuccess(() -> Message.message("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
                     put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
                 }}, location.placeholders())), false);
                 CommandUtil.teleportEntity(target, targetLevel, blockPos);

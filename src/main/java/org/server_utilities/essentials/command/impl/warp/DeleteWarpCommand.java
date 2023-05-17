@@ -43,7 +43,7 @@ public class DeleteWarpCommand extends Command {
         } else {
             Warp warp = warps.get(name);
             warps.remove(name);
-            ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.deletewarp", warp.placeholders(name)), false);
+            ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.deletewarp", warp.placeholders(name)), false);
         }
         return SUCCESS;
     }

@@ -40,7 +40,7 @@ public class SetWarpCommand extends Command {
         if (!warps.containsKey(name)) {
             Warp warp = new Warp(new Location(src));
             warps.put(name, warp);
-            src.sendSuccess(Message.message("fabric-essentials.commands.setwarp", warp.placeholders(name)), false);
+            src.sendSuccess(() -> Message.message("fabric-essentials.commands.setwarp", warp.placeholders(name)), false);
             return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();

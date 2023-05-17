@@ -59,7 +59,7 @@ public class SignEditCommand extends Command {
                         src.sendFailure(Message.message("fabric-essentials.commands.signedit.length"));
                         return FAILURE;
                     }
-                    src.sendSuccess(Message.message("fabric-essentials.commands.signedit", new HashMap<>() {{
+                    src.sendSuccess(() -> Message.message("fabric-essentials.commands.signedit", new HashMap<>() {{
                         put("sign_line", Component.literal(String.valueOf(line)));
                         put("sign_text", component);
                     }}), false);

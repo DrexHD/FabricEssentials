@@ -31,7 +31,7 @@ public abstract class SimpleToggleCommand extends Command {
                         .executes(ctx -> {
                             ServerPlayer target = getPlayer(ctx, "player");
                             boolean previousState = getState(target);
-                            ctx.getSource().sendSuccess(Message.message(messageId + (previousState ? ".disable" : ".enable") + ".other", PlaceholderContext.of(target)), false);
+                            ctx.getSource().sendSuccess(() -> Message.message(messageId + (previousState ? ".disable" : ".enable") + ".other", PlaceholderContext.of(target)), false);
                             setState(target, !previousState);
                             return previousState ? FAILURE : SUCCESS;
                         })
@@ -39,7 +39,7 @@ public abstract class SimpleToggleCommand extends Command {
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             boolean previousState = getState(player);
-            ctx.getSource().sendSuccess(Message.message(messageId + (previousState ? ".disable" : ".enable") + ".self"), false);
+            ctx.getSource().sendSuccess(() -> Message.message(messageId + (previousState ? ".disable" : ".enable") + ".self"), false);
             setState(player, !previousState);
             return previousState ? FAILURE : SUCCESS;
         });

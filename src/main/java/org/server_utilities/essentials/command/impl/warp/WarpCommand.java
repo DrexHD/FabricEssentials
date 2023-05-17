@@ -50,7 +50,7 @@ public class WarpCommand extends Command {
         if (targetLevel != null) {
             CommandUtil.asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().warps.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                ctx.getSource().sendSuccess(Message.message("fabric-essentials.commands.warp", warp.placeholders(name)), false);
+                ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.warp", warp.placeholders(name)), false);
                 warp.location().teleport(serverPlayer);
             }, src.getServer());
         } else {

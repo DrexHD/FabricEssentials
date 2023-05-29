@@ -29,12 +29,12 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        MutableComponent result = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(this.player, "style.anvil." + textTag.name()));
+        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(this.player, "style.anvil." + textTag.name()));
         // This check is required to stay compatible with datapacks, which rely on vanilla text formatting
-        if (result.getString().equals(input)) {
+        if (formatted.getString().equals(input)) {
             return Component.literal(input);
         } else {
-            return result;
+            return formatted;
         }
     }
 

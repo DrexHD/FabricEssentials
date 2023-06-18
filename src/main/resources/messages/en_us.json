@@ -60,6 +60,14 @@
   "fabric-essentials.commands.invulnerable.disable.self": "<red>Disabled godmode.",
   "fabric-essentials.commands.invulnerable.disable.other": "<red>Disabled godmode for <dark_red>%player:displayname%<red>.",
 
+  "fabric-essentials.commands.itemedit.missing": "<red>You need to hold an item to use this command!",
+  "fabric-essentials.commands.itemedit.experience": "<red>You don't have enough experience levels to do this!",
+  "fabric-essentials.commands.itemedit.lore": "<yellow>Changed item lore <gold>${line}<yellow> to \"<gold>${lore}<yellow>\".",
+  "fabric-essentials.commands.itemedit.lore.length": "<red>The lore exceeds the maximum length!",
+  "fabric-essentials.commands.itemedit.lore.invalid_line": "<red>This lore line doesn't exist!",
+  "fabric-essentials.commands.itemedit.name": "<yellow>Changed item name to \"<gold>${name}<yellow>\".",
+  "fabric-essentials.commands.itemedit.name.length": "<red>The name exceeds the maximum length!",
+
   "fabric-essentials.commands.mods": "<gold>Mods [<yellow>${mod_count}<gold>]:\n${mod_list}",
   "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>Version: <aqua>${mod_version}\n<gray>Authors: <green>${mod_authors}\n<gray>Description: <yellow>${mod_description}",
   "fabric-essentials.commands.mods.mod.unknown": "<red>No mod with that id exists!",

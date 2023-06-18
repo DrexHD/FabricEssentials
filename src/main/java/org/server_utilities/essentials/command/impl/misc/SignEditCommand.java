@@ -29,7 +29,7 @@ import static net.minecraft.commands.Commands.literal;
 public class SignEditCommand extends Command {
 
     public SignEditCommand() {
-        super(CommandProperties.create("signedit", 0));
+        super(CommandProperties.create("signedit", 2));
     }
 
     @Override
@@ -54,7 +54,13 @@ public class SignEditCommand extends Command {
                     CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player)) {
                 BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
                 if (blockEntity instanceof SignBlockEntity signBlockEntity) {
-                    Component component = StyledInputUtil.parse(text, textTag -> IdentifierUtil.check(src, "style.sign." + textTag.name()));
+                    Component component;
+                    Component parsed = StyledInputUtil.parse(text, textTag -> IdentifierUtil.check(src, "style.sign." + textTag.name()));
+                    if (parsed.getString().equals(text)) {
+                        component = Component.literal(text);
+                    } else {
+                        component = parsed;
+                    }
                     if (component.getString().length() > 45) {
                         src.sendFailure(Message.message("fabric-essentials.commands.signedit.length"));
                         return FAILURE;

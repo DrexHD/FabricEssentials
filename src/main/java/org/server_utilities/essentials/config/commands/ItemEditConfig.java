@@ -18,7 +18,6 @@ public class ItemEditConfig {
 
     }
 
-
     @ConfigSerializable
     public static class LoreConfig {
 

@@ -27,12 +27,12 @@ public class PingCommand extends Command {
                         .executes(ctx -> {
                             ServerPlayer player = getPlayer(ctx, "player");
                             ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.ping.self"));
-                            return player.latency;
+                            return player.connection.latency();
                         })
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.ping.other", PlaceholderContext.of(player)));
-            return player.latency;
+            return player.connection.latency();
         });
     }
 }

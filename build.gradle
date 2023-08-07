@@ -28,7 +28,7 @@ dependencies {
         "fabric-lifecycle-events-v1"
     ]
     apiModules.forEach {
-        include(modImplementation(fabricApi.module(it, project.fabric_version)))
+        modImplementation(fabricApi.module(it, project.fabric_version))
     }
 
     // Mod dependencies

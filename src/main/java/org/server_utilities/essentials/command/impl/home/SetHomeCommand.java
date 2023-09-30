@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import org.server_utilities.essentials.command.Command;
@@ -21,6 +20,7 @@ import java.util.Map;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static org.server_utilities.essentials.command.impl.home.HomeCommand.DEFAULT_HOME_NAME;
@@ -29,7 +29,7 @@ import static org.server_utilities.essentials.command.util.CommandUtil.getGamePr
 
 public class SetHomeCommand extends Command {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.sethome.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(localized("fabric-essentials.commands.sethome.already_exists"));
 
     public SetHomeCommand() {
         super(CommandProperties.create("sethome", 0));
@@ -55,16 +55,16 @@ public class SetHomeCommand extends Command {
         if (!homes.containsKey(name)) {
             int limit = getHomesLimit(src);
             if (homes.size() >= limit) {
-                src.sendFailure(Message.message("fabric-essentials.commands.sethome.limit"));
+                src.sendFailure(localized("fabric-essentials.commands.sethome.limit"));
                 return FAILURE;
             } else {
                 Home home = new Home(new Location(src));
                 homes.put(name, home);
                 DataStorage.STORAGE.saveOfflinePlayerData(src.getServer(), target.getId(), playerData);
                 if (self) {
-                    src.sendSystemMessage(Message.message("fabric-essentials.commands.sethome.self", home.placeholders(name)));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
                 } else {
-                    src.sendSystemMessage(Message.message("fabric-essentials.commands.sethome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
                 }
                 return SUCCESS;
             }

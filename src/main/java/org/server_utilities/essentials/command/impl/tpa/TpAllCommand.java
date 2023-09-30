@@ -4,7 +4,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -15,6 +14,8 @@ import org.server_utilities.essentials.util.TpaManager;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static me.drex.message.api.LocalizedMessage.localized;
 
 public class TpAllCommand extends Command {
 
@@ -36,11 +37,11 @@ public class TpAllCommand extends Command {
             TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
             if (direction == TpaManager.Direction.HERE) continue;
             TpaManager.INSTANCE.addRequest(participants, TpaManager.Direction.HERE);
-            target.sendSystemMessage(Message.message("fabric-essentials.commands.tpahere.victim", PlaceholderContext.of(ctx.getSource())));
+            target.sendSystemMessage(localized("fabric-essentials.commands.tpahere.victim", PlaceholderContext.of(ctx.getSource())));
             success++;
         }
         final int count = success;
-        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.tpall", new HashMap<>() {{
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpall", new HashMap<>() {{
             put("count", Component.literal(String.valueOf(count)));
         }}), false);
         return success;

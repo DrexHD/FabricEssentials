@@ -3,7 +3,6 @@ package org.server_utilities.essentials.command.impl.warp;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import org.server_utilities.essentials.command.Command;
@@ -16,6 +15,7 @@ import java.util.Map;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static org.server_utilities.essentials.command.impl.warp.WarpCommand.UNKNOWN;
 import static org.server_utilities.essentials.command.impl.warp.WarpCommand.WARPS_PROVIDER;
@@ -43,7 +43,7 @@ public class DeleteWarpCommand extends Command {
         } else {
             Warp warp = warps.get(name);
             warps.remove(name);
-            ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.deletewarp", warp.placeholders(name)), false);
+            ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.deletewarp", warp.placeholders(name)), false);
         }
         return SUCCESS;
     }

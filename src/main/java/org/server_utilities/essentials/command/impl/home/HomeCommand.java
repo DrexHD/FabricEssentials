@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -21,6 +20,7 @@ import org.server_utilities.essentials.util.teleportation.Home;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static org.server_utilities.essentials.command.util.CommandUtil.PROFILES_PROVIDER;
@@ -28,7 +28,7 @@ import static org.server_utilities.essentials.command.util.CommandUtil.getGamePr
 
 public class HomeCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.home.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.home.unknown"));
     public static final String DEFAULT_HOME_NAME = "home";
 
     public HomeCommand() {
@@ -60,9 +60,9 @@ public class HomeCommand extends Command {
             CommandUtil.asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
                 if (self) {
-                    src.sendSystemMessage(Message.message("fabric-essentials.commands.home.self", home.placeholders(name)));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.home.self", home.placeholders(name)));
                 } else {
-                    src.sendSystemMessage(Message.message("fabric-essentials.commands.home.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.home.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
                 }
                 home.location().teleport(serverPlayer);
             }, src.getServer());

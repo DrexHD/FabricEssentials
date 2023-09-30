@@ -26,7 +26,7 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static me.drex.message.api.Message.message;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.world.item.ItemStack.TAG_DISPLAY;
@@ -66,7 +66,7 @@ public class ItemEditCommand extends Command {
         ServerPlayer player = src.getPlayerOrException();
         ItemStack itemStack = player.getMainHandItem();
         if (itemStack.isEmpty()) {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.missing"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.missing"));
             return FAILURE;
         }
         ItemEditConfig.NameConfig nameConfig = config().commands.itemEdit.name;
@@ -78,7 +78,7 @@ public class ItemEditCommand extends Command {
             component = (MutableComponent) parsed;
         }
         if (parsed.getString().length() > nameConfig.maxLength) {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.name.length"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.name.length"));
             return FAILURE;
         }
 
@@ -89,11 +89,11 @@ public class ItemEditCommand extends Command {
             } else {
                 itemStack.setHoverName(component.withStyle(Style.EMPTY.withItalic(false)));
             }
-            src.sendSuccess(() -> message("fabric-essentials.commands.itemedit.name", Map.of(
+            src.sendSuccess(() -> localized("fabric-essentials.commands.itemedit.name", Map.of(
                 "name", itemStack.getHoverName())), false);
             return SUCCESS;
         } else {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.experience"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.experience"));
             return FAILURE;
         }
     }
@@ -102,7 +102,7 @@ public class ItemEditCommand extends Command {
         ServerPlayer player = src.getPlayerOrException();
         ItemStack itemStack = player.getMainHandItem();
         if (itemStack.isEmpty()) {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.missing"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.missing"));
             return FAILURE;
         }
         ItemEditConfig.LoreConfig loreConfig = config().commands.itemEdit.lore;
@@ -114,7 +114,7 @@ public class ItemEditCommand extends Command {
             component = (MutableComponent) parsed;
         }
         if (parsed.getString().length() > loreConfig.maxLength) {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.lore.length"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.lore.length"));
             return FAILURE;
         }
 
@@ -129,7 +129,7 @@ public class ItemEditCommand extends Command {
                 if (line <= loreTag.size()) {
                     loreTag.remove(line - 1);
                 } else {
-                    src.sendFailure(message("fabric-essentials.commands.itemedit.lore.invalid_line"));
+                    src.sendFailure(localized("fabric-essentials.commands.itemedit.lore.invalid_line"));
                     return FAILURE;
                 }
             } else {
@@ -138,12 +138,12 @@ public class ItemEditCommand extends Command {
                 }
                 loreTag.set(line - 1, StringTag.valueOf(Component.Serializer.toJson(component.withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.WHITE)))));
             }
-            src.sendSuccess(() -> message("fabric-essentials.commands.itemedit.lore", Map.of(
+            src.sendSuccess(() -> localized("fabric-essentials.commands.itemedit.lore", Map.of(
                 "line", Component.literal(String.valueOf(line)),
                 "lore", component)), false);
             return SUCCESS;
         } else {
-            src.sendFailure(message("fabric-essentials.commands.itemedit.experience"));
+            src.sendFailure(localized("fabric-essentials.commands.itemedit.experience"));
             return FAILURE;
         }
     }

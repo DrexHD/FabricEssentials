@@ -1,7 +1,6 @@
 package org.server_utilities.essentials.mixin.spy;
 
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
 import net.minecraft.network.chat.MutableComponent;
@@ -17,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 
+import static me.drex.message.api.LocalizedMessage.localized;
+
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
 
@@ -25,7 +26,7 @@ public abstract class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)I"))
     public void onCommand(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
-        MutableComponent spyMessage = Message.message("fabric-essentials.commandspy", new HashMap<>(){{
+        MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
             put("command", Component.literal(packet.command()));
         }}, PlaceholderContext.of(player));
         for (ServerPlayer player : player.server.getPlayerList().getPlayers()) {

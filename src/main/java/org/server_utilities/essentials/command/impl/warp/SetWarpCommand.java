@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import org.server_utilities.essentials.command.Command;
@@ -16,11 +15,12 @@ import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.Map;
 
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 
 public class SetWarpCommand extends Command {
 
-    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.setwarp.already_exists"));
+    private static final SimpleCommandExceptionType ALREADY_EXISTS = new SimpleCommandExceptionType(localized("fabric-essentials.commands.setwarp.already_exists"));
 
     public SetWarpCommand() {
         super(CommandProperties.create("setwarp", 2));
@@ -40,7 +40,7 @@ public class SetWarpCommand extends Command {
         if (!warps.containsKey(name)) {
             Warp warp = new Warp(new Location(src));
             warps.put(name, warp);
-            src.sendSuccess(() -> Message.message("fabric-essentials.commands.setwarp", warp.placeholders(name)), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.setwarp", warp.placeholders(name)), false);
             return SUCCESS;
         } else {
             throw ALREADY_EXISTS.create();

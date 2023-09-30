@@ -7,7 +7,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.BlockPos;
@@ -26,6 +25,7 @@ import org.server_utilities.essentials.util.TeleportCancelException;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.arguments.GameProfileArgument.getGameProfiles;
 import static org.server_utilities.essentials.EssentialsMod.LOGGER;
 import static org.server_utilities.essentials.util.AsyncChunkLoadUtil.ASYNC_CHUNK_LOAD;
@@ -90,7 +90,7 @@ public class CommandUtil {
     public static CompletableFuture<ChunkAccess> asyncTeleport(CommandSourceStack src, ServerLevel level, ChunkPos pos, WaitingPeriodConfig config) throws CommandSyntaxException {
         AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) src.getPlayerOrException();
         if (asyncTeleportPlayer.isAsyncLoadingChunks()) {
-            src.sendFailure(Message.message("fabric-essentials.async.active"));
+            src.sendFailure(localized("fabric-essentials.async.active"));
             return CompletableFuture.completedFuture(null);
         }
         final int RADIUS = 2;
@@ -109,7 +109,7 @@ public class CommandUtil {
                 if (waitingThrowable instanceof TeleportCancelException exception) {
                     src.sendFailure(exception.getRawMessage());
                 } else {
-                    src.sendFailure(Message.message("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(waitingThrowable)));
+                    src.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(waitingThrowable)));
                     LOGGER.error("An unknown error occurred, during waiting period", waitingThrowable);
                 }
                 result.cancel(false);
@@ -118,14 +118,14 @@ public class CommandUtil {
             } else {
                 chunkAccessFuture.whenCompleteAsync((either, chunkThrowable) -> {
                     if (chunkThrowable != null) {
-                        src.sendFailure(Message.message("fabric-essentials.async.error", ComponentPlaceholderUtil.exceptionPlaceholders(chunkThrowable)));
+                        src.sendFailure(localized("fabric-essentials.async.error", ComponentPlaceholderUtil.exceptionPlaceholders(chunkThrowable)));
                         LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
                         result.cancel(false);
                     } else {
                         if (either.left().isPresent()) {
                             result.complete(either.left().get());
                         } else {
-                            src.sendFailure(Message.message("fabric-essentials.async.not_loaded"));
+                            src.sendFailure(localized("fabric-essentials.async.not_loaded"));
                             LOGGER.error("Chunk not there when requested: {}", either.right().get());
                         }
                     }

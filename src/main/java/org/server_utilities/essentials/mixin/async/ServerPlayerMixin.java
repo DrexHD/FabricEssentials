@@ -1,7 +1,6 @@
 package org.server_utilities.essentials.mixin.async;
 
 import com.mojang.authlib.GameProfile;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
+import static me.drex.message.api.LocalizedMessage.localized;
 import static org.server_utilities.essentials.config.util.WaitingPeriodConfig.WaitingResult.*;
 
 @Mixin(ServerPlayer.class)
@@ -83,7 +83,7 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
         asyncLoadingChunks = loadingChunks;
         if (!loadingChunks) {
             this.sendSystemMessage(Component.empty(), true);
-            this.sendSystemMessage(Message.message("fabric-essentials.async.loading_chunks.done"), true);
+            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks.done"), true);
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
     public void onTick(CallbackInfo ci) {
         if (isAsyncLoadingChunks()) {
             String key = String.valueOf((this.server.getTickCount() / 6) % 3);
-            this.sendSystemMessage(Message.message("fabric-essentials.async.loading_chunks." + key), true);
+            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks." + key), true);
         }
         if (waitingPeriodTicks >= 0) {
             if (waitingPeriodTicks == 0) {
@@ -115,7 +115,7 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                 }
                 if (waitingPeriodTicks % 20 == 0) {
                     int ceilDiv = -Math.floorDiv(-waitingPeriodTicks, 20);
-                    this.sendSystemMessage(Message.message("fabric-essentials.teleport.wait", new HashMap<>() {{
+                    this.sendSystemMessage(localized("fabric-essentials.teleport.wait", new HashMap<>() {{
                         put("time", Component.literal(String.valueOf(ceilDiv)));
                     }}));
                 }

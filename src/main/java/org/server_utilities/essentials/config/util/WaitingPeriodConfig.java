@@ -1,9 +1,10 @@
 package org.server_utilities.essentials.config.util;
 
-import me.drex.message.api.Message;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
+
+import static me.drex.message.api.LocalizedMessage.localized;
 
 @ConfigSerializable
 public class WaitingPeriodConfig {
@@ -37,7 +38,7 @@ public class WaitingPeriodConfig {
         }
 
         public Component component() {
-            return Message.message(translationKeySelf);
+            return localized(translationKeySelf);
         }
 
     }

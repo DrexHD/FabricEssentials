@@ -3,7 +3,6 @@ package org.server_utilities.essentials.command.impl.misc;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
+
+import static me.drex.message.api.LocalizedMessage.localized;
 
 public class HatCommand extends Command {
 
@@ -34,17 +35,17 @@ public class HatCommand extends Command {
         ItemStack selected = inventory.getSelected();
         ResourceLocation resourceLocation = BuiltInRegistries.ITEM.getKey(selected.getItem());
         if (!check(ctx.getSource(), "item." + resourceLocation.getPath())) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.hat.no_permission"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission"));
             return FAILURE;
         }
         ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
 
         if (EnchantmentHelper.hasBindingCurse(head) && !check(ctx.getSource(), "bypassBindingCurse")) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.hat.binding_curse"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.binding_curse"));
             return FAILURE;
         }
 
-        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.hat"), false);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.hat"), false);
         player.setItemInHand(InteractionHand.MAIN_HAND, head);
         inventory.armor.set(EquipmentSlot.HEAD.getIndex(), selected);
         return SUCCESS;

@@ -2,7 +2,6 @@ package org.server_utilities.essentials.command.impl.warp;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -15,6 +14,8 @@ import org.server_utilities.essentials.util.teleportation.Warp;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static me.drex.message.api.LocalizedMessage.localized;
 
 public class WarpsCommand extends Command {
 
@@ -31,12 +32,12 @@ public class WarpsCommand extends Command {
         ServerData essentialsData = DataStorage.STORAGE.getServerData();
         Map<String, Warp> warps = essentialsData.getWarps();
         if (warps.isEmpty()) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.warps.empty"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.warps.empty"));
         } else {
-            Component warpsList = ComponentUtils.formatList(warps.entrySet(), Message.message("fabric-essentials.commands.warps.list.separator"), entry -> {
-                return Message.message("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()));
+            Component warpsList = ComponentUtils.formatList(warps.entrySet(), localized("fabric-essentials.commands.warps.list.separator"), entry -> {
+                return localized("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()));
             });
-            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.warps", new HashMap<>(){{
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.warps", new HashMap<>(){{
                 put("warp_list",warpsList);
             }}));
         }

@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.drex.message.api.Message;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,10 +13,12 @@ import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.EssentialsMod;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.config.EssentialsConfig;
-import org.server_utilities.essentials.util.*;
+import org.server_utilities.essentials.util.IdentifierUtil;
 import org.slf4j.Logger;
 
 import java.util.function.Predicate;
+
+import static me.drex.message.api.LocalizedMessage.localized;
 
 public abstract class Command {
 
@@ -96,7 +97,7 @@ public abstract class Command {
         return ConfigManager.INSTANCE.config();
     }
 
-    public static final SimpleCommandExceptionType WORLD_UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.location.world.unknown"));
+    public static final SimpleCommandExceptionType WORLD_UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.location.world.unknown"));
     public static final int SUCCESS = 1;
     public static final int FAILURE = 0;
 

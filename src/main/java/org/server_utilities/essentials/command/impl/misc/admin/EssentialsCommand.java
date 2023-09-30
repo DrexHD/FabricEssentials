@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import me.drex.message.api.Message;
 import me.drex.message.api.MessageAPI;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,12 +26,13 @@ import java.util.Optional;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class EssentialsCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(Message.message("fabric-essentials.commands.essentials.import.unknown"));
+    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.essentials.import.unknown"));
     private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS};
 
     public EssentialsCommand() {
@@ -63,20 +63,20 @@ public class EssentialsCommand extends Command {
             ConfigManager.INSTANCE.load();
             MessageAPI.reload();
             stopWatch.stop();
-            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
                 put("time", Component.literal(String.valueOf(stopWatch.getTime())));
             }}));
             return SUCCESS;
         } catch (ConfigurateException configurateException) {
             LOGGER.error("An error occurred while loading the config, keeping old values", configurateException);
-            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.reload.error", ComponentPlaceholderUtil.exceptionPlaceholders(configurateException)));
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload.error", ComponentPlaceholderUtil.exceptionPlaceholders(configurateException)));
             return FAILURE;
         }
     }
 
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         if (!((CommandSourceStackAccessor) ctx.getSource()).getSource().equals(ctx.getSource().getServer())) {
-            ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.essentials.import.console"));
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.import.console"));
             return FAILURE;
         }
         String importerId = getString(ctx, "importer");

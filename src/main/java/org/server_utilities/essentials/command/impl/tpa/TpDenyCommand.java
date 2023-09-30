@@ -4,7 +4,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,6 +11,7 @@ import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
 import org.server_utilities.essentials.util.TpaManager;
 
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
 import static net.minecraft.commands.arguments.EntityArgument.player;
@@ -38,12 +38,12 @@ public class TpDenyCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == null) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.tpdeny.no_pending", PlaceholderContext.of(target)));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_pending", PlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.tpdeny.self", PlaceholderContext.of(target)), false);
-        target.sendSystemMessage(Message.message("fabric-essentials.commands.tpdeny.victim", PlaceholderContext.of(ctx.getSource())), false);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpdeny.self", PlaceholderContext.of(target)), false);
+        target.sendSystemMessage(localized("fabric-essentials.commands.tpdeny.victim", PlaceholderContext.of(ctx.getSource())), false);
         return SUCCESS;
     }
 

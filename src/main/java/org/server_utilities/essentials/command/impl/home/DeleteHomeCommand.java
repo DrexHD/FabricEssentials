@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import org.server_utilities.essentials.command.Command;
@@ -15,6 +14,7 @@ import org.server_utilities.essentials.util.teleportation.Home;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static org.server_utilities.essentials.command.impl.home.HomeCommand.*;
@@ -48,9 +48,9 @@ public class DeleteHomeCommand extends Command {
             playerData.getHomes().remove(name);
             DataStorage.STORAGE.saveOfflinePlayerData(src.getServer(), target.getId(), playerData);
             if (self) {
-                src.sendSystemMessage(Message.message("fabric-essentials.commands.deletehome.self", home.placeholders(name)));
+                src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.self", home.placeholders(name)));
             } else {
-                src.sendSystemMessage(Message.message("fabric-essentials.commands.deletehome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
             }
             return SUCCESS;
         } else {

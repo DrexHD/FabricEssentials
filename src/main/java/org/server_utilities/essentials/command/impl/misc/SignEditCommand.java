@@ -3,7 +3,6 @@ package org.server_utilities.essentials.command.impl.misc;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.common.protection.api.CommonProtection;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -23,6 +22,7 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -62,10 +62,10 @@ public class SignEditCommand extends Command {
                         component = parsed;
                     }
                     if (component.getString().length() > 45) {
-                        src.sendFailure(Message.message("fabric-essentials.commands.signedit.length"));
+                        src.sendFailure(localized("fabric-essentials.commands.signedit.length"));
                         return FAILURE;
                     }
-                    src.sendSuccess(() -> Message.message("fabric-essentials.commands.signedit", new HashMap<>() {{
+                    src.sendSuccess(() -> localized("fabric-essentials.commands.signedit", new HashMap<>() {{
                         put("sign_line", Component.literal(String.valueOf(line)));
                         put("sign_text", component);
                     }}), false);
@@ -75,12 +75,12 @@ public class SignEditCommand extends Command {
                     return SUCCESS;
                 }
             } else {
-                src.sendFailure(Message.message("fabric-essentials.commands.signedit.cant_modify"));
+                src.sendFailure(localized("fabric-essentials.commands.signedit.cant_modify"));
                 return FAILURE;
             }
 
         }
-        src.sendFailure(Message.message("fabric-essentials.commands.signedit.missing"));
+        src.sendFailure(localized("fabric-essentials.commands.signedit.missing"));
         return FAILURE;
     }
 

@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import me.drex.message.api.Message;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.ResourceOrTagArgument;
@@ -41,6 +40,7 @@ import java.util.HashMap;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
@@ -85,7 +85,7 @@ public class RTPCommand extends Command {
 
     private int checkOther(CommandSourceStack src, GameProfile target) {
         PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(src.getServer(), target.getId());
-        MutableComponent message = Message.message("fabric-essentials.commands.rtp.check.other", new HashMap<>() {{
+        MutableComponent message = localized("fabric-essentials.commands.rtp.check.other", new HashMap<>() {{
             put("rtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
         }}, PlaceholderContext.of(target, src.getServer()));
         src.sendSystemMessage(message);
@@ -95,7 +95,7 @@ public class RTPCommand extends Command {
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
-        ctx.getSource().sendSystemMessage(Message.message("fabric-essentials.commands.rtp.check.self"));
+        ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.rtp.check.self"));
         return playerData.rtpCount;
     }
 
@@ -106,7 +106,7 @@ public class RTPCommand extends Command {
         playerData.rtpCount += amount;
         DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
 
-        MutableComponent message = Message.message("fabric-essentials.commands.rtp.add", new HashMap<>() {{
+        MutableComponent message = localized("fabric-essentials.commands.rtp.add", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
             put("newRtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
         }}, PlaceholderContext.of(target, ctx.getSource().getServer()));
@@ -120,7 +120,7 @@ public class RTPCommand extends Command {
         playerData.rtpCount -= amount;
         DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
 
-        MutableComponent message = Message.message("fabric-essentials.commands.rtp.remove", new HashMap<>() {{
+        MutableComponent message = localized("fabric-essentials.commands.rtp.remove", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
             put("newRtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
         }}, PlaceholderContext.of(target, ctx.getSource().getServer()));
@@ -135,16 +135,16 @@ public class RTPCommand extends Command {
         PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
         ResourceLocation resourceLocation = targetLevel.dimension().location();
         if (!check(src, "dimension" + "." + resourceLocation.getNamespace() + "." + resourceLocation.getPath())) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.dimension"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.rtp.dimension"));
             return -1;
         }
         if (playerData.rtpCount <= 0 && !check(src, "bypassLimit", false)) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.limit"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.rtp.limit"));
             return -2;
         }
         ChunkPos chunkPos = generateLocation(targetLevel, biomeFilter);
         if (chunkPos == null) {
-            ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.no_location"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.rtp.no_location"));
             return -3;
         }
         long start = System.currentTimeMillis();
@@ -161,12 +161,12 @@ public class RTPCommand extends Command {
         if (lastRtpLocation != null) {
             CommandUtil.asyncTeleport(ctx.getSource(), lastRtpLocation.getLevel(ctx.getSource().getServer()), lastRtpLocation.chunkPos(), config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                ctx.getSource().sendSuccess(() -> Message.message("fabric-essentials.commands.rtp.back"), false);
+                ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.rtp.back"), false);
                 lastRtpLocation.teleport(target);
             });
             return 1;
         }
-        ctx.getSource().sendFailure(Message.message("fabric-essentials.commands.rtp.back.none"));
+        ctx.getSource().sendFailure(localized("fabric-essentials.commands.rtp.back.none"));
         return 0;
     }
 
@@ -203,7 +203,7 @@ public class RTPCommand extends Command {
                 Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
                 PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(target);
                 playerData.lastRtpLocation = location;
-                src.sendSuccess(() -> Message.message("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
+                src.sendSuccess(() -> localized("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
                     put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
                 }}, location.placeholders())), false);
                 CommandUtil.teleportEntity(target, targetLevel, blockPos);
@@ -213,7 +213,7 @@ public class RTPCommand extends Command {
                 return;
             }
         }
-        src.sendFailure(Message.message("fabric-essentials.commands.rtp.unsafe"));
+        src.sendFailure(localized("fabric-essentials.commands.rtp.unsafe"));
     }
 
 }

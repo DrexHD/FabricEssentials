@@ -92,7 +92,8 @@
   "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",
   "fabric-essentials.commands.sethome.limit": "<red>Home limited reached! You can't set any more homes!",
-  "fabric-essentials.commands.sethome.already_exists": "<red>A home with that name already exists!",
+  "fabric-essentials.commands.sethome.self.confirm": "<red>A home with that name already exists! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} -confirm'><dark_red>[<bold>CONFIRM</bold>]",
+  "fabric-essentials.commands.sethome.other.confirm": "<red><gold>%player:displayname% <red>already has a home with that name! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} %player:name% -confirm'><dark_red>[<bold>CONFIRM</bold>]",
 
   "fabric-essentials.commands.setwarp": "<yellow>Set the warp <gold>${warp_name}<yellow>!",
   "fabric-essentials.commands.setwarp.already_exists": "<red>A warp with that name already exists!",

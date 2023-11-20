@@ -57,7 +57,7 @@ public class SetHomeCommand extends Command {
         Home previousHome = homes.get(name);
         if (previousHome == null || confirm) {
             int limit = getHomesLimit(src);
-            if (homes.size() >= limit) {
+            if (homes.size() >= limit && !confirm) {
                 src.sendFailure(localized("fabric-essentials.commands.sethome.limit"));
                 return FAILURE;
             } else {

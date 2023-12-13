@@ -20,8 +20,8 @@
     "essentials.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.8",
-    "fabric": "*",
+    "fabricloader": ">=0.15.1",
+    "fabric-api": "*",
     "java": ">=17"
   }
 }

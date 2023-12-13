@@ -51,13 +51,12 @@ public class HomeCommand extends Command {
 
     protected int teleportHome(CommandSourceStack src, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = src.getPlayerOrException();
-        DataStorage dataStorage = DataStorage.STORAGE;
-        PlayerData playerData = dataStorage.getOfflinePlayerData(src.getServer(), target.getId());
+        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
         Home home = playerData.getHomes().get(name);
         if (home == null) throw UNKNOWN.create();
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
-            CommandUtil.asyncTeleport(src, targetLevel, home.location().chunkPos(), config().homes.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+            CommandUtil.asyncTeleport(src, targetLevel, home.location().chunkPos(), config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
                 if (self) {
                     src.sendSystemMessage(localized("fabric-essentials.commands.home.self", home.placeholders(name)));
@@ -72,8 +71,8 @@ public class HomeCommand extends Command {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getPlayerData(ctx).getHomes().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.getPlayerData(ctx).getHomes().keySet(), builder);
 
-    public static final SuggestionProvider<CommandSourceStack> OTHER_HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.STORAGE.getOfflinePlayerData(ctx.getSource().getServer(), getGameProfile(ctx, "player").getId()).getHomes().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> OTHER_HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.getOfflinePlayerData(ctx.getSource().getServer(), getGameProfile(ctx, "player").getId()).getHomes().keySet(), builder);
 
 }

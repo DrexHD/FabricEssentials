@@ -1,49 +1,50 @@
 package org.server_utilities.essentials.config;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import eu.pb4.playerdata.impl.BaseGson;
 import net.fabricmc.loader.api.FabricLoader;
-import org.server_utilities.essentials.EssentialsMod;
-import org.server_utilities.essentials.config.serializer.ResourceLocationSerializer;
-import org.slf4j.Logger;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationOptions;
-import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static org.server_utilities.essentials.EssentialsMod.LOGGER;
 
 public class ConfigManager {
 
-    private static final Logger LOGGER = EssentialsMod.LOGGER;
-    public static final String SUBDIRECTORY = "fabric-essentials";
-    public static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir().resolve(SUBDIRECTORY);
-    public static final Path CONFIG_FILE = CONFIG_DIR.resolve("config.hocon");
-    private EssentialsConfig essentialsConfig = new EssentialsConfig();
+    public static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
+    public static final Path CONFIG_FILE = CONFIG_DIR.resolve("fabric-essentials.json");
+    private static final Gson GSON = BaseGson.createBuilder().setPrettyPrinting().create();
+    private static Config config = new Config();
 
-    public static final ConfigManager INSTANCE = new ConfigManager();
-
-    public ConfigManager() {
-        try {
-            load();
-        } catch (ConfigurateException e) {
-            LOGGER.error("An error occurred while loading the config, keeping old values", e);
+    public static boolean load() {
+        LOGGER.info("Loading essentials config");
+        if (Files.exists(CONFIG_FILE)) {
+            try {
+                String data = Files.readString(CONFIG_FILE);
+                try {
+                    config = GSON.fromJson(data, Config.class);
+                    return true;
+                } catch (JsonSyntaxException e) {
+                    LOGGER.error("Failed to parse essentials config", e);
+                }
+            } catch (IOException e) {
+                LOGGER.error("Failed to load essentials config", e);
+            }
+        } else {
+            try {
+                Files.writeString(CONFIG_FILE, GSON.toJson(config));
+                return true;
+            } catch (IOException e) {
+                LOGGER.error("Failed to save essentials config", e);
+            }
         }
+        return false;
     }
 
-    public void load() throws ConfigurateException {
-        LOGGER.info("Loading configuration...");
-        HoconConfigurationLoader loader = HoconConfigurationLoader.builder().path(CONFIG_FILE).build();
-        CommentedConfigurationNode rootNode = loader.load(ConfigurationOptions.defaults().serializers(builder -> builder.register(new ResourceLocationSerializer())));
-        if (!CONFIG_FILE.toFile().exists()) {
-            CONFIG_DIR.toFile().mkdirs();
-            LOGGER.info("Creating configuration file!");
-            rootNode.set(EssentialsConfig.class, new EssentialsConfig());
-            loader.save(rootNode);
-        }
-        essentialsConfig = rootNode.get(EssentialsConfig.class, new EssentialsConfig());
-    }
-
-    public EssentialsConfig config() {
-        return essentialsConfig;
+    public static Config config() {
+        return config;
     }
 
 }

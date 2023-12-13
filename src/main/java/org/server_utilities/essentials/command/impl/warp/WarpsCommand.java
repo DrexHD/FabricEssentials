@@ -29,8 +29,7 @@ public class WarpsCommand extends Command {
     }
 
     private int execute(CommandContext<CommandSourceStack> ctx) {
-        ServerData essentialsData = DataStorage.STORAGE.getServerData();
-        Map<String, Warp> warps = essentialsData.getWarps();
+        Map<String, Warp> warps = DataStorage.serverData().getWarps();
         if (warps.isEmpty()) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.warps.empty"));
         } else {

@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
-import org.server_utilities.essentials.config.commands.ItemEditConfig;
+import org.server_utilities.essentials.config.ItemEditConfig;
 import org.server_utilities.essentials.util.IdentifierUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 
@@ -52,7 +52,7 @@ public class ItemEditCommand extends Command {
             literal("lore")
                 .requires(require("lore"))
                 .then(
-                    argument("line", integer(1, config().commands.itemEdit.lore.maxLines))
+                    argument("line", integer(1, config().itemEdit.lore.maxLines))
                         .then(
                             argument("lore", greedyString()).executes(context -> editItemLore(context.getSource(), getInteger(context, "line"), getString(context, "lore"), false))
                         ).then(
@@ -69,7 +69,7 @@ public class ItemEditCommand extends Command {
             src.sendFailure(localized("fabric-essentials.commands.itemedit.missing"));
             return FAILURE;
         }
-        ItemEditConfig.NameConfig nameConfig = config().commands.itemEdit.name;
+        ItemEditConfig.NameConfig nameConfig = config().itemEdit.name;
         MutableComponent component;
         Component parsed = StyledInputUtil.parse(name, textTag -> IdentifierUtil.check(src, "style.item.name." + textTag.name()));
         if (parsed.getString().equals(name)) {
@@ -105,7 +105,7 @@ public class ItemEditCommand extends Command {
             src.sendFailure(localized("fabric-essentials.commands.itemedit.missing"));
             return FAILURE;
         }
-        ItemEditConfig.LoreConfig loreConfig = config().commands.itemEdit.lore;
+        ItemEditConfig.LoreConfig loreConfig = config().itemEdit.lore;
         MutableComponent component;
         Component parsed = StyledInputUtil.parse(lore, textTag -> IdentifierUtil.check(src, "style.item.lore." + textTag.name()));
         if (parsed.getString().equals(lore)) {

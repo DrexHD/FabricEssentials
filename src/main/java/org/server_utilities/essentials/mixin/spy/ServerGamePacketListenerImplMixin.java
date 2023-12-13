@@ -27,14 +27,14 @@ public abstract class ServerGamePacketListenerImplMixin {
 
     @Inject(method = "performChatCommand", at = @At(value = "INVOKE", target = "Lnet/minecraft/commands/Commands;performCommand(Lcom/mojang/brigadier/ParseResults;Ljava/lang/String;)V"))
     public void onCommand(ServerboundChatCommandPacket packet, LastSeenMessages lastSeenMessages, CallbackInfo ci) {
-        for (String ignoreCommandSpyCommand : ConfigManager.INSTANCE.config().commands.ignoreCommandSpyCommands) {
+        for (String ignoreCommandSpyCommand : ConfigManager.config().ignoreCommandSpyCommands) {
             if (packet.command().startsWith(ignoreCommandSpyCommand)) return;
         }
         MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
             put("command", Component.literal(packet.command()));
         }}, PlaceholderContext.of(player));
         for (ServerPlayer player : player.server.getPlayerList().getPlayers()) {
-            if (DataStorage.STORAGE.getPlayerData(player).commandSpy && player != this.player) {
+            if (DataStorage.getPlayerData(player).commandSpy && player != this.player) {
                 player.sendSystemMessage(spyMessage);
             }
         }

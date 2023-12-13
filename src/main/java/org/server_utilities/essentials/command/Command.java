@@ -11,8 +11,8 @@ import net.minecraft.commands.Commands;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.EssentialsMod;
+import org.server_utilities.essentials.config.Config;
 import org.server_utilities.essentials.config.ConfigManager;
-import org.server_utilities.essentials.config.EssentialsConfig;
 import org.server_utilities.essentials.util.IdentifierUtil;
 import org.slf4j.Logger;
 
@@ -93,8 +93,8 @@ public abstract class Command {
         }
     }
 
-    public static EssentialsConfig config() {
-        return ConfigManager.INSTANCE.config();
+    public static Config config() {
+        return ConfigManager.config();
     }
 
     public static final SimpleCommandExceptionType WORLD_UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.location.world.unknown"));

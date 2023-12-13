@@ -84,7 +84,7 @@ public class RTPCommand extends Command {
     }
 
     private int checkOther(CommandSourceStack src, GameProfile target) {
-        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(src.getServer(), target.getId());
+        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
         MutableComponent message = localized("fabric-essentials.commands.rtp.check.other", new HashMap<>() {{
             put("rtpCount", Component.literal(String.valueOf(playerData.rtpCount)));
         }}, PlaceholderContext.of(target, src.getServer()));
@@ -94,7 +94,7 @@ public class RTPCommand extends Command {
 
     private int check(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
+        PlayerData playerData = DataStorage.getPlayerData(target);
         ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.rtp.check.self"));
         return playerData.rtpCount;
     }
@@ -102,9 +102,9 @@ public class RTPCommand extends Command {
     private int add(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int amount = getInteger(ctx, "amount");
         GameProfile target = getGameProfile(ctx, "target");
-        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
+        PlayerData playerData = DataStorage.getOfflinePlayerData(ctx, target);
         playerData.rtpCount += amount;
-        DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
+        DataStorage.saveOfflinePlayerData(ctx, target, playerData);
 
         MutableComponent message = localized("fabric-essentials.commands.rtp.add", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
@@ -116,9 +116,9 @@ public class RTPCommand extends Command {
     }
 
     private int remove(CommandContext<CommandSourceStack> ctx, GameProfile target, int amount) {
-        PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(ctx, target);
+        PlayerData playerData = DataStorage.getOfflinePlayerData(ctx, target);
         playerData.rtpCount -= amount;
-        DataStorage.STORAGE.saveOfflinePlayerData(ctx, target, playerData);
+        DataStorage.saveOfflinePlayerData(ctx, target, playerData);
 
         MutableComponent message = localized("fabric-essentials.commands.rtp.remove", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
@@ -132,7 +132,7 @@ public class RTPCommand extends Command {
         CommandSourceStack src = ctx.getSource();
         ServerPlayer target = src.getPlayerOrException();
         ServerLevel targetLevel = src.getLevel();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
+        PlayerData playerData = DataStorage.getPlayerData(target);
         ResourceLocation resourceLocation = targetLevel.dimension().location();
         if (!check(src, "dimension" + "." + resourceLocation.getNamespace() + "." + resourceLocation.getPath())) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.rtp.dimension"));
@@ -148,7 +148,7 @@ public class RTPCommand extends Command {
             return -3;
         }
         long start = System.currentTimeMillis();
-        CommandUtil.asyncTeleport(src, targetLevel, chunkPos, config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+        CommandUtil.asyncTeleport(src, targetLevel, chunkPos, config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
             if (chunkAccess != null) execute(src, target, targetLevel, start, chunkPos, chunkAccess);
         }, src.getServer());
         return SUCCESS;
@@ -156,10 +156,10 @@ public class RTPCommand extends Command {
 
     private int back(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer target = ctx.getSource().getPlayerOrException();
-        PlayerData playerData = DataStorage.STORAGE.getPlayerData(target);
+        PlayerData playerData = DataStorage.getPlayerData(target);
         Location lastRtpLocation = playerData.lastRtpLocation;
         if (lastRtpLocation != null) {
-            CommandUtil.asyncTeleport(ctx.getSource(), lastRtpLocation.getLevel(ctx.getSource().getServer()), lastRtpLocation.chunkPos(), config().rtp.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
+            CommandUtil.asyncTeleport(ctx.getSource(), lastRtpLocation.getLevel(ctx.getSource().getServer()), lastRtpLocation.chunkPos(), config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
                 ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.rtp.back"), false);
                 lastRtpLocation.teleport(target);
@@ -201,14 +201,14 @@ public class RTPCommand extends Command {
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, BuiltInRegistries.BLOCK.getKey(blockState.getBlock()));
                 Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
-                PlayerData playerData = DataStorage.STORAGE.getAndSavePlayerData(target);
+                PlayerData playerData = DataStorage.getAndSavePlayerData(target);
                 playerData.lastRtpLocation = location;
                 src.sendSuccess(() -> localized("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
                     put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
                 }}, location.placeholders())), false);
-                CommandUtil.teleportEntity(target, targetLevel, blockPos);
+                location.teleport(target);
                 if (!check(src, "bypassLimit", false)) {
-                    DataStorage.STORAGE.getAndSavePlayerData(target).rtpCount--;
+                    DataStorage.getAndSavePlayerData(target).rtpCount--;
                 }
                 return;
             }

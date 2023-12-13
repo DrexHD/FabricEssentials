@@ -17,8 +17,6 @@ import org.server_utilities.essentials.command.impl.misc.admin.importer.DataImpo
 import org.server_utilities.essentials.command.impl.misc.admin.importer.KiloEssentialsImporter;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.mixin.CommandSourceStackAccessor;
-import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
-import org.spongepowered.configurate.ConfigurateException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,21 +55,18 @@ public class EssentialsCommand extends Command {
     }
 
     private int reload(CommandContext<CommandSourceStack> ctx) {
-        try {
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            ConfigManager.INSTANCE.load();
-            MessageAPI.reload();
-            stopWatch.stop();
-            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
-                put("time", Component.literal(String.valueOf(stopWatch.getTime())));
-            }}));
-            return SUCCESS;
-        } catch (ConfigurateException configurateException) {
-            LOGGER.error("An error occurred while loading the config, keeping old values", configurateException);
-            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload.error", ComponentPlaceholderUtil.exceptionPlaceholders(configurateException)));
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        if (!ConfigManager.load()) {
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload.error"));
             return FAILURE;
         }
+        MessageAPI.reload();
+        stopWatch.stop();
+        ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
+            put("time", Component.literal(String.valueOf(stopWatch.getTime())));
+        }}));
+        return SUCCESS;
     }
 
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

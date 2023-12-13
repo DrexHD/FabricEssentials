@@ -3,7 +3,7 @@ package org.server_utilities.essentials.util;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
+import org.server_utilities.essentials.config.teleportation.WaitingPeriodConfig;
 
 import java.util.concurrent.CompletableFuture;
 

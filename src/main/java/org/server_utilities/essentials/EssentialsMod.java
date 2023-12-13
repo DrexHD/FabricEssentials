@@ -8,7 +8,6 @@ import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.util.FabricEssentialsPlaceholders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.configurate.ConfigurateException;
 
 public class EssentialsMod implements DedicatedServerModInitializer {
 
@@ -20,12 +19,8 @@ public class EssentialsMod implements DedicatedServerModInitializer {
      */
     @Override
     public void onInitializeServer() {
-        try {
-            ConfigManager.INSTANCE.load();
-        } catch (ConfigurateException e) {
-            LOGGER.error("An error occurred while loading the config, keeping default values", e);
-        }
-        DataStorage.STORAGE.init();
+        ConfigManager.load();
+        DataStorage.init();
         FabricEssentialsPlaceholders.register();
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
     }

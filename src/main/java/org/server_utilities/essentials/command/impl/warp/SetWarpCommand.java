@@ -35,7 +35,7 @@ public class SetWarpCommand extends Command {
     }
 
     private int setWarp(CommandSourceStack src, String name) throws CommandSyntaxException {
-        ServerData essentialsData = DataStorage.STORAGE.getServerData();
+        ServerData essentialsData = DataStorage.serverData();
         Map<String, Warp> warps = essentialsData.getWarps();
         if (!warps.containsKey(name)) {
             Warp warp = new Warp(new Location(src));

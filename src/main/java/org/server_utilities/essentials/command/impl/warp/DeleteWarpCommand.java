@@ -36,7 +36,7 @@ public class DeleteWarpCommand extends Command {
 
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String name = getString(ctx, "warp");
-        ServerData essentialsData = DataStorage.STORAGE.getServerData();
+        ServerData essentialsData = DataStorage.serverData();
         Map<String, Warp> warps = essentialsData.getWarps();
         if (!warps.containsKey(name)) {
             throw UNKNOWN.create();

@@ -1,98 +1,82 @@
 package org.server_utilities.essentials.storage;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.playerdata.api.PlayerDataApi;
 import eu.pb4.playerdata.api.storage.JsonDataStorage;
+import eu.pb4.playerdata.impl.BaseGson;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.server_utilities.essentials.EssentialsMod;
-import org.server_utilities.essentials.config.ConfigManager;
-import org.server_utilities.essentials.storage.adapter.RecordTypeAdapterFactory;
-import org.server_utilities.essentials.storage.adapter.ResourceLocationAdapter;
 import org.server_utilities.essentials.storage.adapter.Vec3Adapter;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Objects;
 import java.util.UUID;
 
 public class DataStorage {
 
-    public static final DataStorage STORAGE = new DataStorage();
-    public static final Gson GSON = new GsonBuilder()
-            .disableHtmlEscaping()
-            .setLenient()
-            .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
-            .registerTypeAdapter(Vec3.class, new Vec3Adapter())
-            .registerTypeAdapterFactory(new RecordTypeAdapterFactory())
-            .create();
-    private static final Path DATA_PATH = ConfigManager.CONFIG_DIR.resolve("data.json");
+    public static final Gson GSON = BaseGson.createBuilder()
+        .registerTypeAdapter(Vec3.class, new Vec3Adapter()) // legacy file structure
+        .create();
+    public static final File FABRIC_ESSENTIALS_DATA = new File("fabric-essentials.json");
 
-    public static final JsonDataStorage<PlayerData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", PlayerData.class, DataStorage.GSON);
-    private ServerData serverData;
+    public static final JsonDataStorage<PlayerData> USER_DATA_STORAGE = new JsonDataStorage<>("fabric-essentials", PlayerData.class, GSON);
+    private static ServerData serverData = new ServerData();
 
     private DataStorage() {
     }
 
     @ApiStatus.Internal
-    public void init() {
+    public static void init() {
         PlayerDataApi.register(USER_DATA_STORAGE);
-        ServerLifecycleEvents.SERVER_STARTING.register(this::load);
+        ServerLifecycleEvents.SERVER_STARTING.register(DataStorage::load);
     }
 
     @NotNull
-    public ServerData getServerData() {
-        return Objects.requireNonNull(serverData, "Server data was not yet loaded!");
+    public static ServerData serverData() {
+        return serverData;
     }
 
-    private void load(MinecraftServer server) {
-        if (!DATA_PATH.toFile().exists()) {
-            serverData = new ServerData();
-        } else {
+    private static void load(MinecraftServer server) {
+        if (FABRIC_ESSENTIALS_DATA.exists()) {
             try {
-                String json = IOUtils.toString(new InputStreamReader(new FileInputStream(DATA_PATH.toFile()), StandardCharsets.UTF_8));
+                String json = Files.readString(FABRIC_ESSENTIALS_DATA.toPath());
                 ServerData essentialsData = GSON.fromJson(json, ServerData.class);
-                this.serverData = Objects.requireNonNullElseGet(essentialsData, ServerData::new);
+                serverData = Objects.requireNonNullElseGet(essentialsData, ServerData::new);
             } catch (IOException e) {
                 EssentialsMod.LOGGER.error("Couldn't load server data", e);
-                this.serverData = new ServerData();
             }
         }
     }
 
     @ApiStatus.Internal
-    public void save() {
-        ConfigManager.CONFIG_DIR.toFile().mkdirs();
+    public static void save() {
         try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(DATA_PATH.toFile()), StandardCharsets.UTF_8));
-            writer.write(GSON.toJson(serverData));
-            writer.close();
+            Files.writeString(FABRIC_ESSENTIALS_DATA.toPath(), GSON.toJson(serverData));
         } catch (IOException e) {
             EssentialsMod.LOGGER.error("Couldn't save server data", e);
         }
     }
 
     @NotNull
-    public PlayerData getPlayerData(ServerPlayer player) {
+    public static PlayerData getPlayerData(ServerPlayer player) {
         PlayerData playerData = PlayerDataApi.getCustomDataFor(player, USER_DATA_STORAGE);
         if (playerData == null) playerData = new PlayerData();
         return playerData;
     }
 
     @NotNull
-    public PlayerData getAndSavePlayerData(ServerPlayer player) {
+    public static PlayerData getAndSavePlayerData(ServerPlayer player) {
         PlayerData playerData = PlayerDataApi.getCustomDataFor(player, USER_DATA_STORAGE);
         if (playerData == null) {
             playerData = new PlayerData();
@@ -102,17 +86,17 @@ public class DataStorage {
     }
 
     @NotNull
-    public PlayerData getPlayerData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+    public static PlayerData getPlayerData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         return getOfflinePlayerData(ctx.getSource().getServer(), ctx.getSource().getPlayerOrException().getUUID());
     }
 
     @NotNull
-    public PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target) {
+    public static PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target) {
         return getOfflinePlayerData(ctx.getSource().getServer(), target.getId());
     }
 
     @NotNull
-    public PlayerData getOfflinePlayerData(MinecraftServer server, UUID uuid) {
+    public static PlayerData getOfflinePlayerData(MinecraftServer server, UUID uuid) {
         PlayerData playerData = PlayerDataApi.getCustomDataFor(server, uuid, USER_DATA_STORAGE);
         if (playerData == null) {
             playerData = new PlayerData();
@@ -120,11 +104,11 @@ public class DataStorage {
         return playerData;
     }
 
-    public void saveOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
+    public static void saveOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
         saveOfflinePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
     }
 
-    public void saveOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {
+    public static void saveOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {
         PlayerDataApi.setCustomDataFor(server, uuid, USER_DATA_STORAGE, playerData);
     }
 

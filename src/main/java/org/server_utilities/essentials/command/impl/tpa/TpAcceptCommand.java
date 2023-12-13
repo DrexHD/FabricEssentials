@@ -9,11 +9,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
-import org.server_utilities.essentials.command.util.CommandUtil;
 import org.server_utilities.essentials.util.AsyncTeleportPlayer;
 import org.server_utilities.essentials.util.ComponentPlaceholderUtil;
 import org.server_utilities.essentials.util.TeleportCancelException;
 import org.server_utilities.essentials.util.TpaManager;
+import org.server_utilities.essentials.util.teleportation.Location;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -57,8 +57,8 @@ public class TpAcceptCommand extends Command {
         CommandSourceStack teleportingSource = teleporting.createCommandSourceStack();
         CommandSourceStack teleportingTargetSource = teleportingTarget.createCommandSourceStack();
         CompletableFuture.allOf(
-                ((AsyncTeleportPlayer) teleporting).delayedTeleport(teleportingSource, config().tpa.waitingPeriod),
-                ((AsyncTeleportPlayer) teleportingTarget).delayedTeleport(teleportingTargetSource, config().tpa.waitingPeriod.period * 20, null)
+                ((AsyncTeleportPlayer) teleporting).delayedTeleport(teleportingSource, config().teleportation.waitingPeriod),
+                ((AsyncTeleportPlayer) teleportingTarget).delayedTeleport(teleportingTargetSource, config().teleportation.waitingPeriod.period * 20, null)
         ).whenCompleteAsync((unused, throwable) -> {
             if (throwable instanceof CompletionException completionException) {
                 if (completionException.getCause() instanceof TeleportCancelException exception) {
@@ -70,7 +70,8 @@ public class TpAcceptCommand extends Command {
                     LOGGER.error("An unknown error occurred, during waiting period", completionException.getCause());
                 }
             } else {
-                CommandUtil.teleportEntity(teleporting, teleportingTarget.serverLevel(), teleportingTarget.getOnPos().above());
+                Location location = new Location(teleportingTarget);
+                location.teleport(teleporting);
             }
         }, ctx.getSource().getServer());
         return SUCCESS;

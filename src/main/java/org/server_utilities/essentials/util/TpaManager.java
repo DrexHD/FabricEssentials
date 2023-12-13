@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 import org.server_utilities.essentials.command.CommandProperties;
+import org.server_utilities.essentials.config.Config;
 import org.server_utilities.essentials.config.ConfigManager;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class TpaManager {
     }
 
     private void onTick(MinecraftServer server) {
-        requestMap.entrySet().removeIf(entry -> (entry.getValue().timeStamp + TimeUnit.SECONDS.toMillis(ConfigManager.INSTANCE.config().tpa.expiry)) <= System.currentTimeMillis());
+        requestMap.entrySet().removeIf(entry -> (entry.getValue().timeStamp + TimeUnit.SECONDS.toMillis(ConfigManager.config().tpa.expiry)) <= System.currentTimeMillis());
     }
 
     public void addRequest(Participants participants, Direction direction) {

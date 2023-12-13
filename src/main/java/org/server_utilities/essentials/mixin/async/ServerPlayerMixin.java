@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
+import org.server_utilities.essentials.config.teleportation.WaitingPeriodConfig;
 import org.server_utilities.essentials.util.AsyncTeleportPlayer;
 import org.server_utilities.essentials.util.IdentifierUtil;
 import org.server_utilities.essentials.util.TeleportCancelException;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
 import static me.drex.message.api.LocalizedMessage.localized;
-import static org.server_utilities.essentials.config.util.WaitingPeriodConfig.WaitingResult.*;
+import static org.server_utilities.essentials.config.teleportation.WaitingPeriodConfig.WaitingResult.*;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {

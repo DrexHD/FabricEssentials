@@ -1,15 +1,11 @@
-package org.server_utilities.essentials.config.commands;
+package org.server_utilities.essentials.config;
 
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-
-@ConfigSerializable
 public class ItemEditConfig {
 
     public NameConfig name = new NameConfig();
 
     public LoreConfig lore = new LoreConfig();
 
-    @ConfigSerializable
     public static class NameConfig {
 
         public int maxLength = 50;
@@ -18,7 +14,6 @@ public class ItemEditConfig {
 
     }
 
-    @ConfigSerializable
     public static class LoreConfig {
 
         public int maxLength = 50;

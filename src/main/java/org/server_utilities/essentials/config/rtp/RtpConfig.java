@@ -4,13 +4,9 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biomes;
-import org.server_utilities.essentials.config.util.WaitingPeriodConfig;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.Random;
 
-@ConfigSerializable
 public class RtpConfig {
 
     public int defaultRtps = 3;
@@ -20,13 +16,8 @@ public class RtpConfig {
     public int minRadius = 5000;
     public int maxRadius = 10000;
 
-    @Comment("Define a waiting period to prevent players from using rtps to escape dangerous situations")
-    public WaitingPeriodConfig waitingPeriod = new WaitingPeriodConfig();
-
-    @Comment("The shape used for determining the rtp area (CIRCLE, RECTANGLE)")
     public Shape shape = Shape.RECTANGLE;
 
-    @Comment("Biomes that should be excluded from rtps")
     public ResourceLocation[] blacklistedBiomes = {
             // Oceans
             Biomes.DEEP_FROZEN_OCEAN.location(),

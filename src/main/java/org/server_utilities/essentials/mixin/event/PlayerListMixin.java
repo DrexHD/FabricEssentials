@@ -12,7 +12,7 @@ public abstract class PlayerListMixin {
 
     @Inject(method = "saveAll", at = @At(value = "HEAD"))
     public void onSave(CallbackInfo ci) {
-        DataStorage.STORAGE.save();
+        DataStorage.save();
     }
 
 }

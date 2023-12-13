@@ -1,6 +1,7 @@
 package org.server_utilities.essentials.command.impl.misc.admin.importer;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -45,8 +46,8 @@ public class KiloEssentialsImporter implements DataImporter {
                 UUID uuid = UUID.fromString(file.getName().replace(".dat", ""));
                 boolean shouldSave = false;
                 try {
-                    PlayerData playerData = DataStorage.STORAGE.getOfflinePlayerData(server, uuid);
-                    CompoundTag tag = NbtIo.readCompressed(new FileInputStream(file));
+                    PlayerData playerData = DataStorage.getOfflinePlayerData(server, uuid);
+                    CompoundTag tag = NbtIo.readCompressed(new FileInputStream(file), NbtAccounter.unlimitedHeap());
                     CompoundTag homesTag = tag.getCompound("homes");
                     Map<String, Home> homes = new HashMap<>();
                     for (String key : homesTag.getAllKeys()) {
@@ -64,7 +65,7 @@ public class KiloEssentialsImporter implements DataImporter {
                         shouldSave = true;
                         playerData.rtpCount = settingsTag.getInt("rtps_left");
                     }
-                    if (shouldSave) DataStorage.STORAGE.saveOfflinePlayerData(server, uuid, playerData);
+                    if (shouldSave) DataStorage.saveOfflinePlayerData(server, uuid, playerData);
                     success++;
                 } catch (Throwable e) {
                     EssentialsMod.LOGGER.error("An error occurred while parsing user file", e);
@@ -78,7 +79,7 @@ public class KiloEssentialsImporter implements DataImporter {
         File warpsFile = data.resolve("warps.dat").toFile();
         if (warpsFile.exists()) {
             try {
-                CompoundTag tag = NbtIo.readCompressed(new FileInputStream(warpsFile));
+                CompoundTag tag = NbtIo.readCompressed(new FileInputStream(warpsFile), NbtAccounter.unlimitedHeap());
                 Map<String, Warp> warps = new HashMap<>();
                 for (String key : tag.getAllKeys()) {
                     CompoundTag loc = tag.getCompound(key).getCompound("loc");
@@ -86,7 +87,7 @@ public class KiloEssentialsImporter implements DataImporter {
                     CompoundTag view = loc.getCompound("view");
                     warps.put(key, new Warp(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
                 }
-                ServerData serverData = DataStorage.STORAGE.getServerData();
+                ServerData serverData = DataStorage.serverData();
                 serverData.getWarps().putAll(warps);
                 EssentialsMod.LOGGER.info("Warps data imported, imported {} warps!", warps.size());
             } catch (Throwable e) {

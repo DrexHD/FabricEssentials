@@ -10,7 +10,7 @@ import java.util.Map;
 public class PlayerData {
 
     private final Map<String, Home> homes = new HashMap<>();
-    public int rtpCount = ConfigManager.INSTANCE.config().rtp.defaultRtps;
+    public int rtpCount = ConfigManager.config().rtp.defaultRtps;
     public Location lastRtpLocation = null;
     public boolean commandSpy = false;
 

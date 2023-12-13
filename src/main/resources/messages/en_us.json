@@ -18,7 +18,7 @@
   "fabric-essentials.commands.deletewarp": "<red>Deleted warp <dark_red>${warp_name}<red>!",
 
   "fabric-essentials.commands.essentials.reload": "<gray>Essentials config successfully reloaded in <white>${time}ms<gray>!",
-  "fabric-essentials.commands.essentials.reload.error": "<red>An error occurred while reloading the config, keeping old values: ${exception_message}",
+  "fabric-essentials.commands.essentials.reload.error": "<red>An error occurred while reloading the config. Check the console for more information!",
   "fabric-essentials.commands.essentials.import.unknown": "<red>No importer with that name exists!",
   "fabric-essentials.commands.essentials.import.console": "<red>This command can only be used from the console!",
 

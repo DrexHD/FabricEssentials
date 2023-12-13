@@ -18,5 +18,6 @@ public class FlyCommand extends SimpleToggleCommand {
     protected void setState(ServerPlayer target, boolean state) {
         target.getAbilities().mayfly = state;
         if (!state) target.getAbilities().flying = false;
+        target.onUpdateAbilities();
     }
 }

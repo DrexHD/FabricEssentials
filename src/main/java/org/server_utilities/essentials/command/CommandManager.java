@@ -61,6 +61,8 @@ public class CommandManager {
         new SignEditCommand(),
         new ModsCommand(),
         new FlyCommand(),
+        new FlySpeedCommand(),
+        new WalkSpeedCommand(),
         new InvulnerableCommand(),
         new TellMessageCommand(),
     };

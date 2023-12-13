@@ -30,6 +30,9 @@
   "fabric-essentials.commands.fly.disable.self": "<red>Disabled fly.",
   "fabric-essentials.commands.fly.disable.other": "<red>Disabled fly for <dark_red>%player:displayname%<red>.",
 
+  "fabric-essentials.commands.flyspeed.self": "<green>Set fly speed to ${fly_speed}",
+  "fabric-essentials.commands.flyspeed.other": "<green>Set fly speed for %player:displayname% to ${fly_speed}",
+
   "fabric-essentials.commands.glow.enable.self": "<green>Enabled glow.",
   "fabric-essentials.commands.glow.disable.self": "<red>Disabled glow.",
   "fabric-essentials.commands.glow.enable.other": "<green>Enabled glow for <dark_green>%player:displayname%<green>.",
@@ -118,6 +121,9 @@
   "fabric-essentials.commands.tpdeny.no_pending": "<red>You don't have any pending requests from <dark_red>%player:displayname%<red>!",
 
   "fabric-essentials.commands.tpall": "<yellow>Request to teleport to you has been sent to <gold>${count} <yellow>players.",
+
+  "fabric-essentials.commands.walkspeed.self": "<green>Set walk speed to ${walk_speed}",
+  "fabric-essentials.commands.walkspeed.other": "<green>Set walk speed for %player:displayname% to ${walk_speed}",
 
   "fabric-essentials.commands.warp": "<yellow>Teleporting to warp <gold>${warp_name}<yellow>.",
   "fabric-essentials.commands.warp.unknown": "<red>No warp with that name exists!",

@@ -35,7 +35,6 @@ public abstract class SimpleToggleCommand extends Command {
                             setState(target, !previousState);
                             return previousState ? FAILURE : SUCCESS;
                         })
-
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             boolean previousState = getState(player);

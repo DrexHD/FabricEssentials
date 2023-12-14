@@ -8,9 +8,7 @@ import org.server_utilities.essentials.command.impl.home.DeleteHomeCommand;
 import org.server_utilities.essentials.command.impl.home.HomeCommand;
 import org.server_utilities.essentials.command.impl.home.HomesCommand;
 import org.server_utilities.essentials.command.impl.home.SetHomeCommand;
-import org.server_utilities.essentials.command.impl.menu.AnvilCommand;
-import org.server_utilities.essentials.command.impl.menu.EnderChestCommand;
-import org.server_utilities.essentials.command.impl.menu.WorkBenchCommand;
+import org.server_utilities.essentials.command.impl.menu.*;
 import org.server_utilities.essentials.command.impl.misc.*;
 import org.server_utilities.essentials.command.impl.misc.admin.*;
 import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
@@ -28,7 +26,13 @@ public class CommandManager {
     public static final Command[] COMMANDS = {
         // Menu
         new AnvilCommand(),
+        new CartographyTableCommand(),
+        new EnchantmentCommand(),
         new EnderChestCommand(),
+        new GrindstoneCommand(),
+        new LoomCommand(),
+        new SmithingCommand(),
+        new StonecutterCommand(),
         new WorkBenchCommand(),
         // Homes
         new DeleteHomeCommand(),

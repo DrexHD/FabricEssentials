@@ -27,7 +27,7 @@ public class FabricEssentialsPlaceholders {
         Placeholders.register(location("home_count"), (context, argument) -> {
             if (context.hasPlayer()) {
                 PlayerData playerData = DataStorage.getPlayerData(context.player());
-                return PlaceholderResult.value(String.valueOf(playerData.getHomes().size()));
+                return PlaceholderResult.value(String.valueOf(playerData.homes.size()));
             } else {
                 return PlaceholderResult.invalid("No player!");
             }

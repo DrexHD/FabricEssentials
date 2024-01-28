@@ -58,14 +58,14 @@ public class KiloEssentialsImporter implements DataImporter {
                     }
                     if (!homes.isEmpty()) {
                         shouldSave = true;
-                        playerData.getHomes().putAll(homes);
+                        playerData.homes.putAll(homes);
                     }
                     CompoundTag settingsTag = tag.getCompound("settings");
                     if (settingsTag.contains("rtps_left")) {
                         shouldSave = true;
                         playerData.rtpCount = settingsTag.getInt("rtps_left");
                     }
-                    if (shouldSave) DataStorage.saveOfflinePlayerData(server, uuid, playerData);
+                    if (shouldSave) DataStorage.updateOfflinePlayerData(server, uuid, playerData);
                     success++;
                 } catch (Throwable e) {
                     EssentialsMod.LOGGER.error("An error occurred while parsing user file", e);

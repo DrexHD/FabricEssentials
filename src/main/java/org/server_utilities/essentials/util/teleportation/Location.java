@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.server_utilities.essentials.storage.DataStorage;
+import org.server_utilities.essentials.storage.PlayerData;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -35,12 +38,22 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
     }
 
     public boolean teleport(@NotNull Entity entity) {
+        return teleport(entity, true);
+    }
+
+    public boolean teleport(@NotNull Entity entity, boolean saveLocation) {
         BlockPos blockPos = BlockPos.containing(pos);
         if (!Level.isInSpawnableBounds(blockPos)) {
             return false;
         } else {
             ServerLevel level = getLevel(entity.getServer());
+            Location currentLocation = new Location(entity);
             if (entity.teleportTo(level, pos.x, pos.y, pos.z, EnumSet.noneOf(RelativeMovement.class),  Mth.wrapDegrees(yaw),  Mth.wrapDegrees(pitch))) {
+                if (saveLocation && entity instanceof ServerPlayer player) {
+                    PlayerData playerData = DataStorage.updatePlayerData(player);
+                    playerData.teleportLocations.push(currentLocation);
+                    playerData.teleportLocations.push(this);
+                }
 
                 if (!(entity instanceof LivingEntity livingEntity) || !livingEntity.isFallFlying()) {
                     entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0, 0.0, 1.0));

@@ -40,7 +40,7 @@ public class HomesCommand extends Command {
 
     protected int listHomes(CommandSourceStack src) throws CommandSyntaxException {
         PlayerData dataStorage = DataStorage.getPlayerData(src.getPlayerOrException());
-        Map<String, Home> homes = dataStorage.getHomes();
+        Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.self.empty"));
         } else {
@@ -58,7 +58,7 @@ public class HomesCommand extends Command {
 
     protected int listOtherHomes(CommandSourceStack src, GameProfile target) {
         PlayerData dataStorage = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
-        Map<String, Home> homes = dataStorage.getHomes();
+        Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", PlaceholderContext.of(target, src.getServer())));
         } else {

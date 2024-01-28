@@ -11,6 +11,7 @@ import org.server_utilities.essentials.command.impl.home.SetHomeCommand;
 import org.server_utilities.essentials.command.impl.menu.*;
 import org.server_utilities.essentials.command.impl.misc.*;
 import org.server_utilities.essentials.command.impl.misc.admin.*;
+import org.server_utilities.essentials.command.impl.teleportation.BackCommand;
 import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAcceptCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAllCommand;
@@ -52,6 +53,7 @@ public class CommandManager {
         new TpAcceptCommand(),
         new TpDenyCommand(),
         // Util
+        new BackCommand(),
         new BroadcastCommand(),
         new CommandSpyCommand(),
         new EssentialsCommand(),

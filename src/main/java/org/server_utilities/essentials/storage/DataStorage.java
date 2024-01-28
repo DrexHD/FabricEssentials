@@ -76,7 +76,7 @@ public class DataStorage {
     }
 
     @NotNull
-    public static PlayerData getAndSavePlayerData(ServerPlayer player) {
+    public static PlayerData updatePlayerData(ServerPlayer player) {
         PlayerData playerData = PlayerDataApi.getCustomDataFor(player, USER_DATA_STORAGE);
         if (playerData == null) {
             playerData = new PlayerData();
@@ -104,11 +104,11 @@ public class DataStorage {
         return playerData;
     }
 
-    public static void saveOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
-        saveOfflinePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
+    public static void updateOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
+        updateOfflinePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
     }
 
-    public static void saveOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {
+    public static void updateOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {
         PlayerDataApi.setCustomDataFor(server, uuid, USER_DATA_STORAGE, playerData);
     }
 

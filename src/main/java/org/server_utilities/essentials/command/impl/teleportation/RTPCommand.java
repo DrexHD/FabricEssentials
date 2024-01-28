@@ -104,7 +104,7 @@ public class RTPCommand extends Command {
         GameProfile target = getGameProfile(ctx, "target");
         PlayerData playerData = DataStorage.getOfflinePlayerData(ctx, target);
         playerData.rtpCount += amount;
-        DataStorage.saveOfflinePlayerData(ctx, target, playerData);
+        DataStorage.updateOfflinePlayerData(ctx, target, playerData);
 
         MutableComponent message = localized("fabric-essentials.commands.rtp.add", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
@@ -118,7 +118,7 @@ public class RTPCommand extends Command {
     private int remove(CommandContext<CommandSourceStack> ctx, GameProfile target, int amount) {
         PlayerData playerData = DataStorage.getOfflinePlayerData(ctx, target);
         playerData.rtpCount -= amount;
-        DataStorage.saveOfflinePlayerData(ctx, target, playerData);
+        DataStorage.updateOfflinePlayerData(ctx, target, playerData);
 
         MutableComponent message = localized("fabric-essentials.commands.rtp.remove", new HashMap<>() {{
             put("amount", Component.literal(String.valueOf(amount)));
@@ -201,14 +201,14 @@ public class RTPCommand extends Command {
                 }
                 LOGGER.debug("Teleporting {} to {} with {}", target.getScoreboardName(), blockPos, BuiltInRegistries.BLOCK.getKey(blockState.getBlock()));
                 Location location = new Location(new Vec3(x, y + 1, z), 0, 0, targetLevel.dimension().location());
-                PlayerData playerData = DataStorage.getAndSavePlayerData(target);
+                PlayerData playerData = DataStorage.updatePlayerData(target);
                 playerData.lastRtpLocation = location;
                 src.sendSuccess(() -> localized("fabric-essentials.commands.rtp", ComponentPlaceholderUtil.mergePlaceholderMaps(new HashMap<>() {{
                     put("time", Component.literal(String.valueOf(System.currentTimeMillis() - start)));
                 }}, location.placeholders())), false);
                 location.teleport(target);
                 if (!check(src, "bypassLimit", false)) {
-                    DataStorage.getAndSavePlayerData(target).rtpCount--;
+                    DataStorage.updatePlayerData(target).rtpCount--;
                 }
                 return;
             }

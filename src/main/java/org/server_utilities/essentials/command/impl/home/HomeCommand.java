@@ -52,7 +52,7 @@ public class HomeCommand extends Command {
     protected int teleportHome(CommandSourceStack src, String name, GameProfile target, boolean self) throws CommandSyntaxException {
         ServerPlayer serverPlayer = src.getPlayerOrException();
         PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
-        Home home = playerData.getHomes().get(name);
+        Home home = playerData.homes.get(name);
         if (home == null) throw UNKNOWN.create();
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
@@ -71,8 +71,14 @@ public class HomeCommand extends Command {
         }
     }
 
-    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.getPlayerData(ctx).getHomes().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> HOMES_PROVIDER = (ctx, builder) -> {
+        PlayerData playerData = DataStorage.getPlayerData(ctx);
+        return SharedSuggestionProvider.suggest(playerData.homes.keySet(), builder);
+    };
 
-    public static final SuggestionProvider<CommandSourceStack> OTHER_HOMES_PROVIDER = (ctx, builder) -> SharedSuggestionProvider.suggest(DataStorage.getOfflinePlayerData(ctx.getSource().getServer(), getGameProfile(ctx, "player").getId()).getHomes().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> OTHER_HOMES_PROVIDER = (ctx, builder) -> {
+        PlayerData playerData = DataStorage.getOfflinePlayerData(ctx.getSource().getServer(), getGameProfile(ctx, "player").getId());
+        return SharedSuggestionProvider.suggest(playerData.homes.keySet(), builder);
+    };
 
 }

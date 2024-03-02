@@ -4,7 +4,6 @@ package org.server_utilities.essentials.util;
  * https://github.com/RelativityMC/VMP-fabric/blob/ver/1.19/src/main/java/com/ishland/vmp/common/chunkloading/async_chunks_on_player_login/AsyncChunkLoadUtil.java
  * */
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
@@ -20,15 +19,15 @@ public class AsyncChunkLoadUtil {
     public static final TicketType<Unit> ASYNC_CHUNK_LOAD = TicketType.create("essentials_async_chunk_load", (unit, unit2) -> 0);
 
 
-    public static CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> scheduleChunkLoadWithRadius(ServerLevel world, ChunkPos pos, int radius) {
+    public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithRadius(ServerLevel world, ChunkPos pos, int radius) {
         return scheduleChunkLoadWithLevel(world, pos, 33 - radius);
     }
 
-    public static CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> scheduleChunkLoadWithLevel(ServerLevel world, ChunkPos pos, int level) {
+    public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithLevel(ServerLevel world, ChunkPos pos, int level) {
         if (!world.getServer().isSameThread()) {
             return CompletableFuture
-                    .supplyAsync(() -> scheduleChunkLoadWithLevel(world, pos, level), world.getServer())
-                    .thenCompose(Function.identity());
+                .supplyAsync(() -> scheduleChunkLoadWithLevel(world, pos, level), world.getServer())
+                .thenCompose(Function.identity());
         }
         final ServerChunkCache chunkCache = world.getChunkSource();
         final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
@@ -39,11 +38,15 @@ public class AsyncChunkLoadUtil {
             throw new IllegalStateException("Chunk not there when requested");
         }
         final FullChunkStatus levelType = ChunkLevel.fullStatus(level);
-        final CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = switch (levelType) {
-            case INACCESSIBLE -> chunkHolder.getOrScheduleFuture(ChunkLevel.generationStatus(level), world.getChunkSource().chunkMap);
-            case FULL -> chunkHolder.getFullChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
-            case BLOCK_TICKING -> chunkHolder.getTickingChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
-            case ENTITY_TICKING -> chunkHolder.getEntityTickingChunkFuture().thenApply(either -> either.mapLeft(Function.identity()));
+        final CompletableFuture<ChunkResult<ChunkAccess>> future = switch (levelType) {
+            case INACCESSIBLE ->
+                chunkHolder.getOrScheduleFuture(ChunkLevel.generationStatus(level), world.getChunkSource().chunkMap);
+            case FULL ->
+                chunkHolder.getFullChunkFuture().thenApply(levelChunkChunkResult -> levelChunkChunkResult.map(levelChunk -> (ChunkAccess) levelChunk));
+            case BLOCK_TICKING ->
+                chunkHolder.getTickingChunkFuture().thenApply(levelChunkChunkResult -> levelChunkChunkResult.map(levelChunk -> (ChunkAccess) levelChunk));
+            case ENTITY_TICKING ->
+                chunkHolder.getEntityTickingChunkFuture().thenApply(levelChunkChunkResult -> levelChunkChunkResult.map(levelChunk -> (ChunkAccess) levelChunk));
         };
         future.whenCompleteAsync((unused, throwable) -> {
             if (throwable != null) throwable.printStackTrace();

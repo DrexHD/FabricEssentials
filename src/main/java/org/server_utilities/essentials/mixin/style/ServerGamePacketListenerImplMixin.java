@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
@@ -19,15 +19,15 @@ public abstract class ServerGamePacketListenerImplMixin {
     public ServerPlayer player;
 
     @ModifyArg(
-            method = "signBook",
+            method = "method_33799",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;updateBookPages(Ljava/util/List;Ljava/util/function/UnaryOperator;Lnet/minecraft/world/item/ItemStack;)V"
+                    target = "Lnet/minecraft/server/network/Filterable;map(Ljava/util/function/Function;)Lnet/minecraft/server/network/Filterable;"
             ),
-            index = 1
+            index = 0
     )
-    public UnaryOperator<String> bookPageFormatting(UnaryOperator<String> original) {
-        return input -> Component.Serializer.toJson(StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(player, "style.book." + textTag.name())));
+    public Function<String, Component> bookPageFormatting(Function<String, Component> original) {
+        return input -> StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(player, "style.book." + textTag.name()));
     }
 
 }

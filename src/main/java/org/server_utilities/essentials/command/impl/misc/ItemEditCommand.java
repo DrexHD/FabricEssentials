@@ -5,22 +5,23 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
 import org.server_utilities.essentials.config.ItemEditConfig;
 import org.server_utilities.essentials.util.IdentifierUtil;
 import org.server_utilities.essentials.util.StyledInputUtil;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -29,8 +30,6 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
-import static net.minecraft.world.item.ItemStack.TAG_DISPLAY;
-import static net.minecraft.world.item.ItemStack.TAG_LORE;
 
 public class ItemEditCommand extends Command {
 
@@ -85,9 +84,9 @@ public class ItemEditCommand extends Command {
         if (player.experienceLevel >= nameConfig.experienceLevelCost || player.isCreative()) {
             if (!player.isCreative()) player.giveExperienceLevels(-nameConfig.experienceLevelCost);
             if (clear) {
-                itemStack.resetHoverName();
+                itemStack.set(DataComponents.CUSTOM_NAME, null);
             } else {
-                itemStack.setHoverName(component.withStyle(Style.EMPTY.withItalic(false)));
+                itemStack.set(DataComponents.CUSTOM_NAME, component.withStyle(Style.EMPTY.withItalic(false)));
             }
             src.sendSuccess(() -> localized("fabric-essentials.commands.itemedit.name", Map.of(
                 "name", itemStack.getHoverName())), false);
@@ -120,28 +119,31 @@ public class ItemEditCommand extends Command {
 
         if (player.experienceLevel >= loreConfig.experienceLevelCost || player.isCreative()) {
             if (!player.isCreative()) player.giveExperienceLevels(-loreConfig.experienceLevelCost);
-            CompoundTag displayTag = itemStack.getOrCreateTagElement(TAG_DISPLAY);
-            if (!displayTag.contains(TAG_LORE)) {
-                displayTag.put(TAG_LORE, new ListTag());
-            }
-            ListTag loreTag = displayTag.getList(TAG_LORE, Tag.TAG_STRING);
-            if (clear) {
-                if (line <= loreTag.size()) {
-                    loreTag.remove(line - 1);
+            AtomicInteger result = new AtomicInteger();
+            itemStack.update(DataComponents.LORE, ItemLore.EMPTY, itemLore -> {
+                List<Component> lines = new LinkedList<>(itemLore.lines());
+                if (clear) {
+                    if (line <= lines.size()) {
+                        lines.remove(line - 1);
+                    } else {
+                        src.sendFailure(localized("fabric-essentials.commands.itemedit.lore.invalid_line"));
+                        result.set(FAILURE);
+                        return itemLore;
+                    }
                 } else {
-                    src.sendFailure(localized("fabric-essentials.commands.itemedit.lore.invalid_line"));
-                    return FAILURE;
+                    for (int i = itemLore.lines().size(); i <= line - 1; i++) {
+                        lines.add(Component.empty());
+                    }
+                    lines.set(line - 1, component.withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.WHITE)));
                 }
-            } else {
-                for (int i = loreTag.size(); i <= line - 1; i++) {
-                    loreTag.add(StringTag.valueOf(Component.Serializer.toJson(Component.empty())));
-                }
-                loreTag.set(line - 1, StringTag.valueOf(Component.Serializer.toJson(component.withStyle(Style.EMPTY.withItalic(false).withColor(ChatFormatting.WHITE)))));
-            }
-            src.sendSuccess(() -> localized("fabric-essentials.commands.itemedit.lore", Map.of(
-                "line", Component.literal(String.valueOf(line)),
-                "lore", component)), false);
-            return SUCCESS;
+                src.sendSuccess(() -> localized("fabric-essentials.commands.itemedit.lore", Map.of(
+                    "line", Component.literal(String.valueOf(line)),
+                    "lore", component)), false);
+                result.set(SUCCESS);
+                return new ItemLore(lines);
+            });
+
+            return result.get();
         } else {
             src.sendFailure(localized("fabric-essentials.commands.itemedit.experience"));
             return FAILURE;

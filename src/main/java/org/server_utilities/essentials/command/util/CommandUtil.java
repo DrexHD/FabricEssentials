@@ -5,15 +5,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Unit;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ChunkHolder;
-import net.minecraft.server.level.DistanceManager;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.server_utilities.essentials.config.teleportation.WaitingPeriodConfig;
@@ -64,8 +60,8 @@ public class CommandUtil {
         final ServerChunkCache chunkCache = level.getChunkSource();
         final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
-        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(level, pos, RADIUS);
-        chunkAccessFuture.whenCompleteAsync((either, throwable) -> {
+        CompletableFuture<ChunkResult<ChunkAccess>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(level, pos, RADIUS);
+        chunkAccessFuture.whenCompleteAsync((chunkResult, throwable) -> {
             asyncTeleportPlayer.setAsyncLoadingChunks(false);
         }, src.getServer());
         waitFuture.whenCompleteAsync((unused, waitingThrowable) -> {
@@ -81,17 +77,17 @@ public class CommandUtil {
                 ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
                 ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
             } else {
-                chunkAccessFuture.whenCompleteAsync((either, chunkThrowable) -> {
+                chunkAccessFuture.whenCompleteAsync((chunkResult, chunkThrowable) -> {
                     if (chunkThrowable != null) {
                         src.sendFailure(localized("fabric-essentials.async.error", ComponentPlaceholderUtil.exceptionPlaceholders(chunkThrowable)));
                         LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
                         result.cancel(false);
                     } else {
-                        if (either.left().isPresent()) {
-                            result.complete(either.left().get());
+                        if (chunkResult.isSuccess()) {
+                            result.complete(chunkResult.orElse(null));
                         } else {
                             src.sendFailure(localized("fabric-essentials.async.not_loaded"));
-                            LOGGER.error("Chunk not there when requested: {}", either.right().get());
+                            LOGGER.error("Chunk not there when requested: {}", chunkResult.getError());
                         }
                     }
                     ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);

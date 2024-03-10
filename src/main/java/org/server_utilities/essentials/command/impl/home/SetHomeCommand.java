@@ -55,23 +55,7 @@ public class SetHomeCommand extends Command {
         PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
         Map<String, Home> homes = playerData.homes;
         Home previousHome = homes.get(name);
-        if (previousHome == null || confirm) {
-            int limit = getHomesLimit(src);
-            if (homes.size() >= limit && !confirm) {
-                src.sendFailure(localized("fabric-essentials.commands.sethome.limit"));
-                return FAILURE;
-            } else {
-                Home home = new Home(new Location(src));
-                homes.put(name, home);
-                DataStorage.updateOfflinePlayerData(src.getServer(), target.getId(), playerData);
-                if (self) {
-                    src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
-                } else {
-                    src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
-                }
-                return SUCCESS;
-            }
-        } else {
+        if (previousHome != null && !confirm) {
             if (self) {
                 src.sendFailure(localized("fabric-essentials.commands.sethome.self.confirm", previousHome.placeholders(name)));
             } else {
@@ -79,6 +63,21 @@ public class SetHomeCommand extends Command {
             }
             return FAILURE;
         }
+        int limit = getHomesLimit(src);
+        boolean overwrite = confirm && previousHome != null;
+        if (homes.size() >= limit && !overwrite) {
+            src.sendFailure(localized("fabric-essentials.commands.sethome.limit"));
+            return FAILURE;
+        }
+        Home home = new Home(new Location(src));
+        homes.put(name, home);
+        DataStorage.updateOfflinePlayerData(src.getServer(), target.getId(), playerData);
+        if (self) {
+            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
+        } else {
+            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+        }
+        return SUCCESS;
     }
 
     private int getHomesLimit(CommandSourceStack src) {

@@ -40,7 +40,7 @@ public class AsyncChunkLoadUtil {
         final FullChunkStatus levelType = ChunkLevel.fullStatus(level);
         final CompletableFuture<ChunkResult<ChunkAccess>> future = switch (levelType) {
             case INACCESSIBLE ->
-                chunkHolder.getOrScheduleFuture(ChunkLevel.generationStatus(level), world.getChunkSource().chunkMap);
+                chunkHolder.scheduleChunkGenerationTask(ChunkLevel.generationStatus(level), world.getChunkSource().chunkMap);
             case FULL ->
                 chunkHolder.getFullChunkFuture().thenApply(levelChunkChunkResult -> levelChunkChunkResult.map(levelChunk -> (ChunkAccess) levelChunk));
             case BLOCK_TICKING ->

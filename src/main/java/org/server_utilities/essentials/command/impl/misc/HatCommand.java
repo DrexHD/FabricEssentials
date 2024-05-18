@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandProperties;
@@ -40,7 +41,7 @@ public class HatCommand extends Command {
         }
         ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
 
-        if (EnchantmentHelper.hasBindingCurse(head) && !check(ctx.getSource(), "bypassBindingCurse")) {
+        if (EnchantmentHelper.has(head, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE) && !check(ctx.getSource(), "bypassBindingCurse")) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.binding_curse"));
             return FAILURE;
         }

@@ -54,7 +54,7 @@ public class KiloEssentialsImporter implements DataImporter {
                         CompoundTag loc = homesTag.getCompound(key).getCompound("loc");
                         CompoundTag pos = loc.getCompound("pos");
                         CompoundTag view = loc.getCompound("view");
-                        homes.put(key, new Home(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
+                        homes.put(key, new Home(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), ResourceLocation.parse(loc.getString("dim")))));
                     }
                     if (!homes.isEmpty()) {
                         shouldSave = true;
@@ -85,7 +85,7 @@ public class KiloEssentialsImporter implements DataImporter {
                     CompoundTag loc = tag.getCompound(key).getCompound("loc");
                     CompoundTag pos = loc.getCompound("pos");
                     CompoundTag view = loc.getCompound("view");
-                    warps.put(key, new Warp(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), new ResourceLocation(loc.getString("dim")))));
+                    warps.put(key, new Warp(new Location(new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")), view.getFloat("yaw"), view.getFloat("pitch"), ResourceLocation.parse(loc.getString("dim")))));
                 }
                 ServerData serverData = DataStorage.serverData();
                 serverData.getWarps().putAll(warps);

@@ -50,7 +50,7 @@ import static org.server_utilities.essentials.command.util.CommandUtil.getGamePr
 
 public class RTPCommand extends Command {
 
-    public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registries.BLOCK, new ResourceLocation(MOD_ID, "unsafe_rtp_location"));
+    public static final TagKey<Block> UNSAFE_RTP_LOCATION = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(MOD_ID, "unsafe_rtp_location"));
 
     public RTPCommand() {
         super(CommandProperties.create("rtp", new String[]{"wild"}, 2));

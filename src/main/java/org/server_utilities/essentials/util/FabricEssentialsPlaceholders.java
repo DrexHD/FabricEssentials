@@ -12,7 +12,7 @@ import static org.server_utilities.essentials.EssentialsMod.MOD_ID;
 public class FabricEssentialsPlaceholders {
 
     private static ResourceLocation location(String placeholderId) {
-        return new ResourceLocation(MOD_ID, placeholderId);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, placeholderId);
     }
 
     public static void register() {

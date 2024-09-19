@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.storage.DataStorage;
 import org.server_utilities.essentials.storage.PlayerData;
 
@@ -53,6 +54,11 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
                     PlayerData playerData = DataStorage.updatePlayerData(player);
                     playerData.teleportLocations.push(currentLocation);
                     playerData.teleportLocations.push(this);
+                    // This used to have no limit...
+                    int toRemove = playerData.teleportLocations.size() - ConfigManager.config().teleportation.savedBackLocations;
+                    for (int i = 0; i < toRemove; i++) {
+                        playerData.teleportLocations.removeLast();
+                    }
                 }
 
                 if (!(entity instanceof LivingEntity livingEntity) || !livingEntity.isFallFlying()) {

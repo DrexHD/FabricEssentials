@@ -4,4 +4,6 @@ public class TeleportationConfig {
 
     public WaitingPeriodConfig waitingPeriod = new WaitingPeriodConfig();
 
+    public int savedBackLocations = 32;
+
 }

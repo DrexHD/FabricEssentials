@@ -60,11 +60,6 @@ public class KiloEssentialsImporter implements DataImporter {
                         shouldSave = true;
                         playerData.homes.putAll(homes);
                     }
-                    CompoundTag settingsTag = tag.getCompound("settings");
-                    if (settingsTag.contains("rtps_left")) {
-                        shouldSave = true;
-                        playerData.rtpCount = settingsTag.getInt("rtps_left");
-                    }
                     if (shouldSave) DataStorage.updateOfflinePlayerData(server, uuid, playerData);
                     success++;
                 } catch (Throwable e) {

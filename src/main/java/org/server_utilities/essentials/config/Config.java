@@ -4,7 +4,6 @@ import org.server_utilities.essentials.command.Command;
 import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.command.CommandProperties;
 import org.server_utilities.essentials.config.homes.HomesConfig;
-import org.server_utilities.essentials.config.rtp.RtpConfig;
 import org.server_utilities.essentials.config.teleportation.TeleportationConfig;
 import org.server_utilities.essentials.config.tpa.TpaConfig;
 
@@ -14,8 +13,6 @@ import java.util.Map;
 public class Config {
 
     public HomesConfig homes = new HomesConfig();
-
-    public RtpConfig rtp = new RtpConfig();
 
     public TpaConfig tpa = new TpaConfig();
 

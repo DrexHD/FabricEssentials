@@ -12,7 +12,6 @@ import org.server_utilities.essentials.command.impl.menu.*;
 import org.server_utilities.essentials.command.impl.misc.*;
 import org.server_utilities.essentials.command.impl.misc.admin.*;
 import org.server_utilities.essentials.command.impl.teleportation.BackCommand;
-import org.server_utilities.essentials.command.impl.teleportation.RTPCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAcceptCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpAllCommand;
 import org.server_utilities.essentials.command.impl.tpa.TpDenyCommand;
@@ -46,7 +45,6 @@ public class CommandManager {
         new SetWarpCommand(),
         new WarpsCommand(),
         // Teleportation
-        new RTPCommand(),
         TpaCommand.TPA,
         TpaCommand.TPA_HERE,
         new TpAllCommand(),

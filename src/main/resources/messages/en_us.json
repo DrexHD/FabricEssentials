@@ -53,10 +53,10 @@
   "fabric-essentials.commands.homes.other.empty": "<dark_red>%player:displayname% <red>doesn't have any homes!",
   "fabric-essentials.commands.homes.self": "<gold>Homes [<yellow>${home_count}<gold>]:\n${home_list}",
   "fabric-essentials.commands.homes.self.list.separator": "<gray>, </gray>",
-  "fabric-essentials.commands.homes.self.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
+  "fabric-essentials.commands.homes.self.list.element": "<hover:show_text:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
   "fabric-essentials.commands.homes.other": "<gold>%player:displayname%'s Homes [<yellow>${home_count}<gold>]:\n${home_list}",
   "fabric-essentials.commands.homes.other.list.separator": "<gray>, </gray>",
-  "fabric-essentials.commands.homes.other.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name} %player:name%'><yellow>${home_name}",
+  "fabric-essentials.commands.homes.other.list.element": "<hover:show_text:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/home ${home_name} %player:name%'><yellow>${home_name}",
 
   "fabric-essentials.commands.invulnerable.enable.self": "<green>Enabled godmode.",
   "fabric-essentials.commands.invulnerable.enable.other": "<green>Enabled godmode for <dark_green>%player:displayname%<green>.",
@@ -75,7 +75,7 @@
   "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>Version: <aqua>${mod_version}\n<gray>Authors: <green>${mod_authors}\n<gray>Description: <yellow>${mod_description}",
   "fabric-essentials.commands.mods.mod.unknown": "<red>No mod with that id exists!",
   "fabric-essentials.commands.mods.list.separator": "<gray>, </gray>",
-  "fabric-essentials.commands.mods.list.element": "<hover:'<aqua>Click for more information!'><run_cmd:'/mods ${mod_id}'>${mod_name}",
+  "fabric-essentials.commands.mods.list.element": "<hover:show_text:'<aqua>Click for more information!'><run_cmd:'/mods ${mod_id}'>${mod_name}",
 
   "fabric-essentials.commands.ping.self": "<yellow>Pong! Your connection latency to the server is %player:ping_colored%<yellow>ms!",
   "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%'s connection latency to the server is %player:ping_colored%<yellow>ms!",
@@ -95,8 +95,8 @@
   "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",
   "fabric-essentials.commands.sethome.limit": "<red>Home limited reached! You can't set any more homes!",
-  "fabric-essentials.commands.sethome.self.confirm": "<red>A home with that name already exists! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} -confirm'><dark_red>[<bold>CONFIRM</bold>]",
-  "fabric-essentials.commands.sethome.other.confirm": "<red><gold>%player:displayname% <red>already has a home with that name! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} %player:name% -confirm'><dark_red>[<bold>CONFIRM</bold>]",
+  "fabric-essentials.commands.sethome.self.confirm": "<red>A home with that name already exists! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:show_text:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} -confirm'><dark_red>[<bold>CONFIRM</bold>]",
+  "fabric-essentials.commands.sethome.other.confirm": "<red><gold>%player:displayname% <red>already has a home with that name! <yellow>Do you want to overwrite this <gold>home<yellow>? <hover:show_text:'<red>Click to confirm!'><run_cmd:'/sethome ${home_name} %player:name% -confirm'><dark_red>[<bold>CONFIRM</bold>]",
 
   "fabric-essentials.commands.setwarp": "<yellow>Set the warp <gold>${warp_name}<yellow>!",
   "fabric-essentials.commands.setwarp.already_exists": "<red>A warp with that name already exists!",
@@ -107,10 +107,10 @@
   "fabric-essentials.commands.signedit.length": "<red>The text exceeds the maximum length!",
 
   "fabric-essentials.commands.tpa.self": "<yellow>Request to teleport <gold>you <yellow>to <gold>%player:displayname% <yellow>has been sent!",
-  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname% <yellow>requested to teleport to <gold>you<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
+  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname% <yellow>requested to teleport to <gold>you<yellow>. <hover:show_text:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:show_text:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
   "fabric-essentials.commands.tpa.pending": "<red>You already have a pending teleport request for <dark_red>%player:displayname%<red>!",
   "fabric-essentials.commands.tpahere.self": "<yellow>Request to teleport <gold>%player:displayname% <yellow>to <gold>you <yellow>has been sent!",
-  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname% <yellow>requested to teleport <gold>you<yellow> to <gold>them<yellow>. <hover:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
+  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname% <yellow>requested to teleport <gold>you<yellow> to <gold>them<yellow>. <hover:show_text:'<green>Click to accept!'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:show_text:'<red>Click to deny!'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
 
   "fabric-essentials.commands.tpaccept.self": "<green>Teleport request from <dark_green>%player:displayname% <green>accepted!",
   "fabric-essentials.commands.tpaccept.victim": "<dark_green>%player:displayname% <green>accepted your teleport request!",
@@ -131,9 +131,9 @@
   "fabric-essentials.commands.warps": "<gold>Warps [<yellow>%fabric-essentials:warp_count%<gold>]:\n${warp_list}",
   "fabric-essentials.commands.warps.empty": "<red>There aren't any warps!",
   "fabric-essentials.commands.warps.list.separator": "<gray>, </gray>",
-  "fabric-essentials.commands.warps.list.element": "<hover:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
+  "fabric-essentials.commands.warps.list.element": "<hover:show_text:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
 
-  "fabric-essentials.commandspy": "<white>[<light_purple>CommandSpy<white>] <dark_gray>%player:name% <gray><italic>${command}<reset>",
+  "fabric-essentials.commandspy": "<dark_gray>[<light_purple>CommandSpy<dark_gray>] <dark_gray>[<reset>%player:displayname%<dark_gray>] <hover:show_text:'Click to copy!'><click:copy_to_clipboard:'/${command}'><gray>/${command}",
 
   "fabric-essentials.location.world.unknown": "<red>The target world no longer exists!",
 

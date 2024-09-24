@@ -2,6 +2,7 @@ package org.server_utilities.essentials;
 
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.server_utilities.essentials.command.CommandManager;
 import org.server_utilities.essentials.config.ConfigManager;
 import org.server_utilities.essentials.storage.DataStorage;
@@ -23,6 +24,9 @@ public class EssentialsMod implements DedicatedServerModInitializer {
         DataStorage.init();
         FabricEssentialsPlaceholders.register();
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            CommandManager.dumpCommands(server.getCommands().getDispatcher(), server);
+        });
     }
 
 }

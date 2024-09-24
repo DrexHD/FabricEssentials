@@ -1,9 +1,13 @@
 package org.server_utilities.essentials.command;
 
+import com.google.common.collect.Iterables;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.server.MinecraftServer;
 import org.server_utilities.essentials.command.impl.home.DeleteHomeCommand;
 import org.server_utilities.essentials.command.impl.home.HomeCommand;
 import org.server_utilities.essentials.command.impl.home.HomesCommand;
@@ -21,7 +25,12 @@ import org.server_utilities.essentials.command.impl.warp.SetWarpCommand;
 import org.server_utilities.essentials.command.impl.warp.WarpCommand;
 import org.server_utilities.essentials.command.impl.warp.WarpsCommand;
 
+import java.util.Arrays;
+import java.util.Map;
+
 public class CommandManager {
+
+    private static final boolean DUMP_COMMANDS = false;
 
     public static final Command[] COMMANDS = {
         // Menu
@@ -75,6 +84,52 @@ public class CommandManager {
         for (Command command : COMMANDS) {
             command.register(dispatcher, context);
         }
+    }
+
+    public static void dumpCommands(CommandDispatcher<CommandSourceStack> dispatcher, MinecraftServer server) {
+        if (!DUMP_COMMANDS) return;
+        StringBuilder builder = new StringBuilder();
+        builder
+            .append("| Command | Alias | Permission | Default |\n")
+            .append("|---|---|---|---|\n");
+        for (Command command : COMMANDS) {
+            // Command
+            var properties = command.defaultCommandProperties;
+            builder.append("| ");
+            var source = server.createCommandSourceStack();
+            ParseResults<CommandSourceStack> parseResults = dispatcher.parse(properties.literal(), source);
+            Map<CommandNode<CommandSourceStack>, String> map = dispatcher.getSmartUsage((Iterables.getLast(parseResults.getContext().getNodes())).getNode(), source);
+            if (map.isEmpty()) {
+                builder.append("`/").append(properties.literal()).append('`');
+            } else {
+                builder.append(
+                    String.join(
+                        ", ",
+                        map.values().stream()
+                            .map(s -> "`/" + properties.literal() + " " + s.replace("|", "\\|") + "`")
+                            .toList()
+                    )
+                );
+            }
+            builder.append(" | ");
+            // Alias
+            builder.append(String.join(", ",
+                Arrays.stream(properties.alias())
+                    .map(s -> "`/" + s + "`")
+                    .toList()));
+            builder.append(" | ");
+            // Permission
+            builder.append("`fabric-essentials.command.").append(properties.literal()).append('`');
+            builder.append(" | ");
+            // Default
+            if (properties.defaultRequiredLevel() <= 0) {
+                builder.append('✔');
+            } else {
+                builder.append('✘');
+            }
+            builder.append(" |\n");
+        }
+        System.out.println(builder);
     }
 
 }

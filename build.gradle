@@ -1,16 +1,18 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
     id 'fabric-loom' version '1.6-SNAPSHOT'
+    id "me.modmuss50.mod-publish-plugin" version "0.7.4"
     id 'maven-publish'
+    id 'org.jetbrains.changelog' version '2.+'
 }
 
-version = project.mod_version
+archivesBaseName = project.archives_base_name
+version = project.mod_version + "+" + project.minecraft_version
 group = project.maven_group
 
-base {
-    archivesName = project.archives_base_name
-}
-
 repositories {
+    mavenCentral()
     maven { url "https://maven.nucleoid.xyz/" }
     maven { url "https://jitpack.io" }
 }
@@ -43,6 +45,27 @@ dependencies {
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
     modImplementation include("eu.pb4:common-protection-api:${project.common_protection_api_version}")
     modImplementation include("com.github.DrexHD:message-api:${project.message_api_version}")
+}
+
+publishMods {
+    file = remapJar.archiveFile
+    type = BETA
+    changelog = fetchChangelog()
+
+    displayName = "Fabric Essentials ${version.get()}"
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "o69N0FT2"
+        minecraftVersions.add(project.minecraft_version)
+    }
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
+        commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
+    }
 }
 
 processResources {
@@ -87,5 +110,17 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+    }
+}
+
+private String fetchChangelog() {
+    def log = getChangelog.changelog.get()
+    if (log.has(project.mod_version)) {
+        return log.renderItem(
+                log.get(project.mod_version).withHeader(false),
+                Changelog.OutputType.MARKDOWN
+        )
+    } else {
+        return ""
     }
 }

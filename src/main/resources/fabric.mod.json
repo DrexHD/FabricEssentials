@@ -13,7 +13,7 @@
   "environment": "server",
   "entrypoints": {
     "server": [
-      "org.server_utilities.essentials.EssentialsMod"
+      "me.drex.essentials.EssentialsMod"
     ]
   },
   "mixins": [

@@ -94,7 +94,7 @@ public class CommandManager {
             .append("|---|---|---|---|\n");
         for (Command command : COMMANDS) {
             // Command
-            var properties = command.defaultCommandProperties;
+            var properties = command.commandProperties;
             builder.append("| ");
             var source = server.createCommandSourceStack();
             ParseResults<CommandSourceStack> parseResults = dispatcher.parse(properties.literal(), source);

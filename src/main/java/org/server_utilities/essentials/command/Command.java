@@ -22,16 +22,14 @@ import static me.drex.message.api.LocalizedMessage.localized;
 
 public abstract class Command {
 
-    protected final CommandProperties defaultCommandProperties;
+    protected final CommandProperties commandProperties;
     protected static final Logger LOGGER = EssentialsMod.LOGGER;
 
     public Command(@NotNull CommandProperties commandProperties) {
-        this.defaultCommandProperties = commandProperties;
+        this.commandProperties = commandProperties;
     }
 
     public void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-        CommandProperties commandProperties = config().commands.get(defaultCommandProperties.literal());
-        if (commandProperties == null) commandProperties = defaultCommandProperties;
         String[] aliasLiterals = commandProperties.alias();
         LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(commandProperties.literal())
                 .requires(require(null, commandProperties.defaultRequiredLevel()));
@@ -89,14 +87,14 @@ public abstract class Command {
 
     public String permission(@Nullable String permission) {
         if (permission == null) {
-            return IdentifierUtil.permission("command." + defaultCommandProperties.literal());
+            return IdentifierUtil.permission("command." + commandProperties.literal());
         } else {
-            return IdentifierUtil.permission("command." + defaultCommandProperties.literal() + "." + permission);
+            return IdentifierUtil.permission("command." + commandProperties.literal() + "." + permission);
         }
     }
 
     public CommandProperties defaultProperties() {
-        return this.defaultCommandProperties;
+        return this.commandProperties;
     }
 
     public static Config config() {

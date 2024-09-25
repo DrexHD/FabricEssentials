@@ -71,7 +71,6 @@ public class CommandManager {
         new GlowCommand(),
         new PingCommand(),
         new SignEditCommand(),
-        new SignEditCommand(),
         new ModsCommand(),
         new FlyCommand(),
         new FlySpeedCommand(),

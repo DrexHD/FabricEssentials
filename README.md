@@ -37,7 +37,6 @@
 | `/glow [<player>]`                                                        |                           | `fabric-essentials.command.glow`             | ✘       |
 | `/ping [<player>]`                                                        |                           | `fabric-essentials.command.ping`             | ✘       |
 | `/signedit <line> (<text>\|clear)`                                        |                           | `fabric-essentials.command.signedit`         | ✘       |
-| `/signedit <line> (<text>\|clear)`                                        |                           | `fabric-essentials.command.signedit`         | ✘       |
 | `/mods [<mod>]`                                                           |                           | `fabric-essentials.command.mods`             | ✘       |
 | `/fly [<player>]`                                                         |                           | `fabric-essentials.command.fly`              | ✘       |
 | `/flyspeed [<flyspeed>] [<target>]`                                       |                           | `fabric-essentials.command.flyspeed`         | ✘       |

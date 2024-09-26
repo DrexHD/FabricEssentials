@@ -77,6 +77,7 @@ public class CommandManager {
         new WalkSpeedCommand(),
         new InvulnerableCommand(),
         new TellMessageCommand(),
+        new MessageToVanilla(),
     };
 
     public CommandManager(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context, Commands.CommandSelection selection) {

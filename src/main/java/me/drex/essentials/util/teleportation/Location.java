@@ -52,13 +52,7 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
             if (entity.teleportTo(level, pos.x, pos.y, pos.z, EnumSet.noneOf(RelativeMovement.class),  Mth.wrapDegrees(yaw),  Mth.wrapDegrees(pitch))) {
                 if (saveLocation && entity instanceof ServerPlayer player) {
                     PlayerData playerData = DataStorage.updatePlayerData(player);
-                    playerData.teleportLocations.push(currentLocation);
-                    playerData.teleportLocations.push(this);
-                    // This used to have no limit...
-                    int toRemove = playerData.teleportLocations.size() - ConfigManager.config().teleportation.savedBackLocations;
-                    for (int i = 0; i < toRemove; i++) {
-                        playerData.teleportLocations.removeLast();
-                    }
+                    playerData.saveLocation(currentLocation);
                 }
 
                 if (!(entity instanceof LivingEntity livingEntity) || !livingEntity.isFallFlying()) {

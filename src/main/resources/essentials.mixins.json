@@ -13,7 +13,6 @@
     "async.IChunkMap",
     "async.IServerChunkCache",
     "async.ServerPlayerMixin",
-    "event.PlayerListMixin",
     "spy.ServerGamePacketListenerImplMixin",
     "style.AnvilMenuMixin",
     "style.ServerGamePacketListenerImplMixin",

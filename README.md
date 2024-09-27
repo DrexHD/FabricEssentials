@@ -26,7 +26,7 @@
 | `/tpall`                                                                                  |                           | `fabric-essentials.command.tpall`              | ✘       |
 | `/tpaccept <target>`                                                                      |                           | `fabric-essentials.command.tpaccept`           | ✔       |
 | `/tpdeny <target>`                                                                        |                           | `fabric-essentials.command.tpdeny`             | ✔       |
-| `/back [<target>]`                                                                        |                           | `fabric-essentials.command.back`               | ✘       |
+| `/back`                                                                                   |                           | `fabric-essentials.command.back`               | ✘       |
 | `/broadcast <message>`                                                                    |                           | `fabric-essentials.command.broadcast`          | ✘       |
 | `/commandspy`                                                                             |                           | `fabric-essentials.command.commandspy`         | ✘       |
 | `/essentials reload`, `/essentials import <importer>`                                     |                           | `fabric-essentials.command.essentials`         | ✘       |

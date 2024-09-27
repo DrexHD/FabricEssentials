@@ -40,6 +40,7 @@ public class DataStorage {
     public static void init() {
         PlayerDataApi.register(USER_DATA_STORAGE);
         ServerLifecycleEvents.SERVER_STARTING.register(DataStorage::load);
+        ServerLifecycleEvents.BEFORE_SAVE.register((server, flush, force) -> save());
     }
 
     @NotNull

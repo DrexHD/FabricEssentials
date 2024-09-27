@@ -7,6 +7,9 @@
   "fabric-essentials.async.error": "<red>An error occurred, while loading the chunks: ${exception_message}",
   "fabric-essentials.async.not_loaded": "<red>Chunk has not been loaded correctly!",
 
+  "fabric-essentials.commands.back": "<yellow>Teleporting to most <gold>recent location <yellow>at <gold>${location_pos_x} ${location_pos_y} ${location_pos_z} <yellow>in <gold>${location_dimension}<yellow>.",
+  "fabric-essentials.commands.back.empty": "<red>You don't have any saved teleport locations!",
+
   "fabric-essentials.commands.broadcast": "<white>[<red>Broadcast<white>] <gray>${message}",
 
   "fabric-essentials.commands.commandspy.enable": "<green>CommandSpy enabled",
@@ -81,18 +84,6 @@
 
   "fabric-essentials.commands.ping.self": "<yellow>Pong! Your connection latency to the server is %player:ping_colored%<yellow>ms!",
   "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%'s connection latency to the server is %player:ping_colored%<yellow>ms!",
-
-  "fabric-essentials.commands.rtp": "<yellow>Randomly teleported to <gold>${location_pos_x} ${location_pos_y} ${location_pos_z} <yellow>after <gold>${time}ms<yellow>.",
-  "fabric-essentials.commands.rtp.back": "<yellow>Teleporting to most recent RTP location.",
-  "fabric-essentials.commands.rtp.back.none": "<red>You haven't RTPed yet!",
-  "fabric-essentials.commands.rtp.check.self": "<yellow>You have <gold>%fabric-essentials:rtp_count% <yellow>RTPs left!",
-  "fabric-essentials.commands.rtp.check.other": "<yellow>%player:displayname% has <gold>${rtpCount} <yellow>RTPs left!",
-  "fabric-essentials.commands.rtp.dimension": "<red>You don't have permission to RTP in this dimension.",
-  "fabric-essentials.commands.rtp.limit": "<red>You don't have any RTPs left.",
-  "fabric-essentials.commands.rtp.no_location": "<red>Unable to find correct location, within reasonable attempts.",
-  "fabric-essentials.commands.rtp.unsafe": "<red>Target location is not safe. Please try again.",
-  "fabric-essentials.commands.rtp.add": "<green>Added <gold>${amount} <green>RTPs to <gold>%player:displayname%<green>. New RTP count: <gold>${newRtpCount}",
-  "fabric-essentials.commands.rtp.remove": "<red>Removed <gold>${amount} <red>RTPs from <gold>%player:displayname%<red>. New RTP count: <gold>${newRtpCount}",
 
   "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",

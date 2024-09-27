@@ -1,18 +1,18 @@
 package me.drex.essentials.command.impl.teleportation;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.server.level.ServerPlayer;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.storage.DataStorage;
 import me.drex.essentials.storage.PlayerData;
 import me.drex.essentials.util.teleportation.Location;
+import me.drex.message.api.LocalizedMessage;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
 
 import static me.drex.message.api.LocalizedMessage.localized;
-import static net.minecraft.commands.Commands.argument;
 
 public class BackCommand extends Command {
 
@@ -22,19 +22,23 @@ public class BackCommand extends Command {
 
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
-        literal.then(
-            argument("target", EntityArgument.player())
-                .executes(ctx -> teleportBack(ctx.getSource(), EntityArgument.getPlayer(ctx, "target")))
-            ).executes(ctx -> teleportBack(ctx.getSource(), ctx.getSource().getPlayerOrException()));
+        literal.executes(this::teleportBack);
     }
 
-    private int teleportBack(CommandSourceStack src, ServerPlayer target) {
-        PlayerData playerData = DataStorage.updatePlayerData(target);
+    private int teleportBack(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        var source = ctx.getSource();
+        var target = source.getPlayerOrException();
+        PlayerData playerData = DataStorage.getPlayerData(target);
         if (playerData.teleportLocations.isEmpty()) {
-            src.sendFailure(localized(""));
+            source.sendFailure(localized("fabric-essentials.commands.back.empty"));
             return FAILURE;
         }
         Location location = playerData.teleportLocations.pop();
+        source.sendSystemMessage(
+            LocalizedMessage.builder("fabric-essentials.commands.back")
+                .addPlaceholders(location.placeholders())
+                .build()
+        );
         location.teleport(target, false);
         return SUCCESS;
     }

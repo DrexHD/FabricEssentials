@@ -45,6 +45,11 @@
 | `/tellmessage <targets> <message>`                                                        |                           | `fabric-essentials.command.tellmessage`        | ✘       |
 | `/message-to-vanilla quicktext <message>`, `/message-to-vanilla simplifiedtext <message>` |                           | `fabric-essentials.command.message-to-vanilla` | ✘       |
 
+## Messages
+All messages in this mod are completely customizable and translatable. If you want to change them or add translations 
+(you can also PR these so they can be included in this project) navigate to `./config/messages/fabric-essentials/<language_code>.json`.
+For a list of all available language codes check out [the wiki](https://minecraft.wiki/w/Language).
+
 ## Miscellaneous
 
 ### Commandspy

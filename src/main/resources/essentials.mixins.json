@@ -10,6 +10,7 @@
   },
   "mixins": [
     "CommandSourceStackAccessor",
+    "TeleportCommandMixin",
     "async.IChunkMap",
     "async.IServerChunkCache",
     "async.ServerPlayerMixin",

@@ -2,6 +2,7 @@ package me.drex.essentials.mixin.style;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import me.drex.essentials.util.IdentifierUtil;
@@ -21,7 +22,7 @@ public abstract class SignBlockEntityMixin {
             )
     )
     public MutableComponent signFormatting(String input, Player player) {
-        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(player, "style.sign." + textTag.name()));
+        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check((ServerPlayer) player, "style.sign." + textTag.name()));
         // This check is required to keep signs editable, which rely on literal text
         if (formatted.getString().equals(input)) {
             return Component.literal(input);

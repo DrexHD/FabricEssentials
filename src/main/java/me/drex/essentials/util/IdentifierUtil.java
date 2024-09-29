@@ -2,7 +2,7 @@ package me.drex.essentials.util;
 
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.EssentialsMod;
 
 public class IdentifierUtil {
@@ -21,12 +21,12 @@ public class IdentifierUtil {
         }
     }
 
-    public static boolean check(Entity entity, String permission) {
+    public static boolean check(ServerPlayer player, String permission) {
         try {
-            return Permissions.check(entity, permission(permission), 2);
+            return Permissions.check(player, permission(permission), 2);
         } catch (Throwable ignored) {
             // Fallback for datapack compatibility
-            return entity.createCommandSourceStack().hasPermission(2);
+            return player.createCommandSourceStack().hasPermission(2);
         }
     }
 

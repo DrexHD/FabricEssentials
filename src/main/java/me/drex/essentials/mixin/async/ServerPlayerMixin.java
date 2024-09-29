@@ -1,6 +1,10 @@
 package me.drex.essentials.mixin.async;
 
 import com.mojang.authlib.GameProfile;
+import me.drex.essentials.config.teleportation.WaitingPeriodConfig;
+import me.drex.essentials.util.AsyncTeleportPlayer;
+import me.drex.essentials.util.IdentifierUtil;
+import me.drex.essentials.util.TeleportCancelException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -10,10 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import me.drex.essentials.config.teleportation.WaitingPeriodConfig;
-import me.drex.essentials.util.AsyncTeleportPlayer;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.TeleportCancelException;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,8 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
-import static me.drex.message.api.LocalizedMessage.localized;
 import static me.drex.essentials.config.teleportation.WaitingPeriodConfig.WaitingResult.*;
+import static me.drex.message.api.LocalizedMessage.localized;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {
@@ -100,11 +100,12 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                 if (waitingPeriodConfig != null) {
                     WaitingPeriodConfig.CancellationConfig cancellation = waitingPeriodConfig.cancellation;
                     double distance = waitingPeriodSource.getPosition().distanceTo(this.position());
-                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !IdentifierUtil.check(this, "teleport.cancel.bypass.move")) {
+                    ServerPlayer player = (ServerPlayer) (Object) this;
+                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !IdentifierUtil.check(player, "teleport.cancel.bypass.move")) {
                         cancelDelayedTeleport(new TeleportCancelException(MOVE.component()));
                         return;
                     }
-                    if (cancellation.damage && this.getLastDamageSource() != null && !IdentifierUtil.check(this, "teleport.cancel.bypass.damage")) {
+                    if (cancellation.damage && this.getLastDamageSource() != null && !IdentifierUtil.check(player, "teleport.cancel.bypass.damage")) {
                         cancelDelayedTeleport(new TeleportCancelException(DAMAGE.component()));
                         return;
                     }

@@ -2,6 +2,7 @@ package me.drex.essentials.mixin.style;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -29,7 +30,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
             )
     )
     public MutableComponent itemNameFormatting(String input) {
-        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(this.player, "style.anvil." + textTag.name()));
+        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check((ServerPlayer) this.player, "style.anvil." + textTag.name()));
         // This check is required to stay compatible with datapacks, which rely on vanilla text formatting
         if (formatted.getString().equals(input)) {
             return Component.literal(input);

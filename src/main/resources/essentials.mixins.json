@@ -10,6 +10,7 @@
   },
   "mixins": [
     "CommandSourceStackAccessor",
+    "FoodDataAccessor",
     "TeleportCommandMixin",
     "async.IChunkMap",
     "async.IServerChunkCache",

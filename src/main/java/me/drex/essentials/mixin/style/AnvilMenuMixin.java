@@ -4,10 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.ItemCombinerMenu;
-import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.*;
 import org.jetbrains.annotations.Nullable;
 import me.drex.essentials.util.IdentifierUtil;
 import me.drex.essentials.util.StyledInputUtil;
@@ -18,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
-    public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
-        super(menuType, i, inventory, containerLevelAccess);
+    public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess, ItemCombinerMenuSlotDefinition itemCombinerMenuSlotDefinition) {
+        super(menuType, i, inventory, containerLevelAccess, itemCombinerMenuSlotDefinition);
     }
 
     @Redirect(

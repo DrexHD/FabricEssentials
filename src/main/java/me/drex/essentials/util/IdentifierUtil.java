@@ -23,7 +23,7 @@ public class IdentifierUtil {
 
     public static boolean check(ServerPlayer player, String permission) {
         try {
-            return Permissions.check(player, permission(permission), 2);
+            return Permissions.check(player.createCommandSourceStack(), permission(permission), 2);
         } catch (Throwable ignored) {
             // Fallback for datapack compatibility
             return player.createCommandSourceStack().hasPermission(2);

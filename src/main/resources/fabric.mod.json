@@ -10,9 +10,9 @@
   ],
   "license": "MIT",
   "icon": "assets/fabric-essentials/icon.png",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
-    "server": [
+    "main": [
       "me.drex.essentials.EssentialsMod"
     ]
   },

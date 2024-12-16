@@ -1,7 +1,7 @@
 package me.drex.essentials;
 
 import me.drex.essentials.util.teleportation.Location;
-import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -13,13 +13,13 @@ import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EssentialsMod implements DedicatedServerModInitializer {
+public class EssentialsMod implements ModInitializer {
 
     public static final String MOD_ID = "fabric-essentials";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
-    public void onInitializeServer() {
+    public void onInitialize() {
         ConfigManager.load();
         DataStorage.init();
         FabricEssentialsPlaceholders.register();
@@ -33,5 +33,4 @@ public class EssentialsMod implements DedicatedServerModInitializer {
             }
         });
     }
-
 }

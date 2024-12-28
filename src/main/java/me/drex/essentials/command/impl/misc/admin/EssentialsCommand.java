@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import me.drex.essentials.command.impl.misc.admin.importer.EssentialCommandsImporter;
 import me.drex.message.api.MessageAPI;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -31,7 +32,7 @@ import static net.minecraft.commands.Commands.literal;
 public class EssentialsCommand extends Command {
 
     public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.essentials.import.unknown"));
-    private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS};
+    private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS, EssentialCommandsImporter.ESSENTIAL_COMMANDS};
 
     public EssentialsCommand() {
         super(CommandProperties.create("essentials", 3));

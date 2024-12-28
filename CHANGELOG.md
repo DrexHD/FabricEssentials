@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2024-12-28
+### Added
+- Essential-Commands data importer
+
+### Changed
+- Promote to stable
+
 ## [1.2.3] - 2024-12-16
 ### Changed
 - Allow running in singleplayer

@@ -63,3 +63,15 @@ Allows users to use [patboxs text format](https://placeholders.pb4.eu/user/text-
 They will require the following permission to do so `fabric-essentials.style.<type>.<tag>`, where `<type>` can be:
 `anvil`, `book`, `sign`, `item.name`, `item.lore` and `<tag>` can be any of
 the [available tags](https://placeholders.pb4.eu/user/text-format/#list-of-available-tags)!
+
+## Import mod data
+
+This mod provides data importers for data from some other mods to help you transition. 
+**Before starting the import process, make sure to take a backup!**
+There is currently support for [`kiloessentials`](https://github.com/DrexHD/KiloEssentials) and [`essential_commands`](https://github.com/John-Paul-R/Essential-Commands).
+If you wish to import data from any of these mods:
+1. Shutdown your server
+2. Remove the old mod
+3. Install this mod
+4. Start the server
+5. Run `/essentials import <id>` from console to start the import process.

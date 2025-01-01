@@ -94,9 +94,9 @@
   "fabric-essentials.commands.setwarp": "<yellow>設置了傳送點<gold>${warp_name}<yellow>!",
   "fabric-essentials.commands.setwarp.already_exists": "<red>已經有一個這個名字的傳送點了！",
 
-  "fabric-essentials.commands.signedit": "<yellow>修改告示排的第<gold>${sign_line}<yellow>行為\"<gold>${sign_text}<yellow>\".",
+  "fabric-essentials.commands.signedit": "<yellow>修改告示牌的第<gold>${sign_line}<yellow>行為\"<gold>${sign_text}<yellow>\".",
   "fabric-essentials.commands.signedit.cant_modify": "<red>你不能修改這個告示牌！",
-  "fabric-essentials.commands.signedit.missing": "<red>你需要指向一個告示排來使用這條指令！",
+  "fabric-essentials.commands.signedit.missing": "<red>你需要指向一個告示牌來使用這條指令！",
   "fabric-essentials.commands.signedit.length": "<red>文本超過了最大長度限制！",
 
   "fabric-essentials.commands.tpa.self": "<yellow>已發送傳送<gold>你<yellow>至<gold>%player:displayname%<yellow>的請求！",

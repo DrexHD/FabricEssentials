@@ -1,0 +1,139 @@
+{
+  "fabric-essentials.async.loading_chunks.0": "<aqua>载入緊區塊.",
+  "fabric-essentials.async.loading_chunks.1": "<aqua>载入緊區塊..",
+  "fabric-essentials.async.loading_chunks.2": "<aqua>载入緊區塊...",
+  "fabric-essentials.async.loading_chunks.done": "<green>區塊載入完了！",
+  "fabric-essentials.async.active": "<red>你已經為其它嘢載入緊區塊啦，等下啦...",
+  "fabric-essentials.async.error": "<red>喺載入區塊嘅時候發生咗錯誤：${exception_message}",
+  "fabric-essentials.async.not_loaded": "<red>區塊未正確加載！",
+
+  "fabric-essentials.commands.back": "<yellow>傳送到<gold>最近嘅地點<yellow>在<gold>${location_pos_x} ${location_pos_y} ${location_pos_z} <yellow>於<gold>${location_dimension}<yellow>.",
+  "fabric-essentials.commands.back.empty": "<red>你冇已保存嘅地點！",
+
+  "fabric-essentials.commands.broadcast": "<white>[<red>廣播<white>] <gray>${message}",
+
+  "fabric-essentials.commands.commandspy.enable": "<green>已啟用偷睇指令",
+  "fabric-essentials.commands.commandspy.disable": "<red>已停用偷睇指令",
+
+  "fabric-essentials.commands.deletehome.self": "<red>刪除咗屋企<dark_red>${home_name}<red>!",
+  "fabric-essentials.commands.deletehome.other": "<red>刪除咗<dark_red>%player:displayname%<red>嘅<dark_red>${home_name}<red>屋企！",
+
+  "fabric-essentials.commands.deletewarp": "<red>刪除咗傳送點<dark_red>${warp_name}<red>!",
+
+  "fabric-essentials.commands.essentials.reload": "<gray>Essentials配置喺<white>${time}ms<gray>後成功重新載入！",
+  "fabric-essentials.commands.essentials.reload.error": "<red>喺重新載入配置時發生咗錯誤。檢查控制台以獲得更多資訊！",
+  "fabric-essentials.commands.essentials.import.unknown": "<red>冇叫呢個名嘅導入配置！",
+  "fabric-essentials.commands.essentials.import.console": "<red>呢個指令衹能由控制台使用！",
+
+  "fabric-essentials.commands.feed.self": "<yellow>你餵飽咗你自己。",
+  "fabric-essentials.commands.feed.other": "<yellow>你餵飽咗<gold>%player:displayname%<yellow>。",
+
+  "fabric-essentials.commands.fly.enable.self": "<green>已啟用飛行。",
+  "fabric-essentials.commands.fly.enable.other": "<green>已為<dark_green>%player:displayname%<green>啟用飛行。",
+  "fabric-essentials.commands.fly.disable.self": "<red>已停用飛行。",
+  "fabric-essentials.commands.fly.disable.other": "<red>已為<dark_red>%player:displayname%<red>停用飛行。",
+
+  "fabric-essentials.commands.flyspeed.self": "<green>設定飛行速度為${fly_speed}",
+  "fabric-essentials.commands.flyspeed.other": "<green>為%player:displayname%設定飛行速度為${fly_speed}",
+
+  "fabric-essentials.commands.glow.enable.self": "<green>已啟用發光。",
+  "fabric-essentials.commands.glow.disable.self": "<red>已停用發光。",
+  "fabric-essentials.commands.glow.enable.other": "<green>已為<dark_green>%player:displayname%啟用發光<green>。",
+  "fabric-essentials.commands.glow.disable.other": "<red>已為<dark_red>%player:displayname%停用發光<red>。",
+
+  "fabric-essentials.commands.hat": "<yellow>你笠咗個<gold>%player:equipment_slot head%喺頭上<yellow>。",
+  "fabric-essentials.commands.hat.no_permission": "<red>你唔可以笠呢個嘢落頭！",
+  "fabric-essentials.commands.hat.binding_curse": "<red>你唔可以除低佢。",
+
+  "fabric-essentials.commands.heal.self": "<yellow>你治療咗自己。",
+  "fabric-essentials.commands.heal.other": "<yellow>你治療咗<gold>%player:displayname%<yellow>。",
+
+  "fabric-essentials.commands.home.self": "<yellow>傳送緊返屋企<gold>${home_name}<yellow>！",
+  "fabric-essentials.commands.home.other": "<yellow>傳送緊<gold>%player:displayname%返屋企<gold>${home_name}<yellow><yellow>！",
+  "fabric-essentials.commands.home.unknown": "<red>冇叫呢個名嘅屋企！",
+
+  "fabric-essentials.commands.homes.self.empty": "<red>你仲未設置屋企！",
+  "fabric-essentials.commands.homes.other.empty": "<dark_red>%player:displayname% <red>仲未設置屋企！",
+  "fabric-essentials.commands.homes.self": "<gold>屋企列表[<yellow>${home_count}<gold>]：\n${home_list}",
+  "fabric-essentials.commands.homes.self.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.homes.self.list.element": "<hover:show_text:'<gray>位置：<white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>世界<white>${location_dimension}\n<aqua>點擊以傳送！'><run_cmd:'/home ${home_name}'><yellow>${home_name}",
+  "fabric-essentials.commands.homes.other": "<gold>%player:displayname%嘅屋企列表[<yellow>${home_count}<gold>]:\n${home_list}",
+  "fabric-essentials.commands.homes.other.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.homes.other.list.element": "<hover:show_text:'<gray>位置：<white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>世界<white>${location_dimension}\n<aqua>點擊以傳送！'><run_cmd:'/home ${home_name} %player:name%'><yellow>${home_name}",
+
+  "fabric-essentials.commands.invulnerable.enable.self": "<green>已啟用無敵。",
+  "fabric-essentials.commands.invulnerable.enable.other": "<green>已為<dark_green>%player:displayname%啟用無敵<green>。",
+  "fabric-essentials.commands.invulnerable.disable.self": "<red>已停用無敵。",
+  "fabric-essentials.commands.invulnerable.disable.other": "<red>已為<dark_red>%player:displayname%停用無敵<red>。",
+
+  "fabric-essentials.commands.itemedit.missing": "<red>你要揸住一個嘢來用呢條指令！",
+  "fabric-essentials.commands.itemedit.experience": "<red>你唔夠經驗等級！",
+  "fabric-essentials.commands.itemedit.lore": "<yellow>修改物品描述<gold>${line}<yellow>為\"<gold>${lore}<yellow>\"。",
+  "fabric-essentials.commands.itemedit.lore.length": "<red>物品描述超過長度限制！",
+  "fabric-essentials.commands.itemedit.lore.invalid_line": "<red>呢條描述唔存在！",
+  "fabric-essentials.commands.itemedit.name": "<yellow>修改物品名稱為\"<gold>${name}<yellow>\"。",
+  "fabric-essentials.commands.itemedit.name.length": "<red>物品名稱超過長度限制！",
+
+  "fabric-essentials.commands.message-to-vanilla": "預覽：\"${preview}\"\n<hover:show_text:'點擊以複製！'><click:copy_to_clipboard:${vanilla_json}>點擊以複製原始 JSON！",
+
+  "fabric-essentials.commands.mods": "<gold>模組[<yellow>${mod_count}<gold>]：\n${mod_list}",
+  "fabric-essentials.commands.mods.mod": "<light_purple><underlined>${mod_name}</underlined>\n<gray>版本：<aqua>${mod_version}\n<gray>作者<green>${mod_authors}\n<gray>描述：<yellow>${mod_description}",
+  "fabric-essentials.commands.mods.mod.unknown": "<red>呢個 ID 冇對應嘅模組！",
+  "fabric-essentials.commands.mods.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.mods.list.element": "<hover:show_text:'<aqua>點擊以獲得更多資訊！'><run_cmd:'/mods ${mod_id}'>${mod_name}",
+
+  "fabric-essentials.commands.ping.self": "<yellow>Pong! 你到伺服器嘅延遲是：%player:ping_colored%<yellow>ms！",
+  "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%到伺服器嘅延遲是：%player:ping_colored%<yellow>ms！",
+
+  "fabric-essentials.commands.sethome.self": "<yellow>設置咗屋企<gold>${home_name}<yellow>!",
+  "fabric-essentials.commands.sethome.other": "<yellow>為<gold>%player:displayname%設置咗屋企<gold>${home_name}<yellow>！",
+  "fabric-essentials.commands.sethome.limit": "<red>達到屋企數量限制！你唔可以再設置屋企啦！",
+  "fabric-essentials.commands.sethome.self.confirm": "<red>已經有一個叫呢嘅名嘅屋企啦！<yellow>你係咪要覆蓋呢個<gold>屋企<yellow>呀？ <hover:show_text:'<red>點擊以確認！'><run_cmd:'/sethome ${home_name} -confirm'><dark_red>[<bold>確認</bold>]",
+  "fabric-essentials.commands.sethome.other.confirm": "<red><gold>%player:displayname% <red>已經有一個叫呢個名嘅屋企啦！<yellow>係咪要覆蓋呢個<gold>屋企<yellow>呀？ <hover:show_text:'<red>點擊以確認！'><run_cmd:'/sethome ${home_name} %player:name% -confirm'><dark_red>[<bold>確認</bold>]",
+
+  "fabric-essentials.commands.setwarp": "<yellow>設置了傳送點<gold>${warp_name}<yellow>!",
+  "fabric-essentials.commands.setwarp.already_exists": "<red>已經有一個叫呢個名嘅傳送點啦！",
+
+  "fabric-essentials.commands.signedit": "<yellow>修改告示排的第<gold>${sign_line}<yellow>行為\"<gold>${sign_text}<yellow>\".",
+  "fabric-essentials.commands.signedit.cant_modify": "<red>你唔可以修改呢個告示牌！",
+  "fabric-essentials.commands.signedit.missing": "<red>你要指住一個告示牌嚟用呢條指令！",
+  "fabric-essentials.commands.signedit.length": "<red>文本超過咗最大長度限制！",
+
+  "fabric-essentials.commands.tpa.self": "<yellow>已發送傳送<gold>你<yellow>去<gold>%player:displayname%<yellow>嗰度嘅請求！",
+  "fabric-essentials.commands.tpa.victim": "<gold>%player:displayname%<yellow>請求傳送嚟<gold>你<yellow>呢度。 <hover:show_text:'<green>點擊以同意！'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:show_text:'<red>點擊以拒絕！'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
+  "fabric-essentials.commands.tpa.pending": "<red>你已經申請緊傳送到<dark_red>%player:displayname%啦<red>！",
+  "fabric-essentials.commands.tpahere.self": "<yellow>已發送傳送<gold>%player:displayname%<yellow>來<gold>你<yellow>呢度嘅請求！",
+  "fabric-essentials.commands.tpahere.victim": "<gold>%player:displayname%<yellow>請求傳送<gold>你<yellow>去<gold>佢嗰度<yellow>。 <hover:show_text:'<green>點擊以同意！'><run_cmd:'/tpaccept %player:name%'><dark_green>[✔] <hover:show_text:'<red>點擊以拒絕！'><run_cmd:'/tpdeny %player:name%'><dark_red>[✘]",
+
+  "fabric-essentials.commands.tpaccept.self": "<green>來自<dark_green>%player:displayname%嘅傳送請求<green>已被同意！",
+  "fabric-essentials.commands.tpaccept.victim": "<dark_green>%player:displayname% <green>同意咗你個傳送請求！",
+  "fabric-essentials.commands.tpaccept.no_pending": "<red>你冇來自<dark_red>%player:displayname%嘅正在等待嘅傳送請求<red>！",
+
+  "fabric-essentials.commands.tpdeny.self": "<red>來自<dark_red>%player:displayname%<red>嘅傳送請求已被拒絕！",
+  "fabric-essentials.commands.tpdeny.victim": "<dark_red>%player:displayname% <red>拒絕咗你個傳送請求！",
+  "fabric-essentials.commands.tpdeny.no_pending": "<red>你冇來自<dark_red>%player:displayname%嘅正在等待嘅傳送請求<red>!",
+
+  "fabric-essentials.commands.tpall": "<yellow>傳送所有人嚟你呢度嘅請求已經被發送至<gold>${count}<yellow>名玩家。",
+
+  "fabric-essentials.commands.walkspeed.self": "<green>設置步行速度為${walk_speed}",
+  "fabric-essentials.commands.walkspeed.other": "<green>為%player:displayname%設置步行速度為${walk_speed}",
+
+  "fabric-essentials.commands.warp": "<yellow>傳送緊去傳送點<gold>${warp_name}<yellow>。",
+  "fabric-essentials.commands.warp.unknown": "<red>冇叫呢個名嘅傳送點！",
+
+  "fabric-essentials.commands.warps": "<gold>傳送點[<yellow>%fabric-essentials:warp_count%<gold>]:\n${warp_list}",
+  "fabric-essentials.commands.warps.empty": "<red>仲未有傳送點！",
+  "fabric-essentials.commands.warps.list.separator": "<gray>, </gray>",
+  "fabric-essentials.commands.warps.list.element": "<hover:show_text:'<gray>位置：<white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>世界：<white>${location_dimension}\n<aqua>點擊以傳送！'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
+
+  "fabric-essentials.commandspy": "<dark_gray>[<light_purple>偷睇指令<dark_gray>] <dark_gray>[<reset>%player:displayname%<dark_gray>] <hover:show_text:'點擊以複製！'><click:copy_to_clipboard:'/${command}'><gray>/${command}",
+
+  "fabric-essentials.location.world.unknown": "<red>目的世界已經唔存在啦！",
+
+  "fabric-essentials.teleport.wait": "<yellow><gold>${time} 秒後傳送<yellow>。",
+  "fabric-essentials.teleport.wait.error": "<red>喺等待傳送嘅時候發生咗錯誤：${exception_message}",
+  "fabric-essentials.teleport.cancel.other": "<dark_red>%player:displayname%<red>取消咗傳送！",
+  "fabric-essentials.teleport.cancel.move": "<red>傳送取消咗。你行得太遠啦！",
+  "fabric-essentials.teleport.cancel.damage": "<red>傳送取消咗。你受到咗傷害！",
+  "fabric-essentials.teleport.cancel.unknown": "<red>傳送取消咗。"
+}

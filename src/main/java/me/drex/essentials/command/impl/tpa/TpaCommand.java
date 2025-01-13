@@ -9,11 +9,17 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.util.TpaManager;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import net.minecraft.network.chat.Component;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
 import static net.minecraft.commands.arguments.EntityArgument.player;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TpaCommand extends Command {
 
@@ -31,13 +37,22 @@ public class TpaCommand extends Command {
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
-                argument(TARGET_ARGUMENT_ID, player())
+                argument(TARGET_ARGUMENT_ID, StringArgumentType.word())
+                        .suggests((context, builder) -> {
+                            String input = builder.getRemaining().toLowerCase();
+                            context.getSource().getServer().getPlayerList().getPlayers().stream()
+                                .map(player -> player.getGameProfile().getName())
+                                .filter(name -> name.toLowerCase().startsWith(input))
+                                .forEach(builder::suggest);
+                            return builder.buildFuture();
+                        })
                         .executes(this::execute)
         );
     }
 
     private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer target = getPlayer(ctx, TARGET_ARGUMENT_ID);
+        String partialName = StringArgumentType.getString(ctx, TARGET_ARGUMENT_ID);
+        ServerPlayer target = findPlayerByPartialName(ctx.getSource(), partialName);
         TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == this.direction) {
@@ -48,6 +63,25 @@ public class TpaCommand extends Command {
         ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", PlaceholderContext.of(target)), false);
         target.sendSystemMessage(localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".victim", PlaceholderContext.of(ctx.getSource())));
         return SUCCESS;
+    }
+
+    protected static ServerPlayer findPlayerByPartialName(CommandSourceStack source, String partialName) throws CommandSyntaxException {
+        String lowercasePartial = partialName.toLowerCase();
+        List<ServerPlayer> matches = source.getServer().getPlayerList().getPlayers().stream()
+                .filter(player -> player.getGameProfile().getName().toLowerCase().startsWith(lowercasePartial))
+                .collect(Collectors.toList());
+
+        if (matches.isEmpty()) {
+            throw new SimpleCommandExceptionType(
+                Component.literal("No player found matching '" + partialName + "'"))
+                .create();
+        }
+        if (matches.size() > 1) {
+            throw new SimpleCommandExceptionType(
+                Component.literal("Multiple players found matching '" + partialName + "'"))
+                .create();
+        }
+        return matches.get(0);
     }
 
 }

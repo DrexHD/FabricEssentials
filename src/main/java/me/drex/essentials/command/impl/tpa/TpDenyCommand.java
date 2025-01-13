@@ -10,11 +10,12 @@ import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.util.TpaManager;
+import com.mojang.brigadier.arguments.StringArgumentType;
 
 import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
-import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
-import static net.minecraft.commands.arguments.EntityArgument.player;
+
+import java.util.List;
 
 public class TpDenyCommand extends Command {
 
@@ -26,14 +27,50 @@ public class TpDenyCommand extends Command {
 
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
-        literal.then(
-                argument(TARGET_ARGUMENT_ID, player())
-                        .executes(this::execute)
+        literal.executes(this::executeNoArg)
+        .then(
+                argument(TARGET_ARGUMENT_ID, StringArgumentType.word())
+                        .suggests((context, builder) -> {
+                            String input = builder.getRemaining().toLowerCase();
+                            context.getSource().getServer().getPlayerList().getPlayers().stream()
+                                .map(player -> player.getGameProfile().getName())
+                                .filter(name -> name.toLowerCase().startsWith(input))
+                                .forEach(builder::suggest);
+                            return builder.buildFuture();
+                        })
+                        .executes(ctx -> {
+                            String partialName = StringArgumentType.getString(ctx, TARGET_ARGUMENT_ID);
+                            ServerPlayer target = TpaCommand.findPlayerByPartialName(ctx.getSource(), partialName);
+                            return execute(ctx, target);
+                        })
         );
     }
 
-    private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
-        ServerPlayer target = getPlayer(ctx, TARGET_ARGUMENT_ID);
+    private int executeNoArg(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        List<TpaManager.Participants> requests = TpaManager.INSTANCE.getRequestsFor(player.getUUID());
+        
+        if (requests.isEmpty()) {
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_requests"));
+            return FAILURE;
+        }
+        
+        if (requests.size() > 1) {
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.multiple_requests"));
+            return FAILURE;
+        }
+        
+        TpaManager.Participants participants = requests.get(0);
+        ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayer(participants.requester());
+        if (target == null) {
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.player_offline"));
+            return FAILURE;
+        }
+        
+        return execute(ctx, target);
+    }
+    
+    private int execute(CommandContext<CommandSourceStack> ctx, ServerPlayer target) throws CommandSyntaxException {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);

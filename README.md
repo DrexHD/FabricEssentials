@@ -45,6 +45,68 @@
 | `/tellmessage <targets> <message>`                                                        |                           | `fabric-essentials.command.tellmessage`        | ✘       |
 | `/message-to-vanilla quicktext <message>`, `/message-to-vanilla simplifiedtext <message>` |                           | `fabric-essentials.command.message-to-vanilla` | ✘       |
 
+## Config
+```json5
+{
+  "homes": {
+    // How many homes each player should have independent of permissions
+    "defaultLimit": 3,
+    // A list of configurations to increase the home limit. The system will pick the highest value from all entries with
+    // stacking disabled and add all values with stacking enabled
+    "homesLimits": [
+      {
+        // The permission that a player needs to get this 'fabric-essentials.command.sethome.limit.<permission>'
+        "permission": "vip",
+        "limit": 5,
+        "stacks": false
+      }
+    ]
+  },
+  "tpa": {
+    // How many seconds teleport requests will stay active for
+    "expiry": 30
+  },
+  "commands": {
+    // Whether player argument commands allow partial names (only the start of a name) to target a player
+    "allowPartialNames": false
+  },
+  "teleportation": {
+    "waitingPeriod": {
+      // How many seconds players need to wait before being teleported
+      "period": 2,
+      "cancellation": {
+        // Whether damage cancels teleportation
+        "damage": false,
+        // How far players can move before teleportation is cancelled
+        "maxMoveDistance": -1
+      }
+    },
+    // How many locations can be saved for the back command
+    "savedBackLocations": 32
+  },
+  "itemEdit": {
+    // The maximum name length for the item edit command
+    "name": {
+      "maxLength": 50,
+      "experienceLevelCost": 1
+    },
+    // The maximum lore length for the item edit command
+    "lore": {
+      "maxLength": 50,
+      "maxLines": 5,
+      "experienceLevelCost": 1
+    }
+  },
+  "ignoreCommandSpyCommands": [
+    "me",
+    "msg",
+    "teammsg",
+    "tell",
+    "w"
+  ]
+}
+```
+
 ## Messages
 All messages in this mod are completely customizable and translatable. If you want to change them or add translations 
 (you can also PR these so they can be included in this project) navigate to `./config/messages/fabric-essentials/<language_code>.json`.

@@ -135,5 +135,13 @@
   "fabric-essentials.teleport.cancel.other": "<dark_red>%player:displayname%<red>取消了傳送！",
   "fabric-essentials.teleport.cancel.move": "<red>傳送取消了。你走得太遠了！",
   "fabric-essentials.teleport.cancel.damage": "<red>傳送取消了。你受到了傷害！",
-  "fabric-essentials.teleport.cancel.unknown": "<red>傳送取消了。"
+  "fabric-essentials.teleport.cancel.unknown": "<red>傳送取消了。",
+
+  "fabric-essentials.commands.tpaccept.no_requests": "<red>你沒有待處理的傳送請求",
+  "fabric-essentials.commands.tpaccept.multiple_requests": "<red>你有多個待處理的請求。請指定一個玩家",
+  "fabric-essentials.commands.tpaccept.player_offline": "<red>發送請求的玩家已離線",
+  
+  "fabric-essentials.commands.tpdeny.no_requests": "<red>你沒有待處理的傳送請求",
+  "fabric-essentials.commands.tpdeny.multiple_requests": "<red>你有多個待處理的請求。請指定一個玩家",
+  "fabric-essentials.commands.tpdeny.player_offline": "<red>發送請求的玩家已離線"
 }

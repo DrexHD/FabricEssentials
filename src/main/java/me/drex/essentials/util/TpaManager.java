@@ -9,6 +9,7 @@ import me.drex.essentials.config.ConfigManager;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class TpaManager {
 
@@ -66,6 +67,12 @@ public class TpaManager {
     }
 
     public record Request(Direction direction, long timeStamp) {
+    }
+
+    public List<Participants> getRequestsFor(UUID target) {
+        return requestMap.keySet().stream()
+            .filter(request -> request.requested().equals(target))
+            .toList();
     }
 
 }

@@ -135,5 +135,13 @@
   "fabric-essentials.teleport.cancel.other": "<dark_red>%player:displayname% <red>cancelled the teleportation!",
   "fabric-essentials.teleport.cancel.move": "<red>Teleportation cancelled. You moved too far!",
   "fabric-essentials.teleport.cancel.damage": "<red>Teleportation cancelled. You received damage!",
-  "fabric-essentials.teleport.cancel.unknown": "<red>Teleportation cancelled."
+  "fabric-essentials.teleport.cancel.unknown": "<red>Teleportation cancelled.",
+
+  "fabric-essentials.commands.tpaccept.no_requests": "<red>You have no pending teleport requests",
+  "fabric-essentials.commands.tpaccept.multiple_requests": "<red>You have multiple pending requests. Please specify a player",
+  "fabric-essentials.commands.tpaccept.player_offline": "<red>The player who sent the request is no longer online",
+  
+  "fabric-essentials.commands.tpdeny.no_requests": "<red>You have no pending teleport requests",
+  "fabric-essentials.commands.tpdeny.multiple_requests": "<red>You have multiple pending requests. Please specify a player",
+  "fabric-essentials.commands.tpdeny.player_offline": "<red>The player who sent the request is no longer online"
 }

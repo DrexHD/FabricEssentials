@@ -15,6 +15,7 @@
     "async.IChunkMap",
     "async.IServerChunkCache",
     "async.ServerPlayerMixin",
+    "command.EntitySelectorMixin",
     "spy.ServerGamePacketListenerImplMixin",
     "style.AnvilMenuMixin",
     "style.ServerGamePacketListenerImplMixin",

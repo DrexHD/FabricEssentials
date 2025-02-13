@@ -67,7 +67,7 @@ public class TpAcceptCommand extends Command {
             return FAILURE;
         }
         
-        TpaManager.Participants participants = requests.get(0);
+        TpaManager.Participants participants = requests.getFirst();
         ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayer(participants.requester());
         if (target == null) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.player_offline"));

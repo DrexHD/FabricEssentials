@@ -72,9 +72,8 @@ public class TpaManager {
     }
 
     public List<Participants> getRequestsFor(UUID target) {
-        return requestMap.entrySet().stream()
-            .filter(entry -> entry.getKey().requested().equals(target))
-            .map(Map.Entry::getKey)
+        return requestMap.keySet().stream()
+            .filter(request -> request.requested().equals(target))
             .collect(Collectors.toList());
     }
 

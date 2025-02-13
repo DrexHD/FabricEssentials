@@ -15,11 +15,8 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
-import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
-import static net.minecraft.commands.arguments.EntityArgument.player;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TpaCommand extends Command {
 
@@ -69,7 +66,7 @@ public class TpaCommand extends Command {
         String lowercasePartial = partialName.toLowerCase();
         List<ServerPlayer> matches = source.getServer().getPlayerList().getPlayers().stream()
                 .filter(player -> player.getGameProfile().getName().toLowerCase().startsWith(lowercasePartial))
-                .collect(Collectors.toList());
+                .toList();
 
         if (matches.isEmpty()) {
             throw new SimpleCommandExceptionType(
@@ -81,7 +78,7 @@ public class TpaCommand extends Command {
                 Component.literal("Multiple players found matching '" + partialName + "'"))
                 .create();
         }
-        return matches.get(0);
+        return matches.getFirst();
     }
 
 }

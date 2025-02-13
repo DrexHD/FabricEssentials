@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
@@ -14,7 +15,6 @@ import me.drex.essentials.util.ComponentPlaceholderUtil;
 import me.drex.essentials.util.TeleportCancelException;
 import me.drex.essentials.util.TpaManager;
 import me.drex.essentials.util.teleportation.Location;
-import com.mojang.brigadier.arguments.StringArgumentType;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -36,18 +36,9 @@ public class TpAcceptCommand extends Command {
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.executes(this::executeNoArg)
         .then(
-                argument(TARGET_ARGUMENT_ID, StringArgumentType.word())
-                        .suggests((context, builder) -> {
-                            String input = builder.getRemaining().toLowerCase();
-                            context.getSource().getServer().getPlayerList().getPlayers().stream()
-                                .map(player -> player.getGameProfile().getName())
-                                .filter(name -> name.toLowerCase().startsWith(input))
-                                .forEach(builder::suggest);
-                            return builder.buildFuture();
-                        })
+                argument(TARGET_ARGUMENT_ID, EntityArgument.player())
                         .executes(ctx -> {
-                            String partialName = StringArgumentType.getString(ctx, TARGET_ARGUMENT_ID);
-                            ServerPlayer target = TpaCommand.findPlayerByPartialName(ctx.getSource(), partialName);
+                            ServerPlayer target = EntityArgument.getPlayer(ctx, TARGET_ARGUMENT_ID);
                             return execute(ctx, target);
                         })
         );

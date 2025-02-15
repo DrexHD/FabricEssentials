@@ -82,7 +82,10 @@
       }
     },
     // How many locations can be saved for the back command
-    "savedBackLocations": 32
+    "savedBackLocations": 32,
+    // Enabling this will create a back location when running /back, effectively allowing you to toggle between your 
+    // most recent and your current location using /back
+    "saveBackCommandLocation": false
   },
   "itemEdit": {
     // The maximum name length for the item edit command

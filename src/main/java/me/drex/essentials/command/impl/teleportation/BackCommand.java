@@ -5,6 +5,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
+import me.drex.essentials.config.Config;
+import me.drex.essentials.config.ConfigManager;
 import me.drex.essentials.storage.DataStorage;
 import me.drex.essentials.storage.PlayerData;
 import me.drex.essentials.util.teleportation.Location;
@@ -39,7 +41,7 @@ public class BackCommand extends Command {
                 .addPlaceholders(location.placeholders())
                 .build()
         );
-        location.teleport(target, false);
+        location.teleport(target, ConfigManager.config().teleportation.saveBackCommandLocation);
         return SUCCESS;
     }
 

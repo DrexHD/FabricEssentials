@@ -6,4 +6,6 @@ public class TeleportationConfig {
 
     public int savedBackLocations = 32;
 
+    public boolean saveBackCommandLocation = false;
+
 }

@@ -44,6 +44,7 @@
   "fabric-essentials.commands.hat": "<yellow>Set your hat item to <gold>%player:equipment_slot head%<yellow>.",
   "fabric-essentials.commands.hat.no_permission": "<red>You can't wear that item!",
   "fabric-essentials.commands.hat.binding_curse": "<red>You can't remove your head item",
+  "fabric-essentials.commands.hat.deny": "<red>You can't put this item on your head",
 
   "fabric-essentials.commands.heal.self": "<yellow>You have healed yourself.",
   "fabric-essentials.commands.heal.other": "<yellow>You have healed <gold>%player:displayname%<yellow>.",

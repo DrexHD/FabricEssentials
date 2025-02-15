@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Config option to allow partial names in argument
+- Hat deny item tag
 
 ### Changed
 - Improved tpa command usage (@ifloppy)

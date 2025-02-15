@@ -1,8 +1,8 @@
 import org.jetbrains.changelog.Changelog
 
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
-    id "me.modmuss50.mod-publish-plugin" version "0.7.4"
+    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id "me.modmuss50.mod-publish-plugin" version "0.8.4"
     id 'maven-publish'
     id 'org.jetbrains.changelog' version '2.+'
 }
@@ -47,6 +47,12 @@ dependencies {
     modImplementation include("maven.modrinth:message-api:${project.message_api_version}")
 }
 
+fabricApi {
+    configureDataGeneration() {
+        client = true
+    }
+}
+
 publishMods {
     file = remapJar.archiveFile
     type = STABLE
@@ -88,6 +94,17 @@ java {
 
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.sourcesJar.dependsOn runDatagen
+
+jar {
+    from file('src/main/generated')
+
+    // A bit of a hack to allow the generated sources when they already exist
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    dependsOn 'runDatagen'
 }
 
 jar {

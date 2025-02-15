@@ -3,6 +3,7 @@ package me.drex.essentials.command.impl.misc;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.drex.essentials.item.ModItemTags;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,6 +41,11 @@ public class HatCommand extends Command {
             return FAILURE;
         }
         ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
+
+        if (selected.is(ModItemTags.HAT_DENY) && !check(ctx.getSource(), "bypassDeny")) {
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.deny"));
+            return FAILURE;
+        }
 
         if (EnchantmentHelper.has(head, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE) && !check(ctx.getSource(), "bypassBindingCurse")) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.binding_curse"));

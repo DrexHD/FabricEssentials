@@ -34,13 +34,13 @@ public class HatCommand extends Command {
     protected int setHat(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         Inventory inventory = player.getInventory();
-        ItemStack selected = inventory.getSelected();
+        ItemStack selected = inventory.getSelectedItem();
         ResourceLocation resourceLocation = BuiltInRegistries.ITEM.getKey(selected.getItem());
         if (!check(ctx.getSource(), "item." + resourceLocation.getPath())) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission"));
             return FAILURE;
         }
-        ItemStack head = inventory.getArmor(EquipmentSlot.HEAD.getIndex());
+        ItemStack head = inventory.getItem(EquipmentSlot.HEAD.getIndex(Inventory.INVENTORY_SIZE));
 
         if (selected.is(ModItemTags.HAT_DENY) && !check(ctx.getSource(), "bypassDeny")) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.deny"));
@@ -54,7 +54,7 @@ public class HatCommand extends Command {
 
         ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.hat"), false);
         player.setItemInHand(InteractionHand.MAIN_HAND, head);
-        inventory.armor.set(EquipmentSlot.HEAD.getIndex(), selected);
+        inventory.setItem(EquipmentSlot.HEAD.getIndex(Inventory.INVENTORY_SIZE), selected);
         return SUCCESS;
     }
 }

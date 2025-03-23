@@ -4,7 +4,8 @@ package me.drex.essentials.util;
  * https://github.com/RelativityMC/VMP-fabric/blob/ver/1.19/src/main/java/com/ishland/vmp/common/chunkloading/async_chunks_on_player_login/AsyncChunkLoadUtil.java
  * */
 
-import com.mojang.datafixers.util.Unit;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.*;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -16,12 +17,14 @@ import java.util.function.Function;
 
 public class AsyncChunkLoadUtil {
 
-    public static final TicketType<Unit> ASYNC_CHUNK_LOAD = TicketType.create("essentials_async_chunk_load", (unit, unit2) -> 0);
-
+    public static final TicketType ASYNC_CHUNK_LOAD = register("essentials_async_chunk_load", 0L, false, TicketType.TicketUse.LOADING);
 
     public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithRadius(ServerLevel world, ChunkPos pos, int radius) {
         return scheduleChunkLoadWithLevel(world, pos, 33 - radius);
     }
+
+    // Load static block to register ticket type in registry
+    public static void init() {}
 
     public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithLevel(ServerLevel world, ChunkPos pos, int level) {
         if (!world.getServer().isSameThread()) {
@@ -30,8 +33,7 @@ public class AsyncChunkLoadUtil {
                 .thenCompose(Function.identity());
         }
         final ServerChunkCache chunkCache = world.getChunkSource();
-        final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
-        ticketManager.addTicket(ASYNC_CHUNK_LOAD, pos, level, Unit.INSTANCE);
+        chunkCache.addTicketWithRadius(ASYNC_CHUNK_LOAD, pos, 33 - level);
         ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
         final ChunkHolder chunkHolder = ((IChunkMap) chunkCache.chunkMap).invokeGetUpdatingChunkIfPresent(pos.toLong());
         if (chunkHolder == null) {
@@ -52,6 +54,10 @@ public class AsyncChunkLoadUtil {
             if (throwable != null) throwable.printStackTrace();
         }, world.getServer());
         return future;
+    }
+
+    private static TicketType register(String string, long l, boolean bl, TicketType.TicketUse ticketUse) {
+        return Registry.register(BuiltInRegistries.TICKET_TYPE, string, new TicketType(l, bl, ticketUse));
     }
 
 }

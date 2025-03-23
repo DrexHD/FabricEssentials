@@ -1,5 +1,6 @@
 package me.drex.essentials;
 
+import me.drex.essentials.util.AsyncChunkLoadUtil;
 import me.drex.essentials.util.teleportation.Location;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -22,6 +23,7 @@ public class EssentialsMod implements ModInitializer {
     public void onInitialize() {
         ConfigManager.load();
         DataStorage.init();
+        AsyncChunkLoadUtil.init();
         FabricEssentialsPlaceholders.register();
         CommandRegistrationCallback.EVENT.register(CommandManager::new);
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {

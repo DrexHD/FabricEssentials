@@ -46,17 +46,17 @@ public class EssentialCommandsImporter implements DataImporter {
                             var playerData = DataStorage.getOfflinePlayerData(server, uuid);
                             var tag = NbtIo.readCompressed(Files.newInputStream(path), NbtAccounter.unlimitedHeap());
 
-                            var data = tag.getCompound("data");
+                            var data = tag.getCompound("data").orElseThrow();
                             Map<String, Home> homes = new HashMap<>();
-                            var homesData = data.getCompound("homes");
-                            for (String homeName : homesData.getAllKeys()) {
-                                var home = homesData.getCompound(homeName);
-                                var world = home.getString("WorldRegistryKey");
-                                var x = home.getDouble("x");
-                                var y = home.getDouble("y");
-                                var z = home.getDouble("z");
-                                var yaw = home.getFloat("headYaw");
-                                var pitch = home.getFloat("pitch");
+                            var homesData = data.getCompound("homes").orElseThrow();
+                            for (String homeName : homesData.keySet()) {
+                                var home = homesData.getCompound(homeName).orElseThrow();
+                                var world = home.getString("WorldRegistryKey").orElseThrow();
+                                var x = home.getDouble("x").orElseThrow();
+                                var y = home.getDouble("y").orElseThrow();
+                                var z = home.getDouble("z").orElseThrow();
+                                var yaw = home.getFloat("headYaw").orElseThrow();
+                                var pitch = home.getFloat("pitch").orElseThrow();
                                 homes.put(homeName, new Home(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
                             }
                             if (!homes.isEmpty()) {
@@ -86,17 +86,17 @@ public class EssentialCommandsImporter implements DataImporter {
                 try {
                     var tag = NbtIo.readCompressed(Files.newInputStream(worldData), NbtAccounter.unlimitedHeap());
 
-                    var data = tag.getCompound("data");
+                    var data = tag.getCompound("data").orElseThrow();
                     Map<String, Warp> warps = new HashMap<>();
-                    var warpsData = data.getCompound("warps");
-                    for (String homeName : warpsData.getAllKeys()) {
-                        var home = warpsData.getCompound(homeName);
-                        var world = home.getString("WorldRegistryKey");
-                        var x = home.getDouble("x");
-                        var y = home.getDouble("y");
-                        var z = home.getDouble("z");
-                        var yaw = home.getFloat("headYaw");
-                        var pitch = home.getFloat("pitch");
+                    var warpsData = data.getCompound("warps").orElseThrow();
+                    for (String homeName : warpsData.keySet()) {
+                        var home = warpsData.getCompound(homeName).orElseThrow();
+                        var world = home.getString("WorldRegistryKey").orElseThrow();
+                        var x = home.getDouble("x").orElseThrow();
+                        var y = home.getDouble("y").orElseThrow();
+                        var z = home.getDouble("z").orElseThrow();
+                        var yaw = home.getFloat("headYaw").orElseThrow();
+                        var pitch = home.getFloat("pitch").orElseThrow();
                         warps.put(homeName, new Warp(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
                     }
                     ServerData serverData = DataStorage.serverData();

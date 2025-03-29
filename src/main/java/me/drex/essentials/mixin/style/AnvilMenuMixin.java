@@ -1,13 +1,12 @@
 package me.drex.essentials.mixin.style;
 
+import me.drex.essentials.util.StyledInputUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import org.jetbrains.annotations.Nullable;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.StyledInputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -20,14 +19,14 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     }
 
     @Redirect(
-            method = "createResult",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"
-            )
+        method = "createResult",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;"
+        )
     )
     public MutableComponent itemNameFormatting(String input) {
-        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, textTag -> IdentifierUtil.check((ServerPlayer) this.player, "style.anvil." + textTag.name()));
+        MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, ((ServerPlayer) this.player).createCommandSourceStack(), "style.anvil.");
         // This check is required to stay compatible with datapacks, which rely on vanilla text formatting
         if (formatted.getString().equals(input)) {
             return Component.literal(input);

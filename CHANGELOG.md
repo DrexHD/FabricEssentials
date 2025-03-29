@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2025-03-30
+### Fixed
+- Styled input issues
+
 ## [1.4.0] - 2025-02-15
 ### Added
 - Config option to allow partial names in argument

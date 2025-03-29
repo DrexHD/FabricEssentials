@@ -3,16 +3,14 @@ package me.drex.essentials.command.impl.misc.admin;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
-import eu.pb4.placeholders.api.node.parent.ParentTextNode;
-import eu.pb4.placeholders.api.parsers.TextParserV1;
+import eu.pb4.placeholders.api.node.TextNode;
+import me.drex.essentials.command.Command;
+import me.drex.essentials.command.CommandProperties;
+import me.drex.essentials.util.StyledInputUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import me.drex.essentials.command.Command;
-import me.drex.essentials.command.CommandProperties;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.StyledInputUtil;
 
 import java.util.Collection;
 
@@ -31,19 +29,19 @@ public class TellMessageCommand extends Command {
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
-                argument("targets", players()).then(
-                        argument("message", greedyString())
-                                .executes(ctx -> tellMessage(
-                                        ctx.getSource(),
-                                        getPlayers(ctx, "targets"),
-                                        getString(ctx, "message")
-                                ))
-                )
+            argument("targets", players()).then(
+                argument("message", greedyString())
+                    .executes(ctx -> tellMessage(
+                        ctx.getSource(),
+                        getPlayers(ctx, "targets"),
+                        getString(ctx, "message")
+                    ))
+            )
         );
     }
 
     protected int tellMessage(CommandSourceStack src, Collection<ServerPlayer> players, String message) {
-        ParentTextNode textNode = StyledInputUtil.parseNodes(message, TextParserV1.DEFAULT, textTag -> IdentifierUtil.check(src, "style.tellmessage." + textTag.name()));
+        TextNode textNode = StyledInputUtil.parseNode(message, src, "style.tellmessage.", false);
         for (ServerPlayer player : players) {
             Component component = Placeholders.parseText(textNode, PlaceholderContext.of(player));
             player.sendSystemMessage(component);

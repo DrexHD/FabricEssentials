@@ -3,6 +3,9 @@ package me.drex.essentials.command.impl.misc;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.common.protection.api.CommonProtection;
+import me.drex.essentials.command.Command;
+import me.drex.essentials.command.CommandProperties;
+import me.drex.essentials.util.StyledInputUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -11,10 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import me.drex.essentials.command.Command;
-import me.drex.essentials.command.CommandProperties;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.StyledInputUtil;
 
 import java.util.HashMap;
 
@@ -35,14 +34,14 @@ public class SignEditCommand extends Command {
     @Override
     protected void registerArguments(LiteralArgumentBuilder<CommandSourceStack> literal, CommandBuildContext commandBuildContext) {
         literal.then(
-                argument("line", integer(1, 4))
-                        .then(
-                                argument("text", greedyString())
-                                        .executes(ctx -> editSignText(ctx.getSource(), getInteger(ctx, "line"), getString(ctx, "text")))
-                        ).then(
-                                literal("clear")
-                                        .executes(ctx -> editSignText(ctx.getSource(), getInteger(ctx, "line"), ""))
-                        )
+            argument("line", integer(1, 4))
+                .then(
+                    argument("text", greedyString())
+                        .executes(ctx -> editSignText(ctx.getSource(), getInteger(ctx, "line"), getString(ctx, "text")))
+                ).then(
+                    literal("clear")
+                        .executes(ctx -> editSignText(ctx.getSource(), getInteger(ctx, "line"), ""))
+                )
         );
     }
 
@@ -51,11 +50,11 @@ public class SignEditCommand extends Command {
         HitResult hitResult = player.pick(4.5f, 1, true);
         if (hitResult instanceof BlockHitResult blockHitResult) {
             if (CommonProtection.canBreakBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player) &&
-                    CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player)) {
+                CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player)) {
                 BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
                 if (blockEntity instanceof SignBlockEntity signBlockEntity) {
                     Component component;
-                    Component parsed = StyledInputUtil.parse(text, textTag -> IdentifierUtil.check(src, "style.sign." + textTag.name()));
+                    Component parsed = StyledInputUtil.parse(text, src, "style.sign.");
                     if (parsed.getString().equals(text)) {
                         component = Component.literal(text);
                     } else {

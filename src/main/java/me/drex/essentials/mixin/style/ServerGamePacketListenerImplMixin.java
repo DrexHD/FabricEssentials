@@ -1,10 +1,9 @@
 package me.drex.essentials.mixin.style;
 
+import me.drex.essentials.util.StyledInputUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.StyledInputUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,15 +18,15 @@ public abstract class ServerGamePacketListenerImplMixin {
     public ServerPlayer player;
 
     @ModifyArg(
-            method = "method_33799",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/server/network/Filterable;map(Ljava/util/function/Function;)Lnet/minecraft/server/network/Filterable;"
-            ),
-            index = 0
+        method = "method_33799",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/server/network/Filterable;map(Ljava/util/function/Function;)Lnet/minecraft/server/network/Filterable;"
+        ),
+        index = 0
     )
     public Function<String, Component> bookPageFormatting(Function<String, Component> original) {
-        return input -> StyledInputUtil.parse(input, textTag -> IdentifierUtil.check(player, "style.book." + textTag.name()));
+        return input -> StyledInputUtil.parse(input, player.createCommandSourceStack(), "style.book.");
     }
 
 }

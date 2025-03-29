@@ -2,6 +2,10 @@ package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.drex.essentials.command.Command;
+import me.drex.essentials.command.CommandProperties;
+import me.drex.essentials.config.ItemEditConfig;
+import me.drex.essentials.util.StyledInputUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -12,11 +16,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
-import me.drex.essentials.command.Command;
-import me.drex.essentials.command.CommandProperties;
-import me.drex.essentials.config.ItemEditConfig;
-import me.drex.essentials.util.IdentifierUtil;
-import me.drex.essentials.util.StyledInputUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class ItemEditCommand extends Command {
         }
         ItemEditConfig.NameConfig nameConfig = config().itemEdit.name;
         MutableComponent component;
-        Component parsed = StyledInputUtil.parse(name, textTag -> IdentifierUtil.check(src, "style.item.name." + textTag.name()));
+        Component parsed = StyledInputUtil.parse(name, src, "style.item.name.");
         if (parsed.getString().equals(name)) {
             component = Component.literal(name);
         } else {
@@ -106,7 +105,7 @@ public class ItemEditCommand extends Command {
         }
         ItemEditConfig.LoreConfig loreConfig = config().itemEdit.lore;
         MutableComponent component;
-        Component parsed = StyledInputUtil.parse(lore, textTag -> IdentifierUtil.check(src, "style.item.lore." + textTag.name()));
+        Component parsed = StyledInputUtil.parse(lore, src, "style.item.lore.");
         if (parsed.getString().equals(lore)) {
             component = Component.literal(lore);
         } else {

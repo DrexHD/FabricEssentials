@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2025-05-19
+### Changed
+- Don't list nested mods in /mods
+
 ## [1.4.2] - 2025-03-30
 ### Fixed
 - Client side crash

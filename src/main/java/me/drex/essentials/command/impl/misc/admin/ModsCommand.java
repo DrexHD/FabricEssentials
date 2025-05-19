@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.ModOrigin;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -43,12 +44,14 @@ public class ModsCommand extends Command {
     }
 
     private int sendModList(CommandContext<CommandSourceStack> ctx) {
-        Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
+        Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods().stream()
+            .filter(modContainer -> modContainer.getOrigin().getKind() == ModOrigin.Kind.PATH)
+            .toList();
         Component modsList = ComponentUtils.formatList(mods, localized("fabric-essentials.commands.mods.list.separator"), mod -> {
             return localized("fabric-essentials.commands.mods.list.element", ComponentPlaceholderUtil.modPlaceholders(mod));
         });
         ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.mods", new HashMap<>() {{
-            put("count", Component.literal(String.valueOf(mods.size())));
+            put("mod_count", Component.literal(String.valueOf(mods.size())));
             put("mod_list", modsList);
         }}));
         return mods.size();

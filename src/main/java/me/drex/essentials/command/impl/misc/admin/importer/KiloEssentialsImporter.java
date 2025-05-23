@@ -48,8 +48,9 @@ public class KiloEssentialsImporter implements DataImporter {
                 try {
                     PlayerData playerData = DataStorage.getOfflinePlayerData(server, uuid);
                     CompoundTag tag = NbtIo.readCompressed(new FileInputStream(file), NbtAccounter.unlimitedHeap());
-                    CompoundTag homesTag = tag.getCompoundOrEmpty("homes");
                     Map<String, Home> homes = new HashMap<>();
+                    //? if >= 1.21.5 {
+                    CompoundTag homesTag = tag.getCompoundOrEmpty("homes");
                     for (String key : homesTag.keySet()) {
                         CompoundTag loc = homesTag.getCompound(key).orElseThrow().getCompound("loc").orElseThrow();
                         CompoundTag pos = loc.getCompound("pos").orElseThrow();
@@ -69,6 +70,23 @@ public class KiloEssentialsImporter implements DataImporter {
                             )
                         );
                     }
+                    //?} else {
+                    /*CompoundTag homesTag = tag.getCompound("homes");
+                    for (String key : homesTag.getAllKeys()) {
+                        CompoundTag loc = homesTag.getCompound(key).getCompound("loc");
+                        CompoundTag pos = loc.getCompound("pos");
+                        CompoundTag view = loc.getCompound("view");
+                        homes.put(key,
+                            new Home(
+                                new Location(
+                                    new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")),
+                                    view.getFloat("yaw"),
+                                    view.getFloat("pitch"),
+                                    ResourceLocation.parse(loc.getString("dim")))
+                            )
+                        );
+                    }
+                    *///?}
                     if (!homes.isEmpty()) {
                         shouldSave = true;
                         playerData.homes.putAll(homes);
@@ -89,6 +107,7 @@ public class KiloEssentialsImporter implements DataImporter {
             try {
                 CompoundTag tag = NbtIo.readCompressed(new FileInputStream(warpsFile), NbtAccounter.unlimitedHeap());
                 Map<String, Warp> warps = new HashMap<>();
+                //? if >= 1.21.5 {
                 for (String key : tag.keySet()) {
                     CompoundTag loc = tag.getCompound(key).orElseThrow().getCompound("loc").orElseThrow();
                     CompoundTag pos = loc.getCompound("pos").orElseThrow();
@@ -108,6 +127,22 @@ public class KiloEssentialsImporter implements DataImporter {
                         )
                     );
                 }
+                //?} else {
+                /*for (String key : tag.getAllKeys()) {
+                    CompoundTag loc = tag.getCompound(key).getCompound("loc");
+                    CompoundTag pos = loc.getCompound("pos");
+                    CompoundTag view = loc.getCompound("view");
+                    warps.put(key,
+                        new Warp(
+                            new Location(
+                                new Vec3(pos.getDouble("x"), pos.getDouble("y"), pos.getDouble("z")),
+                                view.getFloat("yaw"),
+                                view.getFloat("pitch"),
+                                ResourceLocation.parse(loc.getString("dim")))
+                        )
+                    );
+                }
+                *///?}
                 ServerData serverData = DataStorage.serverData();
                 serverData.getWarps().putAll(warps);
                 EssentialsMod.LOGGER.info("Warps data imported, imported {} warps!", warps.size());

@@ -45,9 +45,10 @@ public class EssentialCommandsImporter implements DataImporter {
                             var uuid = UUID.fromString(path.getFileName().toString().replace(".dat", ""));
                             var playerData = DataStorage.getOfflinePlayerData(server, uuid);
                             var tag = NbtIo.readCompressed(Files.newInputStream(path), NbtAccounter.unlimitedHeap());
-
-                            var data = tag.getCompound("data").orElseThrow();
                             Map<String, Home> homes = new HashMap<>();
+
+                            //? if >= 1.21.5 {
+                            var data = tag.getCompound("data").orElseThrow();
                             var homesData = data.getCompound("homes").orElseThrow();
                             for (String homeName : homesData.keySet()) {
                                 var home = homesData.getCompound(homeName).orElseThrow();
@@ -59,6 +60,20 @@ public class EssentialCommandsImporter implements DataImporter {
                                 var pitch = home.getFloat("pitch").orElseThrow();
                                 homes.put(homeName, new Home(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
                             }
+                            //?} else {
+                            /*var data = tag.getCompound("data");
+                            var homesData = data.getCompound("homes");
+                            for (String homeName : homesData.getAllKeys()) {
+                                var home = homesData.getCompound(homeName);
+                                var world = home.getString("WorldRegistryKey");
+                                var x = home.getDouble("x");
+                                var y = home.getDouble("y");
+                                var z = home.getDouble("z");
+                                var yaw = home.getFloat("headYaw");
+                                var pitch = home.getFloat("pitch");
+                                homes.put(homeName, new Home(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
+                            }
+                            *///?}
                             if (!homes.isEmpty()) {
                                 shouldSave = true;
                                 playerData.homes.putAll(homes);
@@ -85,9 +100,11 @@ public class EssentialCommandsImporter implements DataImporter {
             if (Files.exists(worldData)) {
                 try {
                     var tag = NbtIo.readCompressed(Files.newInputStream(worldData), NbtAccounter.unlimitedHeap());
-
-                    var data = tag.getCompound("data").orElseThrow();
                     Map<String, Warp> warps = new HashMap<>();
+
+                    //? if >= 1.21.5 {
+                    var data = tag.getCompound("data").orElseThrow();
+
                     var warpsData = data.getCompound("warps").orElseThrow();
                     for (String homeName : warpsData.keySet()) {
                         var home = warpsData.getCompound(homeName).orElseThrow();
@@ -99,6 +116,20 @@ public class EssentialCommandsImporter implements DataImporter {
                         var pitch = home.getFloat("pitch").orElseThrow();
                         warps.put(homeName, new Warp(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
                     }
+                    //?} else {
+                    /*var data = tag.getCompound("data");
+                    var warpsData = data.getCompound("warps");
+                    for (String homeName : warpsData.getAllKeys()) {
+                        var home = warpsData.getCompound(homeName);
+                        var world = home.getString("WorldRegistryKey");
+                        var x = home.getDouble("x");
+                        var y = home.getDouble("y");
+                        var z = home.getDouble("z");
+                        var yaw = home.getFloat("headYaw");
+                        var pitch = home.getFloat("pitch");
+                        warps.put(homeName, new Warp(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
+                    }
+                    *///?}
                     ServerData serverData = DataStorage.serverData();
                     serverData.getWarps().putAll(warps);
                     EssentialsMod.LOGGER.info("Warps data imported, imported {} warps!", warps.size());

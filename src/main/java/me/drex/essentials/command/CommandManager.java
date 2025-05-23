@@ -88,6 +88,26 @@ public class CommandManager {
 
     public static void dumpCommands(CommandDispatcher<CommandSourceStack> dispatcher, MinecraftServer server) {
         if (!DUMP_COMMANDS) return;
+        var source = server.createCommandSourceStack();
+
+        String simple = String.join(", ", Arrays.stream(COMMANDS).map(command -> {
+            var properties = command.commandProperties;
+            ParseResults<CommandSourceStack> parseResults = dispatcher.parse(properties.literal(), source);
+            Map<CommandNode<CommandSourceStack>, String> map = dispatcher.getSmartUsage((Iterables.getLast(parseResults.getContext().getNodes())).getNode(), source);
+            if (map.isEmpty()) {
+                return "`/" + properties.literal() + "`";
+            } else {
+                return String.join(
+                    ", ",
+                    map.values().stream()
+                        .map(s -> "`/" + properties.literal() + " " + s.replace("|", "\\|") + "`")
+                        .toList()
+                );
+
+            }
+        }).toList());
+        System.out.println(simple);
+
         StringBuilder builder = new StringBuilder();
         builder
             .append("| Command | Alias | Permission | Default |\n")
@@ -96,7 +116,6 @@ public class CommandManager {
             // Command
             var properties = command.commandProperties;
             builder.append("| ");
-            var source = server.createCommandSourceStack();
             ParseResults<CommandSourceStack> parseResults = dispatcher.parse(properties.literal(), source);
             Map<CommandNode<CommandSourceStack>, String> map = dispatcher.getSmartUsage((Iterables.getLast(parseResults.getContext().getNodes())).getNode(), source);
             if (map.isEmpty()) {

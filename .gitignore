@@ -33,5 +33,5 @@ bin/
 run/
 
 # Generated sources
-src/main/generated/**
+versions/*/src/main/generated/**
 

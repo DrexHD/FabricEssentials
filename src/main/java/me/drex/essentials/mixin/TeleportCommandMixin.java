@@ -9,7 +9,6 @@ import net.minecraft.server.commands.TeleportCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Relative;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
@@ -25,10 +24,14 @@ public class TeleportCommandMixin {
         method = "performTeleport",
         at = @At(
             value = "INVOKE",
+            //? if >= 1.21.2 {
             target = "Lnet/minecraft/world/entity/Entity;teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDLjava/util/Set;FFZ)Z"
+            //?} else {
+            /*target = "Lnet/minecraft/world/entity/Entity;teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDLjava/util/Set;FF)Z"
+            *///?}
         )
     )
-    private static void onTeleport(CommandSourceStack commandSourceStack, Entity entity, ServerLevel serverLevel, double d, double e, double f, Set<Relative> set, float g, float h, @Coerce Object lookAt, CallbackInfo ci) {
+    private static void onTeleport(CommandSourceStack commandSourceStack, Entity entity, ServerLevel serverLevel, double d, double e, double f, Set set, float g, float h, @Coerce Object lookAt, CallbackInfo ci) {
         CommandSource source = ((CommandSourceStackAccessor) commandSourceStack).getSource();
         if (source instanceof ServerPlayer && entity instanceof ServerPlayer player) {
             // The command was actually executed by a player and not *as* a player (e.g. from /execute as)

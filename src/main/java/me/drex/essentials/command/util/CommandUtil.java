@@ -58,6 +58,9 @@ public class CommandUtil {
         CompletableFuture<ChunkAccess> result = new CompletableFuture<>();
         asyncTeleportPlayer.setAsyncLoadingChunks(true);
         final ServerChunkCache chunkCache = level.getChunkSource();
+        //? if < 1.21.5 {
+        /*final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
+        *///?}
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
         CompletableFuture<ChunkResult<ChunkAccess>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(level, pos, RADIUS);
         chunkAccessFuture.whenCompleteAsync((chunkResult, throwable) -> {
@@ -73,7 +76,11 @@ public class CommandUtil {
                     LOGGER.error("An unknown error occurred, during waiting period", waitingThrowable);
                 }
                 result.cancel(false);
+                //? if >= 1.21.5 {
                 chunkCache.removeTicketWithRadius(ASYNC_CHUNK_LOAD, pos, RADIUS);
+                //?} else {
+                /*ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
+                *///?}
                 ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
             } else {
                 chunkAccessFuture.whenCompleteAsync((chunkResult, chunkThrowable) -> {
@@ -89,7 +96,11 @@ public class CommandUtil {
                             LOGGER.error("Chunk not there when requested: {}", chunkResult.getError());
                         }
                     }
+                    //? if >= 1.21.5 {
                     chunkCache.removeTicketWithRadius(ASYNC_CHUNK_LOAD, pos, RADIUS);
+                    //?} else {
+                    /*ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
+                    *///?}
                     ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
                 }, src.getServer());
             }

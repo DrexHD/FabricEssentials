@@ -4,6 +4,7 @@ package me.drex.essentials.util;
  * https://github.com/RelativityMC/VMP-fabric/blob/ver/1.19/src/main/java/com/ishland/vmp/common/chunkloading/async_chunks_on_player_login/AsyncChunkLoadUtil.java
  * */
 
+import com.mojang.datafixers.util.Unit;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.*;
@@ -17,8 +18,11 @@ import java.util.function.Function;
 
 public class AsyncChunkLoadUtil {
 
+    //? if >= 1.21.5 {
     public static final TicketType ASYNC_CHUNK_LOAD = register("essentials_async_chunk_load", 0L, false, TicketType.TicketUse.LOADING);
-
+    //?} else {
+    /*public static final TicketType<Unit> ASYNC_CHUNK_LOAD = TicketType.create("essentials_async_chunk_load", (unit, unit2) -> 0);
+    *///?}
     public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithRadius(ServerLevel world, ChunkPos pos, int radius) {
         return scheduleChunkLoadWithLevel(world, pos, 33 - radius);
     }
@@ -33,7 +37,12 @@ public class AsyncChunkLoadUtil {
                 .thenCompose(Function.identity());
         }
         final ServerChunkCache chunkCache = world.getChunkSource();
+        //? if >= 1.21.5 {
         chunkCache.addTicketWithRadius(ASYNC_CHUNK_LOAD, pos, 33 - level);
+        //?} else {
+        /*final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
+        ticketManager.addTicket(ASYNC_CHUNK_LOAD, pos, level, Unit.INSTANCE);
+        *///?}
         ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
         final ChunkHolder chunkHolder = ((IChunkMap) chunkCache.chunkMap).invokeGetUpdatingChunkIfPresent(pos.toLong());
         if (chunkHolder == null) {
@@ -56,8 +65,9 @@ public class AsyncChunkLoadUtil {
         return future;
     }
 
+    //? if >= 1.21.5 {
     private static TicketType register(String string, long l, boolean bl, TicketType.TicketUse ticketUse) {
         return Registry.register(BuiltInRegistries.TICKET_TYPE, string, new TicketType(l, bl, ticketUse));
     }
-
+    //?}
 }

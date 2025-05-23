@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
-    public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess, ItemCombinerMenuSlotDefinition itemCombinerMenuSlotDefinition) {
-        super(menuType, i, inventory, containerLevelAccess, itemCombinerMenuSlotDefinition);
+    public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess/*? if >= 1.21.2 {*/, ItemCombinerMenuSlotDefinition itemCombinerMenuSlotDefinition/*?}*/) {
+        super(menuType, i, inventory, containerLevelAccess/*? if >= 1.21.2 {*/, itemCombinerMenuSlotDefinition/*?}*/);
     }
 
     @WrapOperation(

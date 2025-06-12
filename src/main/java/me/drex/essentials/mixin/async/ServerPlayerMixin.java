@@ -29,17 +29,22 @@ import static me.drex.message.api.LocalizedMessage.localized;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {
-
-    public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
+    //? if >= 1.21.6-rc1 {
+    public ServerPlayerMixin(Level level, GameProfile gameProfile) {
+        super(level, gameProfile);
     }
+    //? } else {
+    /*public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
+        super(level, blockPos, f, gameProfile);
+    }*/
+    //? }
 
     @Shadow
     public abstract void sendSystemMessage(Component component);
 
     @Shadow
     @Final
-    public MinecraftServer server;
+    MinecraftServer server;
 
     @Shadow
     public abstract void sendSystemMessage(Component component, boolean bl);

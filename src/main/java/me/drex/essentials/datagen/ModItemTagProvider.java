@@ -15,11 +15,11 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        //? if >= 1.21.6-rc1 {
+        //? if >= 1.21.6 {
         this.valueLookupBuilder(ModItemTags.HAT_DENY)
-        //? } else {
+        //?} else {
         /*this.getOrCreateTagBuilder(ModItemTags.HAT_DENY)*/
-        //? }
+        //?}
             .add(Items.BEDROCK);
     }
 }

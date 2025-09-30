@@ -57,7 +57,7 @@ public class HomesCommand extends Command {
     }
 
     protected int listOtherHomes(CommandSourceStack src, GameProfile target) {
-        PlayerData dataStorage = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
+        PlayerData dataStorage = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", PlaceholderContext.of(target, src.getServer())));

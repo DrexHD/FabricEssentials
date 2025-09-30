@@ -42,11 +42,11 @@ public class DeleteHomeCommand extends Command {
     }
 
     protected int deleteHome(CommandSourceStack src, String name, GameProfile target, boolean self) throws CommandSyntaxException {
-        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
+        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Home home = playerData.homes.get(name);
         if (home != null) {
             playerData.homes.remove(name);
-            DataStorage.updateOfflinePlayerData(src.getServer(), target.getId(), playerData);
+            DataStorage.updateOfflinePlayerData(src.getServer(), target, playerData);
             if (self) {
                 src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.self", home.placeholders(name)));
             } else {

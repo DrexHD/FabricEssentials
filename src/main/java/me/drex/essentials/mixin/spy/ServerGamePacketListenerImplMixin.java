@@ -56,7 +56,7 @@ public abstract class ServerGamePacketListenerImplMixin {
         MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
             put("command", Component.literal(command));
         }}, PlaceholderContext.of(player));
-        for (ServerPlayer player : player.getServer().getPlayerList().getPlayers()) {
+        for (ServerPlayer player : player.level().getServer().getPlayerList().getPlayers()) {
             if (DataStorage.getPlayerData(player).commandSpy && player != this.player) {
                 player.sendSystemMessage(spyMessage);
             }

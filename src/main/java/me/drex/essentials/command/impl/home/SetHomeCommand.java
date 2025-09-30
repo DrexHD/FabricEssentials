@@ -52,7 +52,7 @@ public class SetHomeCommand extends Command {
     }
 
     protected int setHome(CommandSourceStack src, String name, GameProfile target, boolean self, boolean confirm) {
-        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target.getId());
+        PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Map<String, Home> homes = playerData.homes;
         Home previousHome = homes.get(name);
         if (previousHome != null && !confirm) {
@@ -71,7 +71,7 @@ public class SetHomeCommand extends Command {
         }
         Home home = new Home(new Location(src));
         homes.put(name, home);
-        DataStorage.updateOfflinePlayerData(src.getServer(), target.getId(), playerData);
+        DataStorage.updateOfflinePlayerData(src.getServer(), target, playerData);
         if (self) {
             src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
         } else {

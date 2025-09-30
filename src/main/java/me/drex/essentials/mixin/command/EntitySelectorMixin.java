@@ -28,7 +28,7 @@ public abstract class EntitySelectorMixin {
         if (ConfigManager.config().commands.allowPartialNames) {
             String lowercasePartial = input.toLowerCase();
             List<ServerPlayer> matches = playerList.getPlayers().stream()
-                .filter(player -> player.getGameProfile().getName().toLowerCase().startsWith(lowercasePartial))
+                .filter(player -> player.getGameProfile()./*?if >= 1.21.9 {*/ name() /*?} else {*/ /*getName()*/ /*?}*/.toLowerCase().startsWith(lowercasePartial))
                 .toList();
 
             if (matches.isEmpty()) {

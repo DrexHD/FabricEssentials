@@ -45,7 +45,7 @@ public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimens
         if (!Level.isInSpawnableBounds(blockPos)) {
             return false;
         } else {
-            ServerLevel level = getLevel(entity.getServer());
+            ServerLevel level = getLevel(entity.level().getServer());
             Location currentLocation = new Location(entity);
             if (entity.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(),  Mth.wrapDegrees(yaw),  Mth.wrapDegrees(pitch)/*? if >= 1.21.2 {*/, true /*?}*/)) {
                 if (saveLocation && entity instanceof ServerPlayer player) {

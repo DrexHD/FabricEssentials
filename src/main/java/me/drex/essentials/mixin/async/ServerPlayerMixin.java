@@ -29,15 +29,15 @@ import static me.drex.message.api.LocalizedMessage.localized;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {
-    //? if >= 1.21.6-rc1 {
+    //? if >= 1.21.6 {
     public ServerPlayerMixin(Level level, GameProfile gameProfile) {
         super(level, gameProfile);
     }
-    //? } else {
+    //?} else {
     /*public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
     }*/
-    //? }
+    //?}
 
     @Shadow
     public abstract void sendSystemMessage(Component component);

@@ -92,8 +92,12 @@ public class DataStorage {
     }
 
     @NotNull
-    public static PlayerData getOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target) {
-        return getOfflinePlayerData(ctx.getSource().getServer(), target.getId());
+    public static PlayerData getOfflinePlayerData(MinecraftServer server, GameProfile profile) {
+        PlayerData playerData = PlayerDataApi.getCustomDataFor(server, profile./*?if >= 1.21.9 {*/ id() /*?} else {*/ /*getId()*/ /*?}*/, USER_DATA_STORAGE);
+        if (playerData == null) {
+            playerData = new PlayerData();
+        }
+        return playerData;
     }
 
     @NotNull
@@ -105,8 +109,8 @@ public class DataStorage {
         return playerData;
     }
 
-    public static void updateOfflinePlayerData(CommandContext<CommandSourceStack> ctx, GameProfile target, PlayerData playerData) {
-        updateOfflinePlayerData(ctx.getSource().getServer(), target.getId(), playerData);
+    public static void updateOfflinePlayerData(MinecraftServer server, GameProfile profile, PlayerData playerData) {
+        PlayerDataApi.setCustomDataFor(server, profile./*?if >= 1.21.9 {*/ id() /*?} else {*/ /*getId()*/ /*?}*/, USER_DATA_STORAGE, playerData);
     }
 
     public static void updateOfflinePlayerData(MinecraftServer server, UUID uuid, PlayerData playerData) {

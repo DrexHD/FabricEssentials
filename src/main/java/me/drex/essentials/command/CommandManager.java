@@ -7,6 +7,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import me.drex.essentials.command.impl.menu.*;
 import me.drex.essentials.command.impl.misc.*;
 import me.drex.essentials.command.impl.misc.admin.*;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -25,6 +26,8 @@ import me.drex.essentials.command.impl.warp.SetWarpCommand;
 import me.drex.essentials.command.impl.warp.WarpCommand;
 import me.drex.essentials.command.impl.warp.WarpsCommand;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -88,26 +91,8 @@ public class CommandManager {
     }
 
     public static void dumpCommands(CommandDispatcher<CommandSourceStack> dispatcher, MinecraftServer server) {
-        if (!DUMP_COMMANDS) return;
+        if (!FabricLoader.getInstance().isDevelopmentEnvironment()) return;
         var source = server.createCommandSourceStack();
-
-        String simple = String.join(", ", Arrays.stream(COMMANDS).map(command -> {
-            var properties = command.commandProperties;
-            ParseResults<CommandSourceStack> parseResults = dispatcher.parse(properties.literal(), source);
-            Map<CommandNode<CommandSourceStack>, String> map = dispatcher.getSmartUsage((Iterables.getLast(parseResults.getContext().getNodes())).getNode(), source);
-            if (map.isEmpty()) {
-                return "`/" + properties.literal() + "`";
-            } else {
-                return String.join(
-                    ", ",
-                    map.values().stream()
-                        .map(s -> "`/" + properties.literal() + " " + s.replace("|", "\\|") + "`")
-                        .toList()
-                );
-
-            }
-        }).toList());
-        System.out.println(simple);
 
         StringBuilder builder = new StringBuilder();
         builder
@@ -149,7 +134,11 @@ public class CommandManager {
             }
             builder.append(" |\n");
         }
-        System.out.println(builder);
+        try {
+            Files.write(FabricLoader.getInstance().getGameDir().getParent().getParent().getParent().resolve("COMMANDS.md"), builder.toString().getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -70,6 +70,7 @@ public class CommandManager {
         new HealCommand(),
         new GlowCommand(),
         new PingCommand(),
+        new RepairCommand(),
         new SignEditCommand(),
         new ModsCommand(),
         new FlyCommand(),

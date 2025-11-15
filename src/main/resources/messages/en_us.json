@@ -86,6 +86,10 @@
   "fabric-essentials.commands.ping.self": "<yellow>Pong! Your connection latency to the server is %player:ping_colored%<yellow>ms!",
   "fabric-essentials.commands.ping.other": "<yellow>Pong! %player:displayname%'s connection latency to the server is %player:ping_colored%<yellow>ms!",
 
+  "fabric-essentials.commands.repair": "<yellow>Successfully repaired the item in your hand.",
+  "fabric-essentials.commands.repair.all": "<yellow>Successfully repaired all items in your inventory.",
+  "fabric-essentials.commands.repair.missing": "<red>You need to hold a broken item to use this command!",
+
   "fabric-essentials.commands.sethome.self": "<yellow>Set the home <gold>${home_name}<yellow>!",
   "fabric-essentials.commands.sethome.other": "<yellow>Set the home <gold>${home_name} <yellow>for <gold>%player:displayname%<yellow>!",
   "fabric-essentials.commands.sethome.limit": "<red>Home limited reached! You can't set any more homes!",

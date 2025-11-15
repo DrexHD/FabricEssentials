@@ -33,7 +33,7 @@ public class CommandUtil {
     private static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.entity.notfound.player"));
 
     public static GameProfile getGameProfile(CommandContext<CommandSourceStack> context, String argument) throws CommandSyntaxException {
-        Collection</*?if >= 1.21.9 {*/ net.minecraft.server.players.NameAndId /*?} else {*/ /*GameProfile*/ /*?}*/> profiles = getGameProfiles(context, argument);
+        Collection</*? if >= 1.21.9 {*/ net.minecraft.server.players.NameAndId /*?} else {*/ /*GameProfile *//*?}*/> profiles = getGameProfiles(context, argument);
         if (profiles.isEmpty()) {
             throw NO_PLAYERS_FOUND.create();
         } else {
@@ -43,9 +43,9 @@ public class CommandUtil {
                 var profile = profiles.iterator().next();
                 //? if >= 1.21.9 {
                 return new GameProfile(profile.id(), profile.name());
-                //? } else {
-                // return profile;
-                //? }
+                //?} else {
+                 /*return profile;
+                *///?}
             }
         }
     }

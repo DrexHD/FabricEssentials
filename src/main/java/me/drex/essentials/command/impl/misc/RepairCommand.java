@@ -29,7 +29,12 @@ public class RepairCommand extends Command {
                     .executes(ctx -> {
                         CommandSourceStack src = ctx.getSource();
                         ServerPlayer player = src.getPlayerOrException();
+                        //? if >= 1.21.5 {
                         for (ItemStack itemStack : player.getInventory()) {
+                        //?} else {
+                        /*for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                            ItemStack itemStack = player.getInventory().getItem(i);
+                            *///?}
                             if (itemStack.isDamaged()) {
                                 itemStack.setDamageValue(0);
                             }

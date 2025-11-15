@@ -36,8 +36,8 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
     //?} else {
     /*public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
-    }*/
-    //?}
+    }
+    *///?}
 
     @Shadow
     public abstract void sendSystemMessage(Component component);

@@ -18,8 +18,8 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
         //? if >= 1.21.6 {
         this.valueLookupBuilder(ModItemTags.HAT_DENY)
         //?} else {
-        /*this.getOrCreateTagBuilder(ModItemTags.HAT_DENY)*/
-        //?}
+        /*this.getOrCreateTagBuilder(ModItemTags.HAT_DENY)
+        *///?}
             .add(Items.BEDROCK);
     }
 }

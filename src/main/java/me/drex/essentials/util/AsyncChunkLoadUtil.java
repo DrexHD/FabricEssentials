@@ -21,8 +21,8 @@ public class AsyncChunkLoadUtil {
     //? if >= 1.21.9 {
     public static final TicketType ASYNC_CHUNK_LOAD = new TicketType(0L, TicketType.FLAG_LOADING);
     //?} else if >= 1.21.5 {
-//    public static final TicketType ASYNC_CHUNK_LOAD = register("essentials_async_chunk_load", 0L, false, TicketType.TicketUse.LOADING);
-    //?} else {
+    /*public static final TicketType ASYNC_CHUNK_LOAD = register("essentials_async_chunk_load", 0L, false, TicketType.TicketUse.LOADING);
+    *///?} else {
     /*public static final TicketType<Unit> ASYNC_CHUNK_LOAD = TicketType.create("essentials_async_chunk_load", (unit, unit2) -> 0);
     *///?}
     public static CompletableFuture<ChunkResult<ChunkAccess>> scheduleChunkLoadWithRadius(ServerLevel world, ChunkPos pos, int radius) {
@@ -70,6 +70,6 @@ public class AsyncChunkLoadUtil {
     //? if >= 1.21.5 && <= 1.21.8 {
     /*private static TicketType register(String string, long l, boolean bl, TicketType.TicketUse ticketUse) {
         return Registry.register(BuiltInRegistries.TICKET_TYPE, string, new TicketType(l, bl, ticketUse));
-    }*/
-    //?}
+    }
+    *///?}
 }

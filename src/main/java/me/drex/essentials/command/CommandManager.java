@@ -79,6 +79,7 @@ public class CommandManager {
         new FlyCommand(),
         new FlySpeedCommand(),
         new WalkSpeedCommand(),
+        new WhoIsCommand(),
         new InvulnerableCommand(),
         new TellMessageCommand(),
         new MessageToVanilla(),

@@ -131,6 +131,8 @@
   "fabric-essentials.commands.warps.list.separator": "<gray>, </gray>",
   "fabric-essentials.commands.warps.list.element": "<hover:show_text:'<gray>Pos: <white>${location_pos_x} ${location_pos_y} ${location_pos_z}\n<gray>World: <white>${location_dimension}\n<aqua>Click to teleport!'><run_cmd:'/warp ${warp_name}'><yellow>${warp_name}",
 
+  "fabric-essentials.commands.whois": "<gold><bold>Whois %player:name%</bold></gold>\n<gold>Display Name:</gold> <yellow>%player:displayname%</yellow>\n<gold>UUID:</gold> <yellow><hover show_text '<aqua>Click to copy!'><click copy_to_clipboard '%player:uuid%'>%player:uuid%</click></hover></yellow>\n<gold>Position:</gold> <hover show_text '<aqua>Click to teleport!'><click run_command '/execute in %world:id% run tp @s %player:pos_x% %player:pos_y% %player:pos_z%'><yellow>%player:pos_x% %player:pos_y% %player:pos_z%</yellow> <gold>in</gold> <yellow>%world:id%</yellow></click></hover>\n<gold>Playtime:</gold> <yellow>%player:playtime%</yellow>",
+
   "fabric-essentials.commandspy": "<dark_gray>[<light_purple>CommandSpy<dark_gray>] <dark_gray>[<reset>%player:displayname%<dark_gray>] <hover:show_text:'Click to copy!'><click:copy_to_clipboard:'/${command}'><gray>/${command}",
 
   "fabric-essentials.location.world.unknown": "<red>The target world no longer exists!",

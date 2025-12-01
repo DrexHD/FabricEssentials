@@ -38,6 +38,7 @@
 | `/fly [<player>]` |  | `fabric-essentials.command.fly` | ✘ |
 | `/flyspeed [<flyspeed>] [<target>]` |  | `fabric-essentials.command.flyspeed` | ✘ |
 | `/walkspeed [<walkspeed>] [<target>]` |  | `fabric-essentials.command.walkspeed` | ✘ |
+| `/whois <target>` |  | `fabric-essentials.command.whois` | ✘ |
 | `/invulnerable [<player>]` | `/godmode` | `fabric-essentials.command.invulnerable` | ✘ |
 | `/tellmessage <targets> <message>` |  | `fabric-essentials.command.tellmessage` | ✘ |
 | `/message-to-vanilla quicktext <message>`, `/message-to-vanilla simplifiedtext <message>` |  | `fabric-essentials.command.message-to-vanilla` | ✘ |

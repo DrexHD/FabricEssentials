@@ -6,7 +6,7 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,14 +26,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public record Location(Vec3 pos, float yaw, float pitch, ResourceLocation dimension) {
+public record Location(Vec3 pos, float yaw, float pitch, Identifier dimension) {
 
     public Location(Entity entity) {
-        this(entity.position(), entity.getYRot(), entity.getXRot(), entity.level().dimension().location());
+        this(entity.position(), entity.getYRot(), entity.getXRot(), entity.level().dimension().identifier());
     }
 
     public Location(CommandSourceStack source) {
-        this(source.getPosition(), source.getRotation().y, source.getRotation().x, source.getLevel().dimension().location());
+        this(source.getPosition(), source.getRotation().y, source.getRotation().x, source.getLevel().dimension().identifier());
     }
 
     public boolean teleport(@NotNull Entity entity) {

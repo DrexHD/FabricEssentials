@@ -8,7 +8,7 @@ import me.drex.essentials.util.teleportation.Location;
 import me.drex.essentials.util.teleportation.Warp;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.Vec3;
@@ -58,7 +58,7 @@ public class EssentialCommandsImporter implements DataImporter {
                                 var z = home.getDouble("z").orElseThrow();
                                 var yaw = home.getFloat("headYaw").orElseThrow();
                                 var pitch = home.getFloat("pitch").orElseThrow();
-                                homes.put(homeName, new Home(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
+                                homes.put(homeName, new Home(new Location(new Vec3(x, y, z), yaw, pitch, Identifier.parse(world))));
                             }
                             //?} else {
                             /*var data = tag.getCompound("data");
@@ -114,7 +114,7 @@ public class EssentialCommandsImporter implements DataImporter {
                         var z = home.getDouble("z").orElseThrow();
                         var yaw = home.getFloat("headYaw").orElseThrow();
                         var pitch = home.getFloat("pitch").orElseThrow();
-                        warps.put(homeName, new Warp(new Location(new Vec3(x, y, z), yaw, pitch, ResourceLocation.parse(world))));
+                        warps.put(homeName, new Warp(new Location(new Vec3(x, y, z), yaw, pitch, Identifier.parse(world))));
                     }
                     //?} else {
                     /*var data = tag.getCompound("data");

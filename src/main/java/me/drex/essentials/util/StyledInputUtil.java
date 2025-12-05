@@ -24,7 +24,7 @@ public class StyledInputUtil {
     }
 
     public static TextNode parseNode(String input, CommandSourceStack source, String basePermission, boolean safe) {
-        return parseNode(input, textTag -> IdentifierUtil.check(source, basePermission + textTag.name()), safe);
+        return parseNode(input, textTag -> PermissionUtil.check(source, basePermission + textTag.name()), safe);
     }
 
     public static TextNode parseNode(String input, Predicate<TextTag> predicate, boolean safe) {

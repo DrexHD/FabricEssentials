@@ -64,7 +64,7 @@ public class WhoIsCommand extends Command {
 
     private ServerPlayer loadPlayer(MinecraftServer server, /*? if >= 1.21.9 {*/ NameAndId /*?} else {*/ /*GameProfile *//*?}*/ target) {
         PlayerList playerList = server.getPlayerList();
-        ServerPlayer player = playerList.getPlayer(/*? if >= 1.21.9 {*/ target.id()/*?} else {*/ /*target.getId()*/ /*?}*/);
+        ServerPlayer player = playerList.getPlayer(/*? if >= 1.21.9 {*/ target.id()/*?} else {*/ /*target.getId() *//*?}*/);
         if (player != null) return player;
 
         ServerPlayer serverPlayer = new ServerPlayer(server, server.overworld(), /*? if >= 1.21.9 {*/ new GameProfile(target.id(), target.name()) /*?} else {*/ /*target *//*?}*/, ClientInformation.createDefault());

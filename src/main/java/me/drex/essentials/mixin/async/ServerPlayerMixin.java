@@ -3,10 +3,12 @@ package me.drex.essentials.mixin.async;
 import com.mojang.authlib.GameProfile;
 import me.drex.essentials.config.teleportation.WaitingPeriodConfig;
 import me.drex.essentials.util.AsyncTeleportPlayer;
-import me.drex.essentials.util.IdentifierUtil;
+import me.drex.essentials.util.PermissionUtil;
 import me.drex.essentials.util.TeleportCancelException;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.BlockPos;
+//? if < 1.21.6 {
+/*import net.minecraft.core.BlockPos;
+*///? }
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -106,11 +108,11 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                     WaitingPeriodConfig.CancellationConfig cancellation = waitingPeriodConfig.cancellation;
                     double distance = waitingPeriodSource.getPosition().distanceTo(this.position());
                     ServerPlayer player = (ServerPlayer) (Object) this;
-                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !IdentifierUtil.check(player, "teleport.cancel.bypass.move")) {
+                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !PermissionUtil.check(player, "teleport.cancel.bypass.move")) {
                         cancelDelayedTeleport(new TeleportCancelException(MOVE.component()));
                         return;
                     }
-                    if (cancellation.damage && this.getLastDamageSource() != null && !IdentifierUtil.check(player, "teleport.cancel.bypass.damage")) {
+                    if (cancellation.damage && this.getLastDamageSource() != null && !PermissionUtil.check(player, "teleport.cancel.bypass.damage")) {
                         cancelDelayedTeleport(new TeleportCancelException(DAMAGE.component()));
                         return;
                     }

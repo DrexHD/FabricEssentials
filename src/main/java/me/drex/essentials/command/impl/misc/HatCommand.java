@@ -7,7 +7,7 @@ import me.drex.essentials.item.ModItemTags;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -39,8 +39,8 @@ public class HatCommand extends Command {
         //?} else {
         /*ItemStack selected = inventory.getSelected();
         *///?}
-        ResourceLocation resourceLocation = BuiltInRegistries.ITEM.getKey(selected.getItem());
-        if (!check(ctx.getSource(), "item." + resourceLocation.getPath())) {
+        Identifier identifier = BuiltInRegistries.ITEM.getKey(selected.getItem());
+        if (!check(ctx.getSource(), "item." + identifier.getPath())) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission"));
             return FAILURE;
         }

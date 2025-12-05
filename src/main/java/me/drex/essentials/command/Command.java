@@ -8,12 +8,16 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+//? if > 1.21.10 {
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionLevel;
+//? }
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import me.drex.essentials.EssentialsMod;
 import me.drex.essentials.config.Config;
 import me.drex.essentials.config.ConfigManager;
-import me.drex.essentials.util.IdentifierUtil;
+import me.drex.essentials.util.PermissionUtil;
 import org.slf4j.Logger;
 
 import java.util.function.Predicate;
@@ -57,7 +61,11 @@ public abstract class Command {
                 return Permissions.check(src, permission(permission), defaultRequiredLevel);
             } catch (Throwable ignored) {
                 // Fallback for datapack compatibility
-                return src.hasPermission(defaultRequiredLevel);
+                //? if > 1.21.10 {
+                return src.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(defaultRequiredLevel)));
+                //?} else {
+                /*return src.hasPermission(defaultRequiredLevel);
+                *///? }
             }
         };
     }
@@ -87,9 +95,9 @@ public abstract class Command {
 
     public String permission(@Nullable String permission) {
         if (permission == null) {
-            return IdentifierUtil.permission("command." + commandProperties.literal());
+            return PermissionUtil.permission("command." + commandProperties.literal());
         } else {
-            return IdentifierUtil.permission("command." + commandProperties.literal() + "." + permission);
+            return PermissionUtil.permission("command." + commandProperties.literal() + "." + permission);
         }
     }
 

@@ -2,7 +2,7 @@ package me.drex.essentials.util;
 
 import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import me.drex.essentials.storage.DataStorage;
 import me.drex.essentials.storage.PlayerData;
 import me.drex.essentials.storage.ServerData;
@@ -11,8 +11,8 @@ import static me.drex.essentials.EssentialsMod.MOD_ID;
 
 public class FabricEssentialsPlaceholders {
 
-    private static ResourceLocation location(String placeholderId) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, placeholderId);
+    private static Identifier location(String placeholderId) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, placeholderId);
     }
 
     public static void register() {

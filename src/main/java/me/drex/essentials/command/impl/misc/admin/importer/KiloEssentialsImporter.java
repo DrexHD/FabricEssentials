@@ -10,7 +10,7 @@ import me.drex.essentials.util.teleportation.Warp;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec3;
 
@@ -65,7 +65,7 @@ public class KiloEssentialsImporter implements DataImporter {
                                     ),
                                     view.getFloat("yaw").orElseThrow(),
                                     view.getFloat("pitch").orElseThrow(),
-                                    ResourceLocation.parse(loc.getString("dim").orElseThrow())
+                                    Identifier.parse(loc.getString("dim").orElseThrow())
                                 )
                             )
                         );
@@ -122,7 +122,7 @@ public class KiloEssentialsImporter implements DataImporter {
                                 ),
                                 view.getFloat("yaw").orElseThrow(),
                                 view.getFloat("pitch").orElseThrow(),
-                                ResourceLocation.parse(loc.getString("dim").orElseThrow())
+                                Identifier.parse(loc.getString("dim").orElseThrow())
                             )
                         )
                     );

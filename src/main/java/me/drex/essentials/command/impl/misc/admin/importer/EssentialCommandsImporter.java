@@ -48,8 +48,11 @@ public class EssentialCommandsImporter implements DataImporter {
                             Map<String, Home> homes = new HashMap<>();
 
                             //? if >= 1.21.5 {
-                            var data = tag.getCompound("data").orElseThrow();
-                            var homesData = data.getCompound("homes").orElseThrow();
+                            if (tag.contains("data")) {
+                                tag = tag.getCompound("data").orElseThrow();
+                            }
+
+                            var homesData = tag.getCompound("homes").orElseThrow();
                             for (String homeName : homesData.keySet()) {
                                 var home = homesData.getCompound(homeName).orElseThrow();
                                 var world = home.getString("WorldRegistryKey").orElseThrow();
@@ -103,9 +106,11 @@ public class EssentialCommandsImporter implements DataImporter {
                     Map<String, Warp> warps = new HashMap<>();
 
                     //? if >= 1.21.5 {
-                    var data = tag.getCompound("data").orElseThrow();
+                    if (tag.contains("data")) {
+                        tag = tag.getCompound("data").orElseThrow();
+                    }
 
-                    var warpsData = data.getCompound("warps").orElseThrow();
+                    var warpsData = tag.getCompound("warps").orElseThrow();
                     for (String homeName : warpsData.keySet()) {
                         var home = warpsData.getCompound(homeName).orElseThrow();
                         var world = home.getString("WorldRegistryKey").orElseThrow();

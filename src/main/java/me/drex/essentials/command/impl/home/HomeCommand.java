@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -61,7 +61,7 @@ public class HomeCommand extends Command {
                 if (self) {
                     src.sendSystemMessage(localized("fabric-essentials.commands.home.self", home.placeholders(name)));
                 } else {
-                    src.sendSystemMessage(localized("fabric-essentials.commands.home.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.home.other", home.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
                 }
                 home.location().teleport(serverPlayer);
             }, src.getServer());

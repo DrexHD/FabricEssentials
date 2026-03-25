@@ -2,6 +2,7 @@ package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,7 +32,7 @@ public abstract class SimpleToggleCommand extends Command {
                         .executes(ctx -> {
                             ServerPlayer target = getPlayer(ctx, "player");
                             boolean previousState = getState(target);
-                            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".other", PlaceholderContext.of(target)), false);
+                            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".other", ServerPlaceholderContext.of(target)), false);
                             setState(target, !previousState);
                             return previousState ? FAILURE : SUCCESS;
                         })

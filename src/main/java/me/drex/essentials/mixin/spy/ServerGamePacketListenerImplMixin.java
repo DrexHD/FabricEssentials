@@ -1,6 +1,6 @@
 package me.drex.essentials.mixin.spy;
 
-import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.LastSeenMessages;
 import net.minecraft.network.chat.MutableComponent;
@@ -55,7 +55,7 @@ public abstract class ServerGamePacketListenerImplMixin {
         }
         MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
             put("command", Component.literal(command));
-        }}, PlaceholderContext.of(player));
+        }}, ServerPlaceholderContext.of(player));
         for (ServerPlayer player : player.level().getServer().getPlayerList().getPlayers()) {
             if (DataStorage.getPlayerData(player).commandSpy && player != this.player) {
                 player.sendSystemMessage(spyMessage);

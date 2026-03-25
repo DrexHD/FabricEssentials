@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -40,12 +41,12 @@ public class TpaCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(ctx.getSource().getPlayerOrException().getUUID(), target.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == this.direction) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpa.pending", PlaceholderContext.of(target)));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpa.pending", ServerPlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.addRequest(participants, this.direction);
-        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", PlaceholderContext.of(target)), false);
-        target.sendSystemMessage(localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".victim", PlaceholderContext.of(ctx.getSource())));
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".self", ServerPlaceholderContext.of(target)), false);
+        target.sendSystemMessage(localized("fabric-essentials.commands." + this.direction.getTranslationKey() + ".victim", ServerPlaceholderContext.of(ctx.getSource())));
         return SUCCESS;
     }
 

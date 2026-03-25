@@ -49,8 +49,8 @@ public class SignEditCommand extends Command {
         ServerPlayer player = src.getPlayerOrException();
         HitResult hitResult = player.pick(4.5f, 1, true);
         if (hitResult instanceof BlockHitResult blockHitResult) {
-            if (CommonProtection.canBreakBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player) &&
-                CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.getGameProfile(), player)) {
+            if (CommonProtection.canBreakBlock(src.getLevel(), blockHitResult.getBlockPos(), player.nameAndId(), player) &&
+                CommonProtection.canPlaceBlock(src.getLevel(), blockHitResult.getBlockPos(), player.nameAndId(), player)) {
                 BlockEntity blockEntity = src.getLevel().getBlockEntity(blockHitResult.getBlockPos());
                 if (blockEntity instanceof SignBlockEntity signBlockEntity) {
                     Component component;

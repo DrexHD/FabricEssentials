@@ -1,9 +1,10 @@
 package me.drex.essentials.command.impl.misc.admin;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import eu.pb4.placeholders.api.node.TextNode;
+import eu.pb4.placeholders.api.parsers.NodeParser;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.util.StyledInputUtil;
@@ -21,6 +22,9 @@ import static net.minecraft.commands.arguments.EntityArgument.getPlayers;
 import static net.minecraft.commands.arguments.EntityArgument.players;
 
 public class TellMessageCommand extends Command {
+    private static final NodeParser PARSER = NodeParser.builder()
+        .serverPlaceholders()
+        .build();
 
     public TellMessageCommand() {
         super(CommandProperties.create("tellmessage", 2));
@@ -43,7 +47,7 @@ public class TellMessageCommand extends Command {
     protected int tellMessage(CommandSourceStack src, Collection<ServerPlayer> players, String message) {
         TextNode textNode = StyledInputUtil.parseNode(message, src, "style.tellmessage.", false);
         for (ServerPlayer player : players) {
-            Component component = Placeholders.parseText(textNode, PlaceholderContext.of(player));
+            Component component = PARSER.parseComponent(textNode, ServerPlaceholderContext.of(player).asParserContext());
             player.sendSystemMessage(component);
         }
         return players.size();

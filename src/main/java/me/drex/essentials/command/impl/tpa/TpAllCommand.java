@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -37,7 +38,7 @@ public class TpAllCommand extends Command {
             TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
             if (direction == TpaManager.Direction.HERE) continue;
             TpaManager.INSTANCE.addRequest(participants, TpaManager.Direction.HERE);
-            target.sendSystemMessage(localized("fabric-essentials.commands.tpahere.victim", PlaceholderContext.of(ctx.getSource())));
+            target.sendSystemMessage(localized("fabric-essentials.commands.tpahere.victim", ServerPlaceholderContext.of(ctx.getSource())));
             success++;
         }
         final int count = success;

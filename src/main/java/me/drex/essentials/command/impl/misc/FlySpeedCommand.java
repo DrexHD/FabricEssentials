@@ -2,6 +2,7 @@ package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -39,7 +40,7 @@ public class FlySpeedCommand extends Command {
         if (self) {
             src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.self", placeholders), false);
         } else {
-            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.other", placeholders, PlaceholderContext.of(target)), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.other", placeholders, ServerPlaceholderContext.of(target)), false);
         }
         target.getAbilities().setFlyingSpeed(flySpeed);
         target.onUpdateAbilities();

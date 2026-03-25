@@ -3,6 +3,7 @@ package me.drex.essentials.command.impl.home;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import me.drex.essentials.command.Command;
@@ -59,7 +60,7 @@ public class SetHomeCommand extends Command {
             if (self) {
                 src.sendFailure(localized("fabric-essentials.commands.sethome.self.confirm", previousHome.placeholders(name)));
             } else {
-                src.sendFailure(localized("fabric-essentials.commands.sethome.other.confirm", previousHome.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                src.sendFailure(localized("fabric-essentials.commands.sethome.other.confirm", previousHome.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
             }
             return FAILURE;
         }
@@ -75,7 +76,7 @@ public class SetHomeCommand extends Command {
         if (self) {
             src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
         } else {
-            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
         }
         return SUCCESS;
     }

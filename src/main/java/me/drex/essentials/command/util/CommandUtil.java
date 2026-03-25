@@ -5,11 +5,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.datafixers.util.Unit;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import me.drex.essentials.config.teleportation.WaitingPeriodConfig;
@@ -33,7 +33,7 @@ public class CommandUtil {
     private static final SimpleCommandExceptionType NO_PLAYERS_FOUND = new SimpleCommandExceptionType(Component.translatable("argument.entity.notfound.player"));
 
     public static GameProfile getGameProfile(CommandContext<CommandSourceStack> context, String argument) throws CommandSyntaxException {
-        Collection</*? if >= 1.21.9 {*/ net.minecraft.server.players.NameAndId /*?} else {*/ /*GameProfile *//*?}*/> profiles = getGameProfiles(context, argument);
+        Collection<NameAndId> profiles = getGameProfiles(context, argument);
         if (profiles.isEmpty()) {
             throw NO_PLAYERS_FOUND.create();
         } else {
@@ -41,11 +41,7 @@ public class CommandUtil {
                 throw ERROR_NOT_SINGLE_PLAYER.create();
             } else {
                 var profile = profiles.iterator().next();
-                //? if >= 1.21.9 {
                 return new GameProfile(profile.id(), profile.name());
-                //?} else {
-                 /*return profile;
-                *///?}
             }
         }
     }
@@ -63,9 +59,6 @@ public class CommandUtil {
         CompletableFuture<ChunkAccess> result = new CompletableFuture<>();
         asyncTeleportPlayer.setAsyncLoadingChunks(true);
         final ServerChunkCache chunkCache = level.getChunkSource();
-        //? if < 1.21.5 {
-        /*final DistanceManager ticketManager = chunkCache.chunkMap.getDistanceManager();
-         *///?}
         CompletableFuture<Void> waitFuture = asyncTeleportPlayer.delayedTeleport(src, config);
         CompletableFuture<ChunkResult<ChunkAccess>> chunkAccessFuture = AsyncChunkLoadUtil.scheduleChunkLoadWithRadius(level, pos, RADIUS);
         chunkAccessFuture.whenCompleteAsync((chunkResult, throwable) -> {
@@ -81,11 +74,7 @@ public class CommandUtil {
                     LOGGER.error("An unknown error occurred, during waiting period", waitingThrowable);
                 }
                 result.cancel(false);
-                //? if >= 1.21.5 {
                 chunkCache.removeTicketWithRadius(ASYNC_CHUNK_LOAD, pos, RADIUS);
-                //?} else {
-                /*ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
-                 *///?}
                 ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
             } else {
                 chunkAccessFuture.whenCompleteAsync((chunkResult, chunkThrowable) -> {
@@ -101,12 +90,7 @@ public class CommandUtil {
                             LOGGER.error("Chunk not there when requested: {}", chunkResult.getError());
                         }
                     }
-                    //? if >= 1.21.5 {
                     chunkCache.removeTicketWithRadius(ASYNC_CHUNK_LOAD, pos, RADIUS);
-                    //?} else {
-                    /*ticketManager.removeTicket(ASYNC_CHUNK_LOAD, pos, 33 - RADIUS, Unit.INSTANCE);
-                     *///?}
-                    ((IServerChunkCache) chunkCache).invokeRunDistanceManagerUpdates();
                 }, src.getServer());
             }
         }, src.getServer());

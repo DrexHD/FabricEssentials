@@ -8,10 +8,8 @@ import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-//? if > 1.21.10 {
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
-//? }
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import me.drex.essentials.EssentialsMod;
@@ -61,11 +59,7 @@ public abstract class Command {
                 return Permissions.check(src, permission(permission), defaultRequiredLevel);
             } catch (Throwable ignored) {
                 // Fallback for datapack compatibility
-                //? if > 1.21.10 {
                 return src.permissions().hasPermission(new Permission.HasCommandLevel(PermissionLevel.byId(defaultRequiredLevel)));
-                //?} else {
-                /*return src.hasPermission(defaultRequiredLevel);
-                *///? }
             }
         };
     }

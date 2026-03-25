@@ -3,7 +3,9 @@ package me.drex.essentials.command.impl.misc.admin;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.Placeholders;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import eu.pb4.placeholders.api.node.TextNode;
+import eu.pb4.placeholders.api.parsers.NodeParser;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import me.drex.essentials.command.Command;
@@ -18,6 +20,9 @@ import static me.drex.message.api.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 
 public class BroadcastCommand extends Command {
+    private static final NodeParser PARSER = NodeParser.builder()
+        .serverPlaceholders()
+        .build();
 
     public BroadcastCommand() {
         super(CommandProperties.create("broadcast", 2));
@@ -37,7 +42,7 @@ public class BroadcastCommand extends Command {
     public int tellMessage(CommandSourceStack src, String message) {
         TextNode textNode = StyledInputUtil.parseNode(message, src, "style.broadcast.", false);
         src.getServer().getPlayerList().broadcastSystemMessage(localized("fabric-essentials.commands.broadcast", new HashMap<>() {{
-            put("message", Placeholders.parseText(textNode, PlaceholderContext.of(src)));
+            put("message", PARSER.parseComponent(textNode, ServerPlaceholderContext.of(src).asParserContext()));
         }}), false);
         return 1;
     }

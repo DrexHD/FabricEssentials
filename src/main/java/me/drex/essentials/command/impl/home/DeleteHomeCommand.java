@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import me.drex.essentials.command.Command;
@@ -50,7 +51,7 @@ public class DeleteHomeCommand extends Command {
             if (self) {
                 src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.self", home.placeholders(name)));
             } else {
-                src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.other", home.placeholders(name), PlaceholderContext.of(target, src.getServer())));
+                src.sendSystemMessage(localized("fabric-essentials.commands.deletehome.other", home.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
             }
             return SUCCESS;
         } else {

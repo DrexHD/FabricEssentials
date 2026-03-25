@@ -47,7 +47,7 @@ public record Location(Vec3 pos, float yaw, float pitch, Identifier dimension) {
         } else {
             ServerLevel level = getLevel(entity.level().getServer());
             Location currentLocation = new Location(entity);
-            if (entity.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(),  Mth.wrapDegrees(yaw),  Mth.wrapDegrees(pitch)/*? if >= 1.21.2 {*/, true /*?}*/)) {
+            if (entity.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(), Mth.wrapDegrees(yaw), Mth.wrapDegrees(pitch), true)) {
                 if (saveLocation && entity instanceof ServerPlayer player) {
                     PlayerData playerData = DataStorage.updatePlayerData(player);
                     playerData.saveLocation(currentLocation);

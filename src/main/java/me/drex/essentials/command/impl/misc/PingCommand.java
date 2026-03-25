@@ -2,6 +2,7 @@ package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +27,7 @@ public class PingCommand extends Command {
                         .requires(require("other"))
                         .executes(ctx -> {
                             ServerPlayer player = getPlayer(ctx, "player");
-                            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.ping.other", PlaceholderContext.of(player)));
+                            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.ping.other", ServerPlaceholderContext.of(player)));
 
                             return player.connection.latency();
                         })

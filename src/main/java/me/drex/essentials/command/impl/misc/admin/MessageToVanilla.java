@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.serialization.JsonOps;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import eu.pb4.placeholders.api.parsers.NodeParser;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
@@ -51,7 +52,7 @@ public class MessageToVanilla extends Command {
     }
 
     protected int tellMessage(CommandSourceStack src, String message, NodeParser parser) {
-        MutableComponent component = (MutableComponent) parser.parseText(message, PlaceholderContext.of(src).asParserContext());
+        MutableComponent component = (MutableComponent) parser.parseComponent(message, ServerPlaceholderContext.of(src).asParserContext());
         String vanillaJson = ComponentSerialization.CODEC.encodeStart(src.getServer().registryAccess().createSerializationContext(JsonOps.INSTANCE), component).result()
             .map(JsonElement::toString).orElse("Failed to encode message!");
         src.sendSystemMessage(LocalizedMessage.builder("fabric-essentials.commands.message-to-vanilla")

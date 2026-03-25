@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -73,12 +74,12 @@ public class TpAcceptCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == null) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_pending", PlaceholderContext.of(target)));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_pending", ServerPlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpaccept.self", PlaceholderContext.of(target)), false);
-        target.sendSystemMessage(localized("fabric-essentials.commands.tpaccept.victim", PlaceholderContext.of(ctx.getSource())), false);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpaccept.self", ServerPlaceholderContext.of(target)), false);
+        target.sendSystemMessage(localized("fabric-essentials.commands.tpaccept.victim", ServerPlaceholderContext.of(ctx.getSource())), false);
         ServerPlayer teleporting = direction == HERE ? player : target;
         ServerPlayer teleportingTarget = direction == HERE ? target : player;
         CommandSourceStack teleportingSource = teleporting.createCommandSourceStack();
@@ -90,7 +91,7 @@ public class TpAcceptCommand extends Command {
             if (throwable instanceof CompletionException completionException) {
                 if (completionException.getCause() instanceof TeleportCancelException exception) {
                     teleportingSource.sendFailure(exception.getRawMessage());
-                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.cancel.other", PlaceholderContext.of(teleporting)));
+                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.cancel.other", ServerPlaceholderContext.of(teleporting)));
                 } else {
                     teleportingSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));
                     teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));

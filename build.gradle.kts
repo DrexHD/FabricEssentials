@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.ChangelogPluginExtension
 
 plugins {
-    id("fabric-loom") version "1.15-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
     id("maven-publish")
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
     id("org.jetbrains.changelog")
@@ -34,15 +34,14 @@ loom {
 }
 
 fun DependencyHandlerScope.includeMod(dep: String) {
-    include(modImplementation(dep)!!)
+    include(implementation(dep)!!)
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${findProperty("minecraft_version")}")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${findProperty("loader_version")}")
+    implementation("net.fabricmc:fabric-loader:${findProperty("loader_version")}")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${findProperty("fabric_version")}")
+    implementation("net.fabricmc.fabric-api:fabric-api:${findProperty("fabric_version")}")
 
     includeMod("me.lucko:fabric-permissions-api:${findProperty("permission_api_version")}")
     includeMod("eu.pb4:sgui:${findProperty("sgui_version")}")
@@ -52,15 +51,8 @@ dependencies {
     includeMod("maven.modrinth:message-api:${findProperty("message_api_version")}")
 }
 
-stonecutter {
-    replacements.string(eval(current.version, "<=1.21.10")) {
-        replace("Identifier", "ResourceLocation")
-        replace("identifier()", "location()")
-    }
-}
-
 publishMods {
-    file.set(tasks.remapJar.get().archiveFile)
+    file.set(tasks.jar.get().archiveFile)
     type.set(STABLE)
     changelog.set(fetchChangelog())
 

@@ -16,11 +16,11 @@ public class StyledInputUtil {
     }
 
     public static Component parse(String input, CommandSourceStack source, String basePermission, boolean safe) {
-        return parseNode(input, source, basePermission, safe).toText();
+        return parseNode(input, source, basePermission, safe).toComponent();
     }
 
     public static Component parse(String input, Predicate<TextTag> predicate, boolean safe) {
-        return parseNode(input, predicate, safe).toText();
+        return parseNode(input, predicate, safe).toComponent();
     }
 
     public static TextNode parseNode(String input, CommandSourceStack source, String basePermission, boolean safe) {

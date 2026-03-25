@@ -3,6 +3,7 @@ package me.drex.essentials.command.impl.warp;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -38,7 +39,7 @@ public class WarpsCommand extends Command {
             });
             ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.warps", new HashMap<>(){{
                 put("warp_list",warpsList);
-            }}, PlaceholderContext.of(ctx.getSource())));
+            }}, ServerPlaceholderContext.of(ctx.getSource())));
         }
         return warps.size();
     }

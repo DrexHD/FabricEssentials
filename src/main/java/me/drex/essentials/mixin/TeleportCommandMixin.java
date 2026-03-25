@@ -24,11 +24,7 @@ public class TeleportCommandMixin {
         method = "performTeleport",
         at = @At(
             value = "INVOKE",
-            //? if >= 1.21.2 {
             target = "Lnet/minecraft/world/entity/Entity;teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDLjava/util/Set;FFZ)Z"
-            //?} else {
-            /*target = "Lnet/minecraft/world/entity/Entity;teleportTo(Lnet/minecraft/server/level/ServerLevel;DDDLjava/util/Set;FF)Z"
-            *///?}
         )
     )
     private static void onTeleport(CommandSourceStack commandSourceStack, Entity entity, ServerLevel serverLevel, double d, double e, double f, Set set, float g, float h, @Coerce Object lookAt, CallbackInfo ci) {

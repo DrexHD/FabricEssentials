@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -60,15 +61,15 @@ public class HomesCommand extends Command {
         PlayerData dataStorage = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
-            src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", PlaceholderContext.of(target, src.getServer())));
+            src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", ServerPlaceholderContext.of(target, src.getServer())));
         } else {
             Component homesList = ComponentUtils.formatList(homes.entrySet(), localized("fabric-essentials.commands.homes.other.list.separator"), entry -> {
-                return localized("fabric-essentials.commands.homes.other.list.element", entry.getValue().placeholders(entry.getKey()), PlaceholderContext.of(target, src.getServer()));
+                return localized("fabric-essentials.commands.homes.other.list.element", entry.getValue().placeholders(entry.getKey()), ServerPlaceholderContext.of(target, src.getServer()));
             });
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.other", new HashMap<>() {{
                 put("home_list", homesList);
                 put("home_count", Component.literal(String.valueOf(homes.size())));
-            }}, PlaceholderContext.of(target, src.getServer())));
+            }}, ServerPlaceholderContext.of(target, src.getServer())));
         }
         return homes.size();
     }

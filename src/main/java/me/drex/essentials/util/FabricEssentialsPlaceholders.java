@@ -16,15 +16,15 @@ public class FabricEssentialsPlaceholders {
     }
 
     public static void register() {
-        Placeholders.register(location("home_count"), (context, argument) -> {
+        Placeholders.registerServer(location("home_count"), (context, argument) -> {
             if (context.hasPlayer()) {
-                PlayerData playerData = DataStorage.getPlayerData(context.player());
+                PlayerData playerData = DataStorage.getPlayerData(context.serverPlayer());
                 return PlaceholderResult.value(String.valueOf(playerData.homes.size()));
             } else {
                 return PlaceholderResult.invalid("No player!");
             }
         });
-        Placeholders.register(location("warp_count"), (context, argument) -> {
+        Placeholders.registerServer(location("warp_count"), (context, argument) -> {
             ServerData essentialsData = DataStorage.serverData();
             return PlaceholderResult.value(String.valueOf(essentialsData.getWarps().size()));
         });

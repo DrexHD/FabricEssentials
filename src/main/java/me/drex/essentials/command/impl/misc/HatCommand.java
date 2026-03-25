@@ -34,11 +34,7 @@ public class HatCommand extends Command {
     protected int setHat(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         Inventory inventory = player.getInventory();
-        //? if >= 1.21.5 {
         ItemStack selected = inventory.getSelectedItem();
-        //?} else {
-        /*ItemStack selected = inventory.getSelected();
-        *///?}
         Identifier identifier = BuiltInRegistries.ITEM.getKey(selected.getItem());
         if (!check(ctx.getSource(), "item." + identifier.getPath())) {
             ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission"));

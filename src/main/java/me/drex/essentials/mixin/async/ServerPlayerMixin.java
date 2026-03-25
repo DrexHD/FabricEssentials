@@ -6,9 +6,6 @@ import me.drex.essentials.util.AsyncTeleportPlayer;
 import me.drex.essentials.util.PermissionUtil;
 import me.drex.essentials.util.TeleportCancelException;
 import net.minecraft.commands.CommandSourceStack;
-//? if < 1.21.6 {
-/*import net.minecraft.core.BlockPos;
-*///? }
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -31,15 +28,10 @@ import static me.drex.message.api.LocalizedMessage.localized;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {
-    //? if >= 1.21.6 {
     public ServerPlayerMixin(Level level, GameProfile gameProfile) {
         super(level, gameProfile);
     }
-    //?} else {
-    /*public ServerPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
-        super(level, blockPos, f, gameProfile);
-    }
-    *///?}
+
 
     @Shadow
     public abstract void sendSystemMessage(Component component);

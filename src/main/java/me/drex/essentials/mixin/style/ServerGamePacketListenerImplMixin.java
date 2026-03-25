@@ -18,7 +18,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     public ServerPlayer player;
 
     @ModifyArg(
-        method = "method_33799",
+        method = "lambda$signBook$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/server/network/Filterable;map(Ljava/util/function/Function;)Lnet/minecraft/server/network/Filterable;"

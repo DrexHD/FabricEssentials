@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.8] - 2026-04-04
+### Changed
+- Apply waiting period config to `/back` command
+
 ## [1.4.7] - 2026-03-04
 ### Changed
 - Updated Essential-Commands importer to support their v0 and v1 schema.

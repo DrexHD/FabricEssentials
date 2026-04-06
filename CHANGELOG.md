@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.9] - 2026-04-06
+### Fixed
+- `maxMoveDistance` not working when set to `0`
+
 ## [1.4.8] - 2026-04-04
 ### Changed
 - Apply waiting period config to `/back` command

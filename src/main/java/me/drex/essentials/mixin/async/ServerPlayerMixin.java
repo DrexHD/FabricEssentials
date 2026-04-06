@@ -108,7 +108,7 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                     WaitingPeriodConfig.CancellationConfig cancellation = waitingPeriodConfig.cancellation;
                     double distance = waitingPeriodSource.getPosition().distanceTo(this.position());
                     ServerPlayer player = (ServerPlayer) (Object) this;
-                    if (cancellation.maxMoveDistance >= 0 && distance >= cancellation.maxMoveDistance && !PermissionUtil.check(player, "teleport.cancel.bypass.move")) {
+                    if (cancellation.maxMoveDistance >= 0 && distance > cancellation.maxMoveDistance && !PermissionUtil.check(player, "teleport.cancel.bypass.move")) {
                         cancelDelayedTeleport(new TeleportCancelException(MOVE.component()));
                         return;
                     }

@@ -2,7 +2,7 @@
 |---|---|---|---|
 | `/anvil` |  | `fabric-essentials.command.anvil` | ✘ |
 | `/cartographytable` |  | `fabric-essentials.command.cartographytable` | ✘ |
-| `/enchantment` |  | `fabric-essentials.command.enchantment` | ✘ |
+| `/enchantment [<bookcases>]` |  | `fabric-essentials.command.enchantment` | ✘ |
 | `/enderchest` | `/ec` | `fabric-essentials.command.enderchest` | ✘ |
 | `/grindstone` |  | `fabric-essentials.command.grindstone` | ✘ |
 | `/loom` |  | `fabric-essentials.command.loom` | ✘ |

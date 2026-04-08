@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.10] - 2026-04-08
+### Added
+- Bookcases argument to enchantment command
+
+### Changed
+- Default bookcase count for enchantment command to 15
+
 ## [1.4.9] - 2026-04-06
 ### Fixed
 - `maxMoveDistance` not working when set to `0`

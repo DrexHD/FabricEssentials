@@ -8,8 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class DummyEnchantmentMenu extends EnchantmentMenu {
 
-    public DummyEnchantmentMenu(int i, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
-        super(i, inventory, containerLevelAccess);
+    public final int bookCases;
+
+    public DummyEnchantmentMenu(int bookCases, int containerId, Inventory inventory, ContainerLevelAccess containerLevelAccess) {
+        super(containerId, inventory, containerLevelAccess);
+        this.bookCases = bookCases;
     }
 
     @Override

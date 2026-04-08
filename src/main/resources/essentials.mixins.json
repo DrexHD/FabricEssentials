@@ -1,24 +1,25 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "me.drex.essentials.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "server": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
-    "CommandSourceStackAccessor",
-    "FoodDataAccessor",
-    "TeleportCommandMixin",
-    "async.IChunkMap",
-    "async.IServerChunkCache",
-    "async.ServerPlayerMixin",
-    "command.EntitySelectorMixin",
-    "spy.ServerGamePacketListenerImplMixin",
-    "style.AnvilMenuMixin",
-    "style.ServerGamePacketListenerImplMixin",
-    "style.SignBlockEntityMixin"
-  ]
+	"required": true,
+	"minVersion": "0.8",
+	"package": "me.drex.essentials.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"server": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixins": [
+		"CommandSourceStackAccessor",
+		"FoodDataAccessor",
+		"TeleportCommandMixin",
+		"async.IChunkMap",
+		"async.IServerChunkCache",
+		"async.ServerPlayerMixin",
+		"command.EntitySelectorMixin",
+		"menu.EnchantmentMenuMixin",
+		"spy.ServerGamePacketListenerImplMixin",
+		"style.AnvilMenuMixin",
+		"style.ServerGamePacketListenerImplMixin",
+		"style.SignBlockEntityMixin"
+	]
 }

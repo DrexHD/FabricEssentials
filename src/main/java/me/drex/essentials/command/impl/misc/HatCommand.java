@@ -18,7 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class HatCommand extends Command {
 
@@ -37,24 +37,24 @@ public class HatCommand extends Command {
         ItemStack selected = inventory.getSelectedItem();
         Identifier identifier = BuiltInRegistries.ITEM.getKey(selected.getItem());
         if (!check(ctx.getSource(), "item." + identifier.getPath())) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.no_permission", ctx.getSource()));
             return FAILURE;
         }
         ItemStack head = inventory.getItem(EquipmentSlot.HEAD.getIndex(Inventory.INVENTORY_SIZE));
 
         if (selected.is(ModItemTags.HAT_DENY) && !check(ctx.getSource(), "bypassDeny")) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.deny"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.deny", ctx.getSource()));
             return FAILURE;
         }
 
         if (EnchantmentHelper.has(head, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE) && !check(ctx.getSource(), "bypassBindingCurse")) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.binding_curse"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.hat.binding_curse", ctx.getSource()));
             return FAILURE;
         }
 
-        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.hat"), false);
         player.setItemInHand(InteractionHand.MAIN_HAND, head);
         inventory.setItem(EquipmentSlot.HEAD.getIndex(Inventory.INVENTORY_SIZE), selected);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.hat", ctx.getSource()), false);
         return SUCCESS;
     }
 }

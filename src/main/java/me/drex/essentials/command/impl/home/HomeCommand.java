@@ -3,7 +3,7 @@ package me.drex.essentials.command.impl.home;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
@@ -20,7 +20,7 @@ import me.drex.essentials.util.teleportation.Home;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static me.drex.essentials.command.util.CommandUtil.PROFILES_PROVIDER;
@@ -28,7 +28,7 @@ import static me.drex.essentials.command.util.CommandUtil.getGameProfile;
 
 public class HomeCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.home.unknown"));
+    public static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(src -> localized("fabric-essentials.commands.home.unknown", (CommandSourceStack) src));
     public static final String DEFAULT_HOME_NAME = "home";
 
     public HomeCommand() {
@@ -50,24 +50,24 @@ public class HomeCommand extends Command {
     }
 
     protected int teleportHome(CommandSourceStack src, String name, GameProfile target, boolean self) throws CommandSyntaxException {
-        ServerPlayer serverPlayer = src.getPlayerOrException();
+        ServerPlayer player = src.getPlayerOrException();
         PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Home home = playerData.homes.get(name);
-        if (home == null) throw UNKNOWN.create();
+        if (home == null) throw UNKNOWN.create(src);
         ServerLevel targetLevel = home.location().getLevel(src.getServer());
         if (targetLevel != null) {
             CommandUtil.asyncTeleport(src, targetLevel, home.location().chunkPos(), config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
                 if (self) {
-                    src.sendSystemMessage(localized("fabric-essentials.commands.home.self", home.placeholders(name)));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.home.self", home.placeholders(name), src));
                 } else {
-                    src.sendSystemMessage(localized("fabric-essentials.commands.home.other", home.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
+                    src.sendSystemMessage(localized("fabric-essentials.commands.home.other", home.placeholders(name), src, ServerPlaceholderContext.of(target, src.getServer())));
                 }
-                home.location().teleport(serverPlayer);
+                home.location().teleport(player);
             }, src.getServer());
             return SUCCESS;
         } else {
-            throw WORLD_UNKNOWN.create();
+            throw WORLD_UNKNOWN.create(src);
         }
     }
 

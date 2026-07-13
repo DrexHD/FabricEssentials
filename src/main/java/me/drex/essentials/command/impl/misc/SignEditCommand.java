@@ -21,7 +21,7 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -61,25 +61,25 @@ public class SignEditCommand extends Command {
                         component = parsed;
                     }
                     if (component.getString().length() > 45) {
-                        src.sendFailure(localized("fabric-essentials.commands.signedit.length"));
+                        src.sendFailure(localized("fabric-essentials.commands.signedit.length", src));
                         return FAILURE;
                     }
                     src.sendSuccess(() -> localized("fabric-essentials.commands.signedit", new HashMap<>() {{
                         put("sign_line", Component.literal(String.valueOf(line)));
                         put("sign_text", component);
-                    }}), false);
+                    }}, src), false);
                     signBlockEntity.updateText(signText -> signText.setMessage(line - 1, component), signBlockEntity.isFacingFrontText(player));
                     signBlockEntity.setChanged();
                     src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);
                     return SUCCESS;
                 }
             } else {
-                src.sendFailure(localized("fabric-essentials.commands.signedit.cant_modify"));
+                src.sendFailure(localized("fabric-essentials.commands.signedit.cant_modify", src));
                 return FAILURE;
             }
 
         }
-        src.sendFailure(localized("fabric-essentials.commands.signedit.missing"));
+        src.sendFailure(localized("fabric-essentials.commands.signedit.missing", src));
         return FAILURE;
     }
 

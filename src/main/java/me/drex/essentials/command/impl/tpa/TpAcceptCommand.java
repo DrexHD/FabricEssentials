@@ -3,7 +3,6 @@ package me.drex.essentials.command.impl.tpa;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.List;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static me.drex.essentials.util.TpaManager.Direction.HERE;
 
@@ -50,19 +49,19 @@ public class TpAcceptCommand extends Command {
         List<TpaManager.Participants> requests = TpaManager.INSTANCE.getRequestsFor(player.getUUID());
         
         if (requests.isEmpty()) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_requests"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_requests", ctx.getSource()));
             return FAILURE;
         }
         
         if (requests.size() > 1) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.multiple_requests"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.multiple_requests", ctx.getSource()));
             return FAILURE;
         }
         
         TpaManager.Participants participants = requests.getFirst();
         ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayer(participants.requester());
         if (target == null) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.player_offline"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.player_offline", ctx.getSource()));
             return FAILURE;
         }
         
@@ -74,12 +73,12 @@ public class TpAcceptCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == null) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_pending", ServerPlaceholderContext.of(target)));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpaccept.no_pending", ctx.getSource(), ServerPlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpaccept.self", ServerPlaceholderContext.of(target)), false);
-        target.sendSystemMessage(localized("fabric-essentials.commands.tpaccept.victim", ServerPlaceholderContext.of(ctx.getSource())), false);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpaccept.self", ctx.getSource(), ServerPlaceholderContext.of(target)), false);
+        target.sendSystemMessage(localized("fabric-essentials.commands.tpaccept.victim", target.createCommandSourceStack(), ServerPlaceholderContext.of(player)), false);
         ServerPlayer teleporting = direction == HERE ? player : target;
         ServerPlayer teleportingTarget = direction == HERE ? target : player;
         CommandSourceStack teleportingSource = teleporting.createCommandSourceStack();
@@ -91,10 +90,10 @@ public class TpAcceptCommand extends Command {
             if (throwable instanceof CompletionException completionException) {
                 if (completionException.getCause() instanceof TeleportCancelException exception) {
                     teleportingSource.sendFailure(exception.getRawMessage());
-                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.cancel.other", ServerPlaceholderContext.of(teleporting)));
+                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.cancel.other", teleportingTargetSource, ServerPlaceholderContext.of(teleporting)));
                 } else {
-                    teleportingSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));
-                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException)));
+                    teleportingSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException), teleportingSource));
+                    teleportingTargetSource.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(completionException), teleportingTargetSource));
                     LOGGER.error("An unknown error occurred, during waiting period", completionException.getCause());
                 }
             } else {

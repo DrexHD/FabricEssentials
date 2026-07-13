@@ -2,12 +2,12 @@ package me.drex.essentials.command.impl.warp;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import eu.pb4.placeholders.api.PlaceholderContext;
-import eu.pb4.placeholders.api.ServerPlaceholderContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.storage.DataStorage;
@@ -16,7 +16,7 @@ import me.drex.essentials.util.teleportation.Warp;
 import java.util.HashMap;
 import java.util.Map;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class WarpsCommand extends Command {
 
@@ -29,17 +29,17 @@ public class WarpsCommand extends Command {
         literal.executes(this::execute);
     }
 
-    private int execute(CommandContext<CommandSourceStack> ctx) {
+    private int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Map<String, Warp> warps = DataStorage.serverData().getWarps();
         if (warps.isEmpty()) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.warps.empty"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.warps.empty", ctx.getSource()));
         } else {
-            Component warpsList = ComponentUtils.formatList(warps.entrySet(), localized("fabric-essentials.commands.warps.list.separator"), entry -> {
-                return localized("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()));
+            Component warpsList = ComponentUtils.formatList(warps.entrySet(), localized("fabric-essentials.commands.warps.list.separator", ctx.getSource()), entry -> {
+                return localized("fabric-essentials.commands.warps.list.element", entry.getValue().placeholders(entry.getKey()), ctx.getSource());
             });
             ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.warps", new HashMap<>(){{
                 put("warp_list",warpsList);
-            }}, ServerPlaceholderContext.of(ctx.getSource())));
+            }}, ctx.getSource()));
         }
         return warps.size();
     }

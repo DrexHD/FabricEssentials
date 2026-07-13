@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class WhoIsCommand extends Command {
     public WhoIsCommand() {
@@ -47,7 +47,7 @@ public class WhoIsCommand extends Command {
         MinecraftServer server = source.getServer();
 
         ServerPlayer serverPlayer = loadPlayer(server, target);
-        source.sendSuccess(() -> localized("fabric-essentials.commands.whois", Collections.emptyMap(), ServerPlaceholderContext.of(serverPlayer)), false);
+        source.sendSuccess(() -> localized("fabric-essentials.commands.whois", Collections.emptyMap(), source, ServerPlaceholderContext.of(serverPlayer)), false);
         return 1;
     }
 

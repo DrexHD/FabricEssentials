@@ -1,7 +1,7 @@
 package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static com.mojang.brigadier.arguments.FloatArgumentType.floatArg;
 import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 
 public class WalkSpeedCommand extends Command {
@@ -36,12 +36,12 @@ public class WalkSpeedCommand extends Command {
         ).executes(ctx -> setFlySpeed(ctx.getSource(), 0.1f, ctx.getSource().getPlayerOrException(), true));
     }
 
-    private int setFlySpeed(CommandSourceStack src, float walkSpeed, ServerPlayer target, boolean self) {
+    private int setFlySpeed(CommandSourceStack src, float walkSpeed, ServerPlayer target, boolean self) throws CommandSyntaxException {
         Map<String, Component> placeholders = Map.of("walk_speed", Component.literal(String.valueOf(walkSpeed)));
         if (self) {
-            src.sendSuccess(() -> localized("fabric-essentials.commands.walkspeed.self", placeholders), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.walkspeed.self", placeholders, src), false);
         } else {
-            src.sendSuccess(() -> localized("fabric-essentials.commands.walkspeed.other", placeholders, ServerPlaceholderContext.of(target)), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.walkspeed.other", placeholders, src, ServerPlaceholderContext.of(target)), false);
         }
         target.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
         return SUCCESS;

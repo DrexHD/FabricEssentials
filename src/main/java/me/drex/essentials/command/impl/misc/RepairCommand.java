@@ -9,7 +9,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class RepairCommand extends Command {
 
@@ -30,7 +30,7 @@ public class RepairCommand extends Command {
                                 itemStack.setDamageValue(0);
                             }
                         }
-                        src.sendSuccess(() -> localized("fabric-essentials.commands.repair.all"), false);
+                        src.sendSuccess(() -> localized("fabric-essentials.commands.repair.all", src), false);
                         return SUCCESS;
                     })
             )
@@ -39,11 +39,11 @@ public class RepairCommand extends Command {
                 ServerPlayer player = src.getPlayerOrException();
                 ItemStack itemStack = player.getMainHandItem();
                 if (itemStack.isEmpty() || !itemStack.isDamaged()) {
-                    src.sendFailure(localized("fabric-essentials.commands.repair.missing"));
+                    src.sendFailure(localized("fabric-essentials.commands.repair.missing", src));
                     return FAILURE;
                 }
                 itemStack.setDamageValue(0);
-                src.sendSuccess(() -> localized("fabric-essentials.commands.repair"), false);
+                src.sendSuccess(() -> localized("fabric-essentials.commands.repair", src), false);
                 return SUCCESS;
             });
     }

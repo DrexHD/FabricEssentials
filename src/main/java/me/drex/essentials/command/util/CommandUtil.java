@@ -22,7 +22,7 @@ import me.drex.essentials.util.TeleportCancelException;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.arguments.GameProfileArgument.getGameProfiles;
 import static me.drex.essentials.EssentialsMod.LOGGER;
 import static me.drex.essentials.util.AsyncChunkLoadUtil.ASYNC_CHUNK_LOAD;
@@ -50,9 +50,10 @@ public class CommandUtil {
 
 
     public static CompletableFuture<ChunkAccess> asyncTeleport(CommandSourceStack src, ServerLevel level, ChunkPos pos, WaitingPeriodConfig config) throws CommandSyntaxException {
-        AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) src.getPlayerOrException();
+        ServerPlayer player = src.getPlayerOrException();
+        AsyncTeleportPlayer asyncTeleportPlayer = (AsyncTeleportPlayer) player;
         if (asyncTeleportPlayer.isAsyncLoadingChunks()) {
-            src.sendFailure(localized("fabric-essentials.async.active"));
+            src.sendFailure(localized("fabric-essentials.async.active", src));
             return CompletableFuture.completedFuture(null);
         }
         final int RADIUS = 2;
@@ -70,7 +71,7 @@ public class CommandUtil {
                 if (waitingThrowable instanceof TeleportCancelException exception) {
                     src.sendFailure(exception.getRawMessage());
                 } else {
-                    src.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(waitingThrowable)));
+                    src.sendFailure(localized("fabric-essentials.teleport.wait.error", ComponentPlaceholderUtil.exceptionPlaceholders(waitingThrowable), src));
                     LOGGER.error("An unknown error occurred, during waiting period", waitingThrowable);
                 }
                 result.cancel(false);
@@ -79,14 +80,14 @@ public class CommandUtil {
             } else {
                 chunkAccessFuture.whenCompleteAsync((chunkResult, chunkThrowable) -> {
                     if (chunkThrowable != null) {
-                        src.sendFailure(localized("fabric-essentials.async.error", ComponentPlaceholderUtil.exceptionPlaceholders(chunkThrowable)));
+                        src.sendFailure(localized("fabric-essentials.async.error", ComponentPlaceholderUtil.exceptionPlaceholders(chunkThrowable), src));
                         LOGGER.error("An unknown error occurred, while loading the chunks", chunkThrowable);
                         result.cancel(false);
                     } else {
                         if (chunkResult.isSuccess()) {
                             result.complete(chunkResult.orElse(null));
                         } else {
-                            src.sendFailure(localized("fabric-essentials.async.not_loaded"));
+                            src.sendFailure(localized("fabric-essentials.async.not_loaded", src));
                             LOGGER.error("Chunk not there when requested: {}", chunkResult.getError());
                         }
                     }

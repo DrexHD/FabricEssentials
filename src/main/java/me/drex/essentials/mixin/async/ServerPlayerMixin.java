@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
 import static me.drex.essentials.config.teleportation.WaitingPeriodConfig.WaitingResult.*;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player implements AsyncTeleportPlayer {
@@ -81,16 +81,18 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
     public void setAsyncLoadingChunks(boolean loadingChunks) {
         asyncLoadingChunks = loadingChunks;
         if (!loadingChunks) {
+            ServerPlayer player = (ServerPlayer) (Object) this;
             this.sendSystemMessage(Component.empty(), true);
-            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks.done"), true);
+            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks.done", player.createCommandSourceStack()), true);
         }
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void onTick(CallbackInfo ci) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
         if (isAsyncLoadingChunks()) {
             String key = String.valueOf((this.server.getTickCount() / 6) % 3);
-            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks." + key), true);
+            this.sendSystemMessage(localized("fabric-essentials.async.loading_chunks." + key, player.createCommandSourceStack()), true);
         }
         if (waitingPeriodTicks >= 0) {
             if (waitingPeriodTicks == 0) {
@@ -99,17 +101,16 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                 if (waitingPeriodConfig != null) {
                     WaitingPeriodConfig.CancellationConfig cancellation = waitingPeriodConfig.cancellation;
                     double distance = waitingPeriodSource.getPosition().distanceTo(this.position());
-                    ServerPlayer player = (ServerPlayer) (Object) this;
                     if (cancellation.maxMoveDistance >= 0 && distance > cancellation.maxMoveDistance && !PermissionUtil.check(player, "teleport.cancel.bypass.move")) {
-                        cancelDelayedTeleport(new TeleportCancelException(MOVE.component()));
+                        cancelDelayedTeleport(new TeleportCancelException(MOVE.component(player)));
                         return;
                     }
                     if (cancellation.damage && this.getLastDamageSource() != null && !PermissionUtil.check(player, "teleport.cancel.bypass.damage")) {
-                        cancelDelayedTeleport(new TeleportCancelException(DAMAGE.component()));
+                        cancelDelayedTeleport(new TeleportCancelException(DAMAGE.component(player)));
                         return;
                     }
                     if (this.server.getPlayerList().getPlayer(this.getUUID()) == null) {
-                        cancelDelayedTeleport(new TeleportCancelException(UNKNOWN.component()));
+                        cancelDelayedTeleport(new TeleportCancelException(UNKNOWN.component(player)));
                         return;
                     }
                 }
@@ -117,7 +118,7 @@ public abstract class ServerPlayerMixin extends Player implements AsyncTeleportP
                     int ceilDiv = -Math.floorDiv(-waitingPeriodTicks, 20);
                     this.sendSystemMessage(localized("fabric-essentials.teleport.wait", new HashMap<>() {{
                         put("time", Component.literal(String.valueOf(ceilDiv)));
-                    }}));
+                    }}, player.createCommandSourceStack()));
                 }
             }
             waitingPeriodTicks--;

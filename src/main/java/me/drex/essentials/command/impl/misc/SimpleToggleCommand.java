@@ -1,7 +1,6 @@
 package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
 import static net.minecraft.commands.arguments.EntityArgument.player;
@@ -32,14 +31,14 @@ public abstract class SimpleToggleCommand extends Command {
                         .executes(ctx -> {
                             ServerPlayer target = getPlayer(ctx, "player");
                             boolean previousState = getState(target);
-                            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".other", ServerPlaceholderContext.of(target)), false);
+                            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".other", ctx.getSource(), ServerPlaceholderContext.of(target)), false);
                             setState(target, !previousState);
                             return previousState ? FAILURE : SUCCESS;
                         })
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
             boolean previousState = getState(player);
-            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".self"), false);
+            ctx.getSource().sendSuccess(() -> localized(messageId + (previousState ? ".disable" : ".enable") + ".self", ctx.getSource()), false);
             setState(player, !previousState);
             return previousState ? FAILURE : SUCCESS;
         });

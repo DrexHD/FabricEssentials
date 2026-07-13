@@ -1,8 +1,9 @@
 package me.drex.essentials.config.teleportation;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class WaitingPeriodConfig {
 
@@ -29,8 +30,8 @@ public class WaitingPeriodConfig {
             this.translationKeySelf = translationKeySelf;
         }
 
-        public Component component() {
-            return localized(translationKeySelf);
+        public Component component(ServerPlayer player) {
+            return localized(translationKeySelf, player.createCommandSourceStack());
         }
 
     }

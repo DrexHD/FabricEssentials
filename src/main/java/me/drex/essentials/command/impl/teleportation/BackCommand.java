@@ -10,12 +10,12 @@ import me.drex.essentials.config.ConfigManager;
 import me.drex.essentials.storage.DataStorage;
 import me.drex.essentials.storage.PlayerData;
 import me.drex.essentials.util.teleportation.Location;
-import me.drex.message.api.LocalizedMessage;
+import me.drex.essentials.util.LocalizedMessage;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class BackCommand extends Command {
 
@@ -33,7 +33,7 @@ public class BackCommand extends Command {
         var target = source.getPlayerOrException();
         PlayerData playerData = DataStorage.getPlayerData(target);
         if (playerData.teleportLocations.isEmpty()) {
-            source.sendFailure(localized("fabric-essentials.commands.back.empty"));
+            source.sendFailure(localized("fabric-essentials.commands.back.empty", source));
             return FAILURE;
         }
         Location location = playerData.teleportLocations.pop();
@@ -43,15 +43,13 @@ public class BackCommand extends Command {
             CommandUtil.asyncTeleport(source, level, location.chunkPos(), config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
                 source.sendSystemMessage(
-                    LocalizedMessage.builder("fabric-essentials.commands.back")
-                        .addPlaceholders(location.placeholders())
-                        .build()
+                    LocalizedMessage.localized("fabric-essentials.commands.back", location.placeholders(), source)
                 );
                 location.teleport(target, ConfigManager.config().teleportation.saveBackCommandLocation);
             }, source.getServer());
             return SUCCESS;
         } else {
-            throw WORLD_UNKNOWN.create();
+            throw WORLD_UNKNOWN.create(source);
         }
     }
 

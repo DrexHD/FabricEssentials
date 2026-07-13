@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,11 +21,11 @@ import me.drex.essentials.util.teleportation.Warp;
 
 import java.util.Map;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public class WarpCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.warp.unknown"));
+    public static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(src -> localized("fabric-essentials.commands.warp.unknown", (CommandSourceStack) src));
 
     public WarpCommand() {
         super(CommandProperties.create("warp", 0));
@@ -44,16 +44,16 @@ public class WarpCommand extends Command {
         ServerPlayer serverPlayer = src.getPlayerOrException();
         Map<String, Warp> warps = DataStorage.serverData().getWarps();
         Warp warp = warps.get(name);
-        if (warp == null) throw UNKNOWN.create();
+        if (warp == null) throw UNKNOWN.create(src);
         ServerLevel targetLevel = warp.location().getLevel(src.getServer());
         if (targetLevel != null) {
             CommandUtil.asyncTeleport(src, targetLevel, warp.location().chunkPos(), config().teleportation.waitingPeriod).whenCompleteAsync((chunkAccess, throwable) -> {
                 if (chunkAccess == null) return;
-                ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.warp", warp.placeholders(name)), false);
+                ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.warp", warp.placeholders(name), src), false);
                 warp.location().teleport(serverPlayer);
             }, src.getServer());
         } else {
-            throw WORLD_UNKNOWN.create();
+            throw WORLD_UNKNOWN.create(src);
         }
         return SUCCESS;
     }

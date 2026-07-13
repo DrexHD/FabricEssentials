@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
@@ -53,11 +53,11 @@ public abstract class ServerGamePacketListenerImplMixin {
         for (String ignoreCommandSpyCommand : ConfigManager.config().ignoreCommandSpyCommands) {
             if (command.startsWith(ignoreCommandSpyCommand)) return;
         }
-        MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
-            put("command", Component.literal(command));
-        }}, ServerPlaceholderContext.of(player));
         for (ServerPlayer player : player.level().getServer().getPlayerList().getPlayers()) {
             if (DataStorage.getPlayerData(player).commandSpy && player != this.player) {
+                MutableComponent spyMessage = localized("fabric-essentials.commandspy", new HashMap<>(){{
+                    put("command", Component.literal(command));
+                }}, player.createCommandSourceStack(), ServerPlaceholderContext.of(this.player));
                 player.sendSystemMessage(spyMessage);
             }
         }

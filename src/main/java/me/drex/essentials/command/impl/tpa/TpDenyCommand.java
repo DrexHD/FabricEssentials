@@ -3,7 +3,6 @@ package me.drex.essentials.command.impl.tpa;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -13,7 +12,7 @@ import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.util.TpaManager;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 
 import java.util.List;
@@ -43,19 +42,19 @@ public class TpDenyCommand extends Command {
         List<TpaManager.Participants> requests = TpaManager.INSTANCE.getRequestsFor(player.getUUID());
         
         if (requests.isEmpty()) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_requests"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_requests", ctx.getSource()));
             return FAILURE;
         }
         
         if (requests.size() > 1) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.multiple_requests"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.multiple_requests", ctx.getSource()));
             return FAILURE;
         }
         
         TpaManager.Participants participants = requests.get(0);
         ServerPlayer target = ctx.getSource().getServer().getPlayerList().getPlayer(participants.requester());
         if (target == null) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.player_offline"));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.player_offline", ctx.getSource()));
             return FAILURE;
         }
         
@@ -67,12 +66,12 @@ public class TpDenyCommand extends Command {
         TpaManager.Participants participants = new TpaManager.Participants(target.getUUID(), player.getUUID());
         TpaManager.Direction direction = TpaManager.INSTANCE.getRequest(participants);
         if (direction == null) {
-            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_pending", ServerPlaceholderContext.of(target)));
+            ctx.getSource().sendFailure(localized("fabric-essentials.commands.tpdeny.no_pending", ctx.getSource(), ServerPlaceholderContext.of(target)));
             return FAILURE;
         }
         TpaManager.INSTANCE.removeRequest(participants);
-        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpdeny.self", ServerPlaceholderContext.of(target)), false);
-        target.sendSystemMessage(localized("fabric-essentials.commands.tpdeny.victim", ServerPlaceholderContext.of(ctx.getSource())), false);
+        ctx.getSource().sendSuccess(() -> localized("fabric-essentials.commands.tpdeny.self", ctx.getSource(), ServerPlaceholderContext.of(target)), false);
+        target.sendSystemMessage(localized("fabric-essentials.commands.tpdeny.victim", target.createCommandSourceStack(), ServerPlaceholderContext.of(player)), false);
         return SUCCESS;
     }
 

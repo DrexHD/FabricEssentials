@@ -2,17 +2,20 @@ package me.drex.essentials.command.impl.misc.admin;
 
 import com.google.gson.JsonElement;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.JsonOps;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import eu.pb4.placeholders.api.parsers.NodeParser;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
-import me.drex.message.api.LocalizedMessage;
+import me.drex.essentials.util.LocalizedMessage;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
+
+import java.util.Map;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -51,14 +54,11 @@ public class MessageToVanilla extends Command {
         );
     }
 
-    protected int tellMessage(CommandSourceStack src, String message, NodeParser parser) {
+    protected int tellMessage(CommandSourceStack src, String message, NodeParser parser) throws CommandSyntaxException {
         MutableComponent component = (MutableComponent) parser.parseComponent(message, ServerPlaceholderContext.of(src).asParserContext());
         String vanillaJson = ComponentSerialization.CODEC.encodeStart(src.getServer().registryAccess().createSerializationContext(JsonOps.INSTANCE), component).result()
             .map(JsonElement::toString).orElse("Failed to encode message!");
-        src.sendSystemMessage(LocalizedMessage.builder("fabric-essentials.commands.message-to-vanilla")
-            .addPlaceholder("preview", component)
-            .addPlaceholder("vanilla_json", vanillaJson)
-            .build());
+        src.sendSystemMessage(LocalizedMessage.localized("fabric-essentials.commands.message-to-vanilla", Map.of("preview", component, "vanilla_json", Component.literal(vanillaJson)), src));
         return 1;
     }
 

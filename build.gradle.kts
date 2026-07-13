@@ -48,7 +48,7 @@ dependencies {
     includeMod("eu.pb4:placeholder-api:${findProperty("placeholder_api_version")}")
     includeMod("eu.pb4:player-data-api:${findProperty("player_data_api_version")}")
     includeMod("eu.pb4:common-protection-api:${findProperty("common_protection_api_version")}")
-    includeMod("maven.modrinth:message-api:${findProperty("message_api_version")}")
+    includeMod("xyz.nucleoid:server-translations-api:${findProperty("server_translations_api_version")}")
 }
 
 publishMods {

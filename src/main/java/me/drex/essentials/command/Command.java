@@ -2,7 +2,7 @@ package me.drex.essentials.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandBuildContext;
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 
 import java.util.function.Predicate;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 
 public abstract class Command {
 
@@ -103,7 +103,7 @@ public abstract class Command {
         return ConfigManager.config();
     }
 
-    public static final SimpleCommandExceptionType WORLD_UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.location.world.unknown"));
+    public static final DynamicCommandExceptionType WORLD_UNKNOWN = new DynamicCommandExceptionType(src -> localized("fabric-essentials.location.world.unknown", (CommandSourceStack) src));
     public static final int SUCCESS = 1;
     public static final int FAILURE = 0;
 

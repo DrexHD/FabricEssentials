@@ -1,7 +1,6 @@
 package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.EntityArgument.getPlayer;
 import static net.minecraft.commands.arguments.EntityArgument.player;
@@ -31,12 +30,12 @@ public abstract class SimpleTargetCommand extends Command {
                         .requires(require("other"))
                         .executes(ctx -> {
                             ServerPlayer target = getPlayer(ctx, "player");
-                            ctx.getSource().sendSuccess(() -> localized(messageId + ".other", ServerPlaceholderContext.of(target)), false);
+                            ctx.getSource().sendSuccess(() -> localized(messageId + ".other", ctx.getSource(), ServerPlaceholderContext.of(target)), false);
                             return execute(target);
                         })
         ).executes(ctx -> {
             ServerPlayer player = ctx.getSource().getPlayerOrException();
-            ctx.getSource().sendSuccess(() -> localized(messageId + ".self"), false);
+            ctx.getSource().sendSuccess(() -> localized(messageId + ".self", ctx.getSource()), false);
             return execute(player);
         });
     }

@@ -3,10 +3,9 @@ package me.drex.essentials.command.impl.misc.admin;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import me.drex.essentials.command.impl.misc.admin.importer.EssentialCommandsImporter;
-import me.drex.message.api.MessageAPI;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -25,13 +24,13 @@ import java.util.Optional;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
 public class EssentialsCommand extends Command {
 
-    public static final SimpleCommandExceptionType UNKNOWN = new SimpleCommandExceptionType(localized("fabric-essentials.commands.essentials.import.unknown"));
+    public static final DynamicCommandExceptionType UNKNOWN = new DynamicCommandExceptionType(ignored -> localized("fabric-essentials.commands.essentials.import.unknown", (CommandSourceStack) ignored));
     private static final DataImporter[] DATA_IMPORTERS = new DataImporter[]{KiloEssentialsImporter.KILO_ESSENTIALS, EssentialCommandsImporter.ESSENTIAL_COMMANDS};
 
     public EssentialsCommand() {
@@ -55,29 +54,28 @@ public class EssentialsCommand extends Command {
         );
     }
 
-    private int reload(CommandContext<CommandSourceStack> ctx) {
+    private int reload(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         if (!ConfigManager.load()) {
-            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload.error"));
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload.error", ctx.getSource()));
             return FAILURE;
         }
-        MessageAPI.reload();
         stopWatch.stop();
         ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.reload", new HashMap<>(){{
             put("time", Component.literal(String.valueOf(stopWatch.getTime())));
-        }}));
+        }}, ctx.getSource()));
         return SUCCESS;
     }
 
     private int importData(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         if (!((CommandSourceStackAccessor) ctx.getSource()).getSource().equals(ctx.getSource().getServer())) {
-            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.import.console"));
+            ctx.getSource().sendSystemMessage(localized("fabric-essentials.commands.essentials.import.console", ctx.getSource()));
             return FAILURE;
         }
         String importerId = getString(ctx, "importer");
         Optional<DataImporter> optional = Arrays.stream(DATA_IMPORTERS).filter(importer -> importer.getImporterId().equals(importerId)).findFirst();
-        DataImporter dataImporter = optional.orElseThrow(UNKNOWN::create);
+        DataImporter dataImporter = optional.orElseThrow(() -> UNKNOWN.create(ctx.getSource()));
         dataImporter.importData(ctx.getSource().getServer());
         return SUCCESS;
     }

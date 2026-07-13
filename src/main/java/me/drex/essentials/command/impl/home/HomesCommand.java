@@ -3,12 +3,12 @@ package me.drex.essentials.command.impl.home;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import eu.pb4.placeholders.api.PlaceholderContext;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.storage.DataStorage;
@@ -18,7 +18,7 @@ import me.drex.essentials.util.teleportation.Home;
 import java.util.HashMap;
 import java.util.Map;
 
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
 import static me.drex.essentials.command.util.CommandUtil.PROFILES_PROVIDER;
@@ -43,33 +43,33 @@ public class HomesCommand extends Command {
         PlayerData dataStorage = DataStorage.getPlayerData(src.getPlayerOrException());
         Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
-            src.sendSystemMessage(localized("fabric-essentials.commands.homes.self.empty"));
+            src.sendSystemMessage(localized("fabric-essentials.commands.homes.self.empty", src));
         } else {
-            Component homesList = ComponentUtils.formatList(homes.entrySet(), localized("fabric-essentials.commands.homes.self.list.separator"), entry -> {
-                return localized("fabric-essentials.commands.homes.self.list.element", entry.getValue().placeholders(entry.getKey()));
+            Component homesList = ComponentUtils.formatList(homes.entrySet(), localized("fabric-essentials.commands.homes.self.list.separator", src), entry -> {
+                return localized("fabric-essentials.commands.homes.self.list.element", entry.getValue().placeholders(entry.getKey()), src);
             });
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.self", new HashMap<>() {{
                 put("home_list", homesList);
                 put("home_count", Component.literal(String.valueOf(homes.size())));
-            }}));
+            }}, src));
 
         }
         return homes.size();
     }
 
-    protected int listOtherHomes(CommandSourceStack src, GameProfile target) {
+    protected int listOtherHomes(CommandSourceStack src, GameProfile target) throws CommandSyntaxException {
         PlayerData dataStorage = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Map<String, Home> homes = dataStorage.homes;
         if (homes.isEmpty()) {
-            src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", ServerPlaceholderContext.of(target, src.getServer())));
+            src.sendSystemMessage(localized("fabric-essentials.commands.homes.other.empty", src, ServerPlaceholderContext.of(target, src.getServer())));
         } else {
-            Component homesList = ComponentUtils.formatList(homes.entrySet(), localized("fabric-essentials.commands.homes.other.list.separator"), entry -> {
-                return localized("fabric-essentials.commands.homes.other.list.element", entry.getValue().placeholders(entry.getKey()), ServerPlaceholderContext.of(target, src.getServer()));
+            Component homesList = ComponentUtils.formatList(homes.entrySet(), localized("fabric-essentials.commands.homes.other.list.separator", src), entry -> {
+                return localized("fabric-essentials.commands.homes.other.list.element", entry.getValue().placeholders(entry.getKey()), src, ServerPlaceholderContext.of(target, src.getServer()));
             });
             src.sendSystemMessage(localized("fabric-essentials.commands.homes.other", new HashMap<>() {{
                 put("home_list", homesList);
                 put("home_count", Component.literal(String.valueOf(homes.size())));
-            }}, ServerPlaceholderContext.of(target, src.getServer())));
+            }}, src, ServerPlaceholderContext.of(target, src.getServer())));
         }
         return homes.size();
     }

@@ -2,10 +2,11 @@ package me.drex.essentials.command.impl.home;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
 import me.drex.essentials.command.Command;
 import me.drex.essentials.command.CommandProperties;
 import me.drex.essentials.config.homes.HomesConfig;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 import static net.minecraft.commands.arguments.GameProfileArgument.gameProfile;
@@ -52,31 +53,32 @@ public class SetHomeCommand extends Command {
             .executes(ctx -> setHome(ctx.getSource(), DEFAULT_HOME_NAME, ctx.getSource().getPlayerOrException().getGameProfile(), true, false));
     }
 
-    protected int setHome(CommandSourceStack src, String name, GameProfile target, boolean self, boolean confirm) {
+    protected int setHome(CommandSourceStack src, String name, GameProfile target, boolean self, boolean confirm) throws CommandSyntaxException {
+        ServerPlayer player = src.getPlayerOrException();
         PlayerData playerData = DataStorage.getOfflinePlayerData(src.getServer(), target);
         Map<String, Home> homes = playerData.homes;
         Home previousHome = homes.get(name);
         if (previousHome != null && !confirm) {
             if (self) {
-                src.sendFailure(localized("fabric-essentials.commands.sethome.self.confirm", previousHome.placeholders(name)));
+                src.sendFailure(localized("fabric-essentials.commands.sethome.self.confirm", previousHome.placeholders(name), src));
             } else {
-                src.sendFailure(localized("fabric-essentials.commands.sethome.other.confirm", previousHome.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
+                src.sendFailure(localized("fabric-essentials.commands.sethome.other.confirm", previousHome.placeholders(name), src, ServerPlaceholderContext.of(target, src.getServer())));
             }
             return FAILURE;
         }
         int limit = getHomesLimit(src);
         boolean overwrite = confirm && previousHome != null;
         if (homes.size() >= limit && !overwrite) {
-            src.sendFailure(localized("fabric-essentials.commands.sethome.limit"));
+            src.sendFailure(localized("fabric-essentials.commands.sethome.limit", src));
             return FAILURE;
         }
         Home home = new Home(new Location(src));
         homes.put(name, home);
         DataStorage.updateOfflinePlayerData(src.getServer(), target, playerData);
         if (self) {
-            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name)));
+            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.self", home.placeholders(name), src));
         } else {
-            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), ServerPlaceholderContext.of(target, src.getServer())));
+            src.sendSystemMessage(localized("fabric-essentials.commands.sethome.other", home.placeholders(name), src, ServerPlaceholderContext.of(target, src.getServer())));
         }
         return SUCCESS;
     }

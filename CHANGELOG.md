@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.11] - 2026-07-13
 ### Changed
 - Recommend remove-dialog-warning
+- Removed message-api library
 
 ## [1.4.10] - 2026-04-08
 ### Added

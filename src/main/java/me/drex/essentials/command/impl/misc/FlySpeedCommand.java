@@ -1,7 +1,7 @@
 package me.drex.essentials.command.impl.misc;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import eu.pb4.placeholders.api.PlaceholderContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.pb4.placeholders.api.ServerPlaceholderContext;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static com.mojang.brigadier.arguments.FloatArgumentType.floatArg;
 import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
-import static me.drex.message.api.LocalizedMessage.localized;
+import static me.drex.essentials.util.LocalizedMessage.localized;
 import static net.minecraft.commands.Commands.argument;
 
 public class FlySpeedCommand extends Command {
@@ -35,12 +35,12 @@ public class FlySpeedCommand extends Command {
         ).executes(ctx -> setFlySpeed(ctx.getSource(), 0.05f, ctx.getSource().getPlayerOrException(), true));
     }
 
-    private int setFlySpeed(CommandSourceStack src, float flySpeed, ServerPlayer target, boolean self) {
+    private int setFlySpeed(CommandSourceStack src, float flySpeed, ServerPlayer target, boolean self) throws CommandSyntaxException {
         Map<String, Component> placeholders = Map.of("fly_speed", Component.literal(String.valueOf(flySpeed)));
         if (self) {
-            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.self", placeholders), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.self", placeholders, src), false);
         } else {
-            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.other", placeholders, ServerPlaceholderContext.of(target)), false);
+            src.sendSuccess(() -> localized("fabric-essentials.commands.flyspeed.other", placeholders, src, ServerPlaceholderContext.of(target)), false);
         }
         target.getAbilities().setFlyingSpeed(flySpeed);
         target.onUpdateAbilities();

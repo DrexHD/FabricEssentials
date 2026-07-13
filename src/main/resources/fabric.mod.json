@@ -26,5 +26,8 @@
     "fabricloader": ">=0.15.10",
     "fabric-api": "*",
     "java": ">=21"
+  },
+  "suggests": {
+    "remove-dialog-warning": "*"
   }
 }

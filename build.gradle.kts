@@ -4,7 +4,7 @@ import org.jetbrains.changelog.ChangelogPluginExtension
 plugins {
     id("net.fabricmc.fabric-loom") version "1.17-SNAPSHOT"
     id("maven-publish")
-    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
+    id("me.modmuss50.mod-publish-plugin") version "2.1.1"
     id("org.jetbrains.changelog")
 }
 
@@ -70,6 +70,7 @@ publishMods {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "o69N0FT2"
         minecraftVersions.addAll(findProperty("modrinth_minecraft_versions")!!.toString().split(", "))
+        optional("remove-dialog-warning")
     }
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")

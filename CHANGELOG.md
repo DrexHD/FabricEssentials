@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Recommend remove-dialog-warning
+
 ## [1.4.10] - 2026-04-08
 ### Added
 - Bookcases argument to enchantment command

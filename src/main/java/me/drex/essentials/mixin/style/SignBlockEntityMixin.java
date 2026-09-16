@@ -11,28 +11,27 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 //? if >= 26.3 {
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.entity.SignTextSlot;
 
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
+import java.util.function.UnaryOperator;
 //?}
 
 @Mixin(SignBlockEntity.class)
 public abstract class SignBlockEntityMixin {
 
     //? if >= 26.3 {
-    private static final ThreadLocal<Player> EDITING_PLAYER = new ThreadLocal<>();
+    private static final ScopedValue<Player> EDITING_PLAYER = ScopedValue.newInstance();
 
-    @Inject(method = "updateSignText", at = @At("HEAD"))
-    private void captureEditingPlayer(Player player, SignTextSlot slot, List<?> filteredTexts, CallbackInfo ci) {
-        EDITING_PLAYER.set(player);
-    }
-
-    @Inject(method = "updateSignText", at = @At("RETURN"))
-    private void clearEditingPlayer(Player player, SignTextSlot slot, List<?> filteredTexts, CallbackInfo ci) {
-        EDITING_PLAYER.remove();
+    @WrapOperation(
+        method = "updateSignText",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/level/block/entity/SignBlockEntity;updateText(Ljava/util/function/UnaryOperator;Lnet/minecraft/world/level/block/entity/SignTextSlot;)Z"
+        )
+    )
+    private static boolean bindEditingPlayer(SignBlockEntity sign, UnaryOperator<SignText> update, SignTextSlot slot, Operation<Boolean> original, @Local(argsOnly = true) Player player) {
+        return ScopedValue.where(EDITING_PLAYER, player).call(() -> original.call(sign, update, slot));
     }
 
     @WrapOperation(

@@ -33,7 +33,9 @@ public abstract class SignBlockEntityMixin {
     private static boolean bindEditingPlayer(SignBlockEntity sign, UnaryOperator<SignText> update, SignTextSlot slot, Operation<Boolean> original, @Local(argsOnly = true) Player player) {
         return ScopedValue.where(EDITING_PLAYER, player).call(() -> original.call(sign, update, slot));
     }
+    //? }
 
+    //? if >= 26.3 {
     @WrapOperation(
         method = "updateMessages",
         at = @At(
@@ -43,18 +45,8 @@ public abstract class SignBlockEntityMixin {
     )
     private static MutableComponent signFormatting(String input, Operation<MutableComponent> original) {
         Player player = EDITING_PLAYER.get();
-        if (player instanceof ServerPlayer serverPlayer) {
-            MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, serverPlayer.createCommandSourceStack(), "style.sign.");
-            // This check is required to keep signs editable, which rely on literal text
-            if (!formatted.getString().equals(input)) {
-                return formatted;
-            }
-        }
-        return original.call(input);
-    }
-    //?} else {
-    /*
-    @WrapOperation(
+    //? } else {
+    /*@WrapOperation(
         method = "setMessages",
         at = @At(
             value = "INVOKE",
@@ -62,6 +54,7 @@ public abstract class SignBlockEntityMixin {
         )
     )
     public MutableComponent signFormatting(String input, Operation<MutableComponent> original, @Local(argsOnly = true) Player player) {
+    *///? }
         if (player instanceof ServerPlayer serverPlayer) {
             MutableComponent formatted = (MutableComponent) StyledInputUtil.parse(input, serverPlayer.createCommandSourceStack(), "style.sign.");
             // This check is required to keep signs editable, which rely on literal text
@@ -71,6 +64,5 @@ public abstract class SignBlockEntityMixin {
         }
         return original.call(input);
     }
-    *///?}
 
 }

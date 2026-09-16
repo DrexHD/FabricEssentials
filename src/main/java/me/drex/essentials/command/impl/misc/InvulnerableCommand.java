@@ -16,7 +16,11 @@ public class InvulnerableCommand extends SimpleToggleCommand {
 
     @Override
     protected void setState(ServerPlayer target, boolean state) {
-        target.setInvulnerable(state);
+        //? if >= 26.3 {
+        target.setPermanentlyInvulnerable(state);
+        //?} else {
+        /*target.setInvulnerable(state);
+        *///?}
     }
 
 }

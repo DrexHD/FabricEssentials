@@ -12,6 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+//? if >= 26.3 {
+import net.minecraft.world.level.block.entity.SignTextSlot;
+//?}
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -68,7 +71,15 @@ public class SignEditCommand extends Command {
                         put("sign_line", Component.literal(String.valueOf(line)));
                         put("sign_text", component);
                     }}, src), false);
-                    signBlockEntity.updateText(signText -> signText.setMessage(line - 1, component), signBlockEntity.isFacingFrontText(player));
+                    signBlockEntity.updateText(
+                        //? if >= 26.3 {
+                        signText -> signText.asMutable().setLine(line - 1, component).asImmutable(),
+                        signBlockEntity.getSlotPlayerIsFacing(player)
+                        //?} else {
+                        /*signText -> signText.setMessage(line - 1, component),
+                        signBlockEntity.isFacingFrontText(player)
+                        *///?}
+                    );
                     signBlockEntity.setChanged();
                     src.getLevel().sendBlockUpdated(signBlockEntity.getBlockPos(), signBlockEntity.getBlockState(), signBlockEntity.getBlockState(), 3);
                     return SUCCESS;
